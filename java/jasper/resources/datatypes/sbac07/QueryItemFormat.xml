@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query>
+    <folder>/datatypes/sbac07</folder>
+    <name>QueryItemFormat</name>
+    <version>3</version>
+    <label>QueryItemFormat</label>
+    <description></description>
+    <creationDate>2013-03-16T13:11:53.000-06:00</creationDate>
+    <updateDate>2012-11-12T14:04:40.000-07:00</updateDate>
+    <language>sql</language>
+    <queryString>select * from item_format</queryString>
+    <dataSource>
+        <uri>/Data_Sources/cdesbacdb</uri>
+    </dataSource>
+</query>

@@ -1,0 +1,15 @@
+/var/log/mysql/*.log /var/log/mysql/*.err {
+create 644 mysql mysql
+notifempty
+daily
+rotate 5
+missingok
+nocompress
+sharedscripts
+postrotate
+# run if mysqld is running
+if test -n "`ps acx|grep mysqld`"; then
+	/usr/bin/mysqladmin flush-logs
+fi
+endscript
+}

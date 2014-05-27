@@ -1,0 +1,94 @@
+html {
+    -ro-contextaction-add:
+        thesaurus-context,
+        spellcheck-context,
+        toggle-auto-spellcheck,
+        cut,
+        copy,
+        paste,
+        paste-special-dialog,
+        select-all,
+        font-family-default,
+        qti-font-family-arial,
+        qti-font-family-times,
+        qti-font-family-courier,
+        qti-font-size-default,
+        qti-font-size-8,
+        qti-font-size-9,
+        qti-font-size-10,
+        qti-font-size-11,
+        qti-font-size-12,
+        qti-font-size-14,
+        qti-font-size-16,
+        qti-font-size-18,
+        qti-font-size-20,
+        qti-font-size-22,
+        qti-font-size-24,
+        qti-font-size-26,
+        qti-font-size-28,
+        qti-font-size-36,
+        qti-font-size-48,
+        qti-font-size-72,
+        qti-align-left,
+        qti-align-center,
+        qti-align-right,
+        qti-align-justify,
+        bold,
+        italic,
+        qti-underline,
+        qti-strikethrough,
+        script-super,
+        script-sub,
+        insert-table-dialog;
+}
+
+table{
+    -ro-contextaction-add: delete-table,
+        auto-fit-table-content,
+        insert-table-caption,
+        delete-table-caption,
+        insert-paragraph-before-table,
+        insert-paragraph-after-table,
+        table-properties-dialog,
+        column-properties-dialog,
+        insert-column-before,
+        insert-column-after,
+        delete-column,
+        row-properties-dialog,
+        insert-row-before,
+        insert-row-after,
+        delete-row,
+        cell-properties-dialog,
+        merge-cells,
+        split-cell-dialog;
+}
+
+ol, ul, li {
+    -ro-contextaction-add: list-properties-dialog;
+}
+
+hr {
+    -ro-contextaction-add: horizontal-line-properties-dialog;
+}
+
+object {
+    -ro-contextaction-add: object-properties-dialog;
+}
+
+img {
+    -ro-contextaction-add: image-properties-dialog;
+}
+
+a[href] {
+    -ro-contextaction-add: hyperlink-properties-dialog, remove-hyperlink;
+}
+
+a[id] {
+    -ro-contextaction-add: bookmark-properties-dialog, remove-bookmark;
+}
+
+span
+{
+    -ro-contextaction-add: INFOLANDHYPERLINKPROPERTIES;
+}
+

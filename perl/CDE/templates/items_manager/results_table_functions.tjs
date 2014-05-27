@@ -1,0 +1,80 @@
+<script>
+var header_name = { metadata  : [<TMPL_VAR NAME="metadata_headers">], 
+		    hierarchy : [<TMPL_VAR NAME="hierarchy_headers">]
+		  };
+
+var header_keys = { search_metadata :  [<TMPL_VAR NAME="metadata_keys">],
+		    search_standards : [<TMPL_VAR NAME="hierarchy_keys">]
+		  };
+            
+function buildResultsTableHeader(result_type) {
+        var results_table = document.getElementById('itemTable');
+        var header = results_table.createTHead();
+        var row    = header.insertRow(0);
+        var cell = document.createElement("TD");
+        cell.style.backgroundColor = "#e6EEEE";
+        cell.innerHTML = '<img src="/common/images/green_check.gif" border="0" onClick="checkAll(document.cde.item_chk)" onmouseover="this.style.cursor=\'pointer\'" alt="Check All" title="Check/Uncheck All" />';
+        row.appendChild(cell);
+
+        for( i in header_names[result_type] ) {
+            cell = document.createElement("TH");
+            cell.style.whiteSpace = "nowrap";
+            cell.innerHTML = header_names[result_type][i];
+            row.appendChild(cell);
+        }
+        cell = document.createElement("TD");
+        cell.style.backgroundColor = "#e6EEEE";
+        cell.innerHTML = '[ ]';
+        row.appendChild(cell);
+}
+
+function buildResultsTable(items,key) {
+        var results_table = document.getElementById('itemTable');
+        results_table.appendChild(document.createElement('tbody'));
+
+        for( id in items ) {
+            var row    = results_table.insertRow(-1);
+	    row.setAttribute('class',"tbody");
+	    row.style.backgroundColor = "#ffffff";
+            var cell   = document.createElement("TD");
+            cell.style.textAlign = "center";
+            cell.style.width     = "40px";
+            cell.innerHTML = '<input type="checkbox" name="item_chk" value="' + id + '" />';
+            row.appendChild(cell);
+
+            for(k in header_keys[key]) {
+                cell = document.createElement("TD");
+                cell.style.whiteSpace = "nowrap";
+
+                var innerHTML = items[id][header_keys[key][k]];
+		if( header_keys[key][k] == 'i_review_lock' ) {
+		    innerHTML = innerHTML == 1 ? 'Locked' : 'Unlocked';
+		}
+		else if( header_keys[key][k] == 'i_external_id' ) {
+		    if( items[id].i_is_old_version == 1 ) cell.style.color = 'red';
+		}
+
+                cell.innerHTML = innerHTML;
+                row.appendChild(cell);
+            }
+
+            cell = document.createElement("TD");
+            cell.innerHTML = '<select name="tools" onChange="doTool(this.form, this.value, this)">' +
+                    	     '<option value="">-- Options --</option>' +
+                    	     '<option value="editItem_' + id + '">Edit</option>' +
+                    	     '<option value="viewItem_' + id + '">View</option>' +
+                    	     '<option value="itemAccessibility_' + id + '">Accessibility</option>' +
+                    	     '<option value="itemHistoryReport_' + id + '">Item History Report</option>' +
+                	     '</select>' +
+			     '<div style="display:none;">' +
+                    	     '<input type="button" class="go" name="editItem_' + id + '" id="editItem_' + id + '" value="Edit" onClick="parent.menuFrame.document.form1.reset(); editItem(document.item_edit, \'' + id + '\')" />' +
+                    	     '<input type="button" class="go" name="viewItem_' + id + '" id="viewItem_' + id + '" value="View" onClick="viewItem(document.item_view, \'' + id + '\')" />' +
+                    	     '<input type="button" class="go" name="itemAccessibility_' + id + '" id="itemAccessibility_' + id + '" value="Accessibility" onClick="parent.menuFrame.document.form1.reset(); itemAccessibility(\'' + id + '\')" />' +
+                    	     '<input type="button" class="go" name="itemHistoryReport_' + id + '" id="itemHistoryReport_' + id + '" value="Item History Report" onClick="parent.menuFrame.document.form1.reset(); itemHistoryReport(\'' + id + '\')" />' +
+        	     	     '</div>';
+            row.appendChild(cell);
+        }
+
+	$(function() { $("#itemTable").tablesorter(); });
+}
+</script>

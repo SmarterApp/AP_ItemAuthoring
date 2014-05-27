@@ -1,0 +1,75 @@
+<html lang="en"> 
+<head>
+<link rel="stylesheet" href="../style/tablesorter/style.css" type="text/css" />
+<script type="text/javascript" src="/common/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/common/js/jquery.tablesorter.min.js"></script>
+
+<script>
+	function doItem(f, id, name, ib) {
+                f.itemBankId.value = ib;
+                if( f.itemExternalId )
+                    f.itemExternalId.value = name;
+		else
+                    f.externalId.value = name;
+                f.submit();
+        }
+</script>
+</head>
+<body>
+<form action="items_manager.pl" method="post" enctype="multipart/form-data" name="cde" id="cde">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="ib_id" value="<TMPL_VAR NAME="ib_id">" />
+<input type="submit" class="action_button_long" name="back_to_search" value="Back to Search" />
+
+  <div id="results">
+     <table id="itemTable" class="tablesorter" border="1" cellspacing="2" cellpadding="2" align="left">
+        <thead>
+        <tr>
+            <th width="20%">Name</th>
+	    <th width="5%">Version</th>
+            <th width="20%">Description</th>
+            <th width="10%">Editor</th>
+            <th width="10%">Dev State</th>
+            <th width="10%">Pub Status</th>
+            <th width="20%">Processed Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+	</thead>
+        <tbody>
+        <TMPL_LOOP NAME="items">
+        <tr>
+            <td><TMPL_VAR NAME="name"></td>
+	    <td><TMPL_VAR NAME="version">&nbsp;</td>
+            <td><TMPL_VAR NAME="description">&nbsp;</td>
+            <td><TMPL_VAR NAME="author"></td>
+            <td><TMPL_VAR NAME="dev_state">&nbsp;</td>
+            <td><TMPL_VAR NAME="publication_status">&nbsp;</td>
+            <td><TMPL_VAR NAME="processed_status">&nbsp;</td>
+            <td><input type="button"  value="View" onmouseover="this.style.cursor='pointer'" onClick="doItem(document.item_view, '<TMPL_VAR NAME="id">', '<TMPL_VAR NAME="name">', '<TMPL_VAR NAME="ib_id">')" /></td>
+            <td><input type="button"  value="Edit" onmouseover="this.style.cursor='pointer'" onClick="doItem(document.item_edit, '<TMPL_VAR NAME="id">', '<TMPL_VAR NAME="name">', '<TMPL_VAR NAME="ib_id">')" /></td>
+        </tr>
+        </TMPL_LOOP>
+        </tbody>
+    </table>
+  </div>
+</form>
+<form action="itemCreate.pl" method="post" enctype="multipart/form-data" name="item_edit" id="item_edit">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="myAction" value="edit" />
+<input type="hidden" name="adminMode" value="1" />
+<input type="hidden" name="itemBankId" value="" />
+<input type="hidden" name="externalId" value="" />
+</form>
+<form action="itemPrintList.pl" method="post" enctype="multipart/form-data" name="item_view" id="item_view" target="_blank">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="myAction" value="print" />
+<input type="hidden" name="viewType" value="4" />
+<input type="hidden" name="itemBankId" value="" />
+<input type="hidden" name="itemExternalId" value="" />
+<input type="hidden" name="view_itemId" value="1" />
+<input type="hidden" name="view_itemContent" value="1" />
+</form>
+</body>
+</html>

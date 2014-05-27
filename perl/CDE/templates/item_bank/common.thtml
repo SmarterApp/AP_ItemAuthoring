@@ -1,0 +1,60 @@
+<table class="no-style">
+  <tr bgcolor="#0099FF"> 
+    <th align="center" colspan="2"><font color="#FFFFFF">Administration Statistics</font></th>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Program: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="program">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Customer: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="customer">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Form Name: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="formname">
+    </td>
+  </tr>
+  <tr> 
+    <td width="175" bgcolor="#CCCCCC"> Administration Date: </td>
+    <td width="200" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="admindate"> : <TMPL_VAR NAME="admin_date">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Market: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="market">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Level: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="level">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Version: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="version">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Subject: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="subject">
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> Total administered: </td>
+    <td width="175" bgcolor="#F4F4F4">
+	<TMPL_VAR NAME="totaladministered">
+    </td>
+  </tr>
+  <tr> <td colspan="2"><hr color="#000000" /></td> </tr>
+</table>

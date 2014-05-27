@@ -1,0 +1,30 @@
+<license>
+  <licenseserialno>3241</licenseserialno>
+  <licensee>
+   <name>Pacific Metrics Corporation</name>
+   <address>
+    <street>1 Lower Ragsdale Drive, Building 1, Suite 150</street>
+    <city>Monterey, CA 93940</city>
+    <country>United States</country>
+   </address>
+  </licensee>
+  <product>edit-on NG</product>
+  <majorversion>3</majorversion>
+  <minorversion>0</minorversion>
+  <licensetype>CPU</licensetype>
+  <amount>1</amount>
+  <unit>CPU</unit>
+  <maintenanceexpirationdate>2014-06-05</maintenanceexpirationdate>
+  <purchasedate>2012-06-05</purchasedate>
+  <servernames>
+   <servername>*.pacificmetrics.com</servername>
+  </servernames>
+  <advanced>
+   <versiotrackenabled/>
+  </advanced>
+  <signatureinformation>
+   <signdate>2013-05-31 18:13</signdate>
+   <signature>302c02147bf302fa7ba76199335eb707af259b827c91d28802141a5910bdf97ca81a4a77b66d9fa0219fba468f4f</signature>
+   <checksum>2738</checksum>
+  </signatureinformation>
+ </license>

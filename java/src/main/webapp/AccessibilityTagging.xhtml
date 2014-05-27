@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<h:head>
+
+	<title>Accessibility Tagging</title>
+
+	<h:outputStylesheet name="css/basic.css"/>
+	<h:outputScript library="javascript" name="common.js"/>
+	
+	<style type="text/css">
+	
+		.item {
+		    font-size: 125%;
+		}
+		
+		.itemId {
+		    font-weight: bold;
+		}
+		
+	    .tagDiv {
+	        position: relative;
+		    top: 0px; 
+		    left: 0px; 
+	        background-color: #FFECB0;
+	        width: 205px;
+	        height: 55px;
+	        margin: 5px;
+	        border: #FFBD82 solid 2px;
+	        border-radius: 10px;
+	        vertical-align: top;
+	        text-align: center;
+	        padding: 5px;
+	        overflow: hidden; 
+	        white-space: nowrap;
+	        text-overflow: ellipsis;
+	        z-index:1;
+	    }
+	    
+	    .tagDivReassign {
+	       border: #D98411 dashed 2px;
+	    }
+	
+        .tagDiv2
+        {
+            position: absolute;
+            top: 5px; 
+            right: 7px; 
+        }
+        
+        .tagDiv3
+        {
+            position: absolute;
+            bottom: 5px; 
+            right: 7px; 
+        }
+        
+        .closeButton {
+            width: 16px;
+            height: 16px;
+        }
+
+        .warningButton {
+            width: 18px;
+            height: 18px;
+        }
+
+	    .tagsTable {
+	        border-spacing: 1px; 
+	        border-collapse: separate;
+	    }
+	
+	    .tagName {
+	        position: absolute;
+	        font-family: arial,sans-serif;
+	        font-weight: bold;
+	        font-size: 115%;
+	        top: 5px;
+	        left: 7px;
+	        max-width: 100px;
+	        text-align: left;
+	        overflow: hidden;
+            text-overflow: ellipsis;
+	    }
+	
+	    .tagType {
+            position: absolute;
+            top: 5px;
+            left: 100px;
+	        font-family: arial,sans-serif;
+	        font-size: 100%;
+	    }
+	
+	    .tagText {
+            position: absolute;
+	        white-space: nowrap;
+	        width: 200px;
+	        overflow: hidden;
+	        text-overflow: ellipsis;
+	        font-style: italic;
+            top: 25px;
+            left: 7px;
+	    }
+	
+	    .tagText2 {
+	    	position: absolute;
+	    	color: darkblue;
+	    	width: 200px;
+	    	text-align: center;
+	    	bottom: 4px;
+	    }
+	
+	    .selectedCell {
+	        background: #736F6E;
+	    }
+	    
+	    .frameColumn {
+	    	width: 700px;
+	    } 
+	    
+	    .arrowsColumn {
+	    	width: 50px;
+	    } 
+	    
+	    .tagsColumn {
+	    	width: 250px;
+	    }
+	    
+	    .tabbedPane {
+	        /*position: absolute;
+	        height: 100%;
+	        top: 50px;
+	        bottom: 5px;
+	        right: 5px;
+	        left: 5px;*/
+	    }
+	    
+	    .panelTab {
+	        position: relative;
+	    	vertical-align: top;
+	    	padding: 0px;
+	    	margin: 0px;
+	    }
+	    
+	    .activeTabCell {
+	        height: 20px;
+	    }
+	    
+	    #topDiv {
+	        position: absolute;
+	        height: 510px;
+	        width: 100%;
+	        /*border: 1px solid green;*/
+	        left: 0px;
+	        top: 0px;
+	    }
+	
+	    #bottomDiv {
+	        position: absolute;
+	        /*border: 1px solid yellow;*/
+	        height: 30%;
+	        width: 100%;
+	        left: 1px;
+	        bottom: 0px;
+	    }
+	
+	    #outerDiv {
+	        position: relative;
+	        height: 800px;
+	        /*border: 1px solid red;*/
+	    }
+	    
+	    #mainForm {
+	        position: relative;
+	        height: 100%;
+	        width: 100%;
+	    }
+	    
+	    .panelTabDiv {
+	        position: absolute;
+	        top: 29px;
+	        bottom: 5px;
+	        left: 5px;
+	        right: 5px;
+	        /*border: 1px solid red;*/
+	    }
+	    
+	    .accessibilityFeaturesPanel {
+	    	position: relative;
+	        overflow: auto;
+	    	height: 205px;
+	    }
+	    
+	    .buttonsDiv {
+	        width: 130px;
+	        text-align: center;
+	    }
+	    
+	    .button {
+	    	width: 115px;
+	    }
+	    
+	    .wait { 
+	    	cursor: wait; 
+	    }
+	    
+
+	</style>
+	
+	<script type="text/javascript">
+		//<![CDATA[ 
+	
+    	var selectMethod;
+    	var initialized;
+    	
+    	var iframe;
+    	var tagsTable;
+    	var selectedElementInput;
+    	
+    	var selectedTabIndex = #{accessibilityTagging.selectedTabIndex};
+    	var selectedElement;
+    	
+    	var maxElementId = 0;
+    	var changesMade = false;
+    	var saveClicked = false;
+    	var cellToReassign;
+	    
+        var brokenElementCount = 0;
+        var brokenElementIds = "";
+
+        function click(cell) {
+	        if (cell.className == 'selectedCell') {
+	            clearSelection(cell);
+	            selectedElement = undefined;
+	        } else {
+	            cell.className = 'selectedCell';
+	            clearSelectionsExcept(cell);
+	            selectMethod = function() { iframe.contentWindow.select(cell.element); }
+	            selectedElement = cell.element;
+	        }
+            refreshFrame();
+            if (selectedTabIndex >= 1 && selectedElement) {
+            	//document.getElementById('featuresFrame').src = "AccessibilityFeatures.jsf?element=" + selectedElement.elementId;
+            	selectedElementInput.value = selectedElement.elementId;
+            	if (selectedTabIndex == 1) {
+	            	var featuresPanel = document.getElementById('mainForm:afTab:accessibilityFeaturesPanel');
+	            	featuresPanel.style.display = 'block';
+	                featuresPanel.className += ' wait';
+	                document.getElementById('mainForm:afTab:selectedElementRefresh').click();
+            	}
+            }
+	    }
+	    
+	    function clearSelectionsExcept(exceptCell) {
+	        for (var i = 0; i < tagsTable.rows.length; i++) {
+	            var row = tagsTable.rows[i];
+	            var cell = row.cells[0];
+	            if (cell != exceptCell) {
+	                clearSelection(cell);
+	            }
+	        }
+	    }
+	
+	    function clearSelection(cell) {
+	        cell.className = '';
+	    }
+	    
+	    function enableButtons() {
+	    	document.getElementById("mainForm:aeTab:saveButton").disabled = false;
+	    	document.getElementById("mainForm:aeTab:cancelButton").disabled = false;
+	    	changesMade = true;
+	    }
+	
+	    function enableFeaturesButtons() {
+	    	document.getElementById("mainForm:afTab:saveFeaturesButton").disabled = false;
+	    	document.getElementById("mainForm:afTab:cancelFeaturesButton").disabled = false;
+	    	changesMade = true;
+	    }
+	    
+	    function enableInclusionOrderButtons() {
+	    	document.getElementById("mainForm:ioTab:saveInclusionOrderButton").disabled = false;
+	    	document.getElementById("mainForm:ioTab:cancelInclusionOrderButton").disabled = false;
+	    	changesMade = true;
+	    }
+	
+	    function addTag(element, refresh) {
+	        var cell;
+	        var row;
+	        if (!cellToReassign) {
+	            row = tagsTable.insertRow(-1);
+	            cell = row.insertCell(-1);
+	        } else {
+	            cell = cellToReassign;
+	            row = cell.parentNode;
+	            element.modified = true;
+	            element.elementId = cellToReassign.element.elementId;
+	            element.featureCount = cellToReassign.element.featureCount; 	            
+	            //alert(row);
+	            cellToReassign = undefined;
+	        }
+	        cell.element = element;
+	        cell.row = row;
+	        cell.onclick = function() { click(cell); }
+	        if (!element.elementId) {
+                maxElementId = cell.tagId = maxElementId + 1;
+		        element.elementId = "" + cell.tagId;
+		        while (element.elementId.length < 3) { 
+		            element.elementId = "0" + element.elementId;
+		        }
+		        element.elementId = 'ae' + element.elementId;
+		        enableButtons();
+	        } else {
+	        	cell.tagId = parseInt(element.elementId.replace(/ae0*/, ''));
+	        	if (cell.tagId > maxElementId) {
+	        		maxElementId = cell.tagId;
+	        	}
+	        }
+	        var tagType = tagNames[element.tagName];
+	        if (!tagType && element.broken) { //we may not know element's tag name if the link is broken
+	            tagType = "Unknown";
+	        }
+	        var tagText = element.broken ? "" : (element.tagText ? element.tagText : "");
+	        var tagName = element.elementId.length > 6 ? element.elementId.substring(0, 3) + "..." + element.elementId.substring(element.elementId.length - 3) : element.elementId; 
+	        cell.innerHTML = "<div class='tagDiv'><div class='tagName' title='" + element.elementId + "'>" + tagName + 
+	                         "</div><span class='tagType'>" + tagType +
+	                         "</span>" +
+	                         "<div class='tagText' title='" + tagText + "'>" + tagText +
+	                         (selectedTabIndex == 0 && element.featureCount > 0 ? "</div><div class='tagText2'>" + element.featureCount + " accessibility feature" + (element.featureCount > 1 ? "s" : "") + "</div>" : "</div>") +
+	                         (selectedTabIndex == 0 ? "<div class='tagDiv2'><a href='#' onclick='stopEvent(event); return deleteTag(" + cell.tagId + "," + element.featureCount + ");'>" + 
+	                                                  "<img class='closeButton' src='images/delete.png' title='Delete'/></a></div>" : "") +
+	                         (selectedTabIndex == 0 && element.broken ? "<div class='tagDiv3'><a href='#' onclick='stopEvent(event); return reassignTag(" + cell.tagId + ");'>" +
+	                                                                    "<img class='warningButton' src='images/warning.png' title='Link is broken. Click to assign new content'/></div>" : "");
+	        if (refresh) {
+	        	refreshFrame();
+	        	updateStatusAndSaveButton();
+	        }
+	    }
+	    
+	    function reassignTag(tagId) {
+	        //alert('About to assign new value for ' + tagId);
+	        if (cellToReassign) {
+	            cellToReassign.childNodes[0].className = cellToReassign.childNodes[0].className.replace(' tagDivReassign', '');
+	        }
+            for (var i = 0; i < tagsTable.rows.length; i++) {
+                if (tagsTable.rows[i].cells[0].tagId == tagId) {
+                    if (cellToReassign == tagsTable.rows[i].cells[0]) { //clicked again on tag being reassigned - clear selection
+                        cellToReassign.childNodes[0].className = cellToReassign.childNodes[0].className.replace(' tagDivReassign', '');
+                        cellToReassign = undefined;
+                    } else {
+	                    cellToReassign = tagsTable.rows[i].cells[0];
+	                    //alert('cellToReassign: ' + cellToReassign.childNodes[0]);
+	                    cellToReassign.childNodes[0].className += ' tagDivReassign';
+                    }
+                    break;
+                }
+            }
+            updateStatusAndSaveButton();
+	    }
+	    
+	    function deleteTag(tagId, featureCount) {
+	    	if (featureCount > 0 && !confirm('This element has associated features. Proceed with delete?')) {
+	    		return false;
+	    	}
+	        var i = tagsTable.rows.length - 1;
+	        while (i >= 0) {
+	            if (tagsTable.rows[i].cells[0].tagId == tagId) {
+	                if (tagsTable.rows[i].cells[0] == cellToReassign) {
+	                    cellToReassign = undefined;
+	                }
+	                tagsTable.deleteRow(i);
+	            }
+	            i--;
+	        }
+	        refreshFrame();
+	        enableButtons();
+	        updateStatusAndSaveButton();
+	    }
+	
+	    function getMaxTagId() {
+	        var i = 0; 
+	        var maxTagId = 0;
+	        while (i < tagsTable.rows.length) {
+	            if (tagsTable.rows[i].cells[0].tagId > maxTagId) {
+	                maxTagId = tagsTable.rows[i].cells[0].tagId;
+	            }
+	            i++;
+	        }
+	        return maxTagId;
+	    }
+	    
+	    function setDoc(content, stylesheetUrl) {
+	    	var window = iframe.contentWindow;
+	    	if (content && !window.document.body.initialized) {
+	    		window.document.body.innerHTML = content;
+	    		window.document.body.initialized = true;
+	    		if (stylesheetUrl != '') {
+	    		    setStylesheet(window.document, stylesheetUrl);
+	    		} 
+	    	} else {
+	    		window.clearSelection();
+	    	}
+            iframe.contentWindow.addTag = addTag;
+            iframe.contentWindow.mediaURL = '#{accessibilityTagging.mediaURL}';
+	    	iframe.contentWindow.init(selectedTabIndex == 0, selectedTabIndex == 0 ? 'crosshair' : 'auto', setDocAfterInit);
+	    }
+	    
+	    function setStylesheet(doc, stylesheetUrl) {
+	        var ss = doc.createElement("link");
+	        ss.type = "text/css";
+	        ss.rel = "stylesheet";
+	        ss.href = stylesheetUrl;
+	        doc.getElementsByTagName("head")[0].appendChild(ss);	        
+	    }
+	    
+	    function setDocAfterInit() {
+            if (selectMethod) {
+                selectMethod();
+                selectMethod = undefined;
+            }
+            if (!initialized) {
+                tagsFromJSON();
+                updateStatusAndSaveButton();
+                initialized = true;
+            }
+	    }
+	    
+	    function refreshFrame() {
+	    	var content;
+	    	var newSrc = "SelectElements.html";
+	    	content = document.getElementById("mainForm:itemOrPassageHTML").value;
+	    	var stylesheetUrl = document.getElementById("mainForm:stylesheetUrl").value; 
+			if (!iframe.src.endsWith(newSrc)) {
+				iframe.src = newSrc;
+		    	if (iframe.attachEvent){
+					iframe.attachEvent("onload", function() {
+				        setDoc(content, stylesheetUrl);
+				    });
+				} else {
+					iframe.onload = function() {
+				        setDoc(content, stylesheetUrl);
+				    };
+			    }
+			} else {
+				setDoc(content);
+			}
+	    }
+	    
+	    function setVars() {
+	    	if (selectedTabIndex == 0) {
+	    		iframe = document.getElementById('frm1');
+	    		tagsTable = document.getElementById('tagsTable1');
+	    	} else if (selectedTabIndex == 1) {
+	    		iframe = document.getElementById('frm2');
+	    		tagsTable = document.getElementById('tagsTable2');
+	    		selectedElementInput = document.getElementById('mainForm:afTab:selectedElementInput2');
+	    		featuresModified = enableFeaturesButtons;
+	    	} else if (selectedTabIndex == 2) {
+	    		iframe = document.getElementById('frm3');
+	    		tagsTable = document.getElementById('tagsTable3');
+	    		selectedElementInput = document.getElementById('mainForm:ioTab:selectedElementInput3');
+	    		inclusionOrderModified = enableInclusionOrderButtons;
+	    	}
+	    }
+	    
+	    window.onload = function() {
+	    	setVars();
+	    	refreshFrame();
+	    	var iframeHeight = document.documentElement.clientHeight * 0.55;
+	    	document.getElementById('outerDiv').style.height = document.documentElement.clientHeight - 18 + 'px';
+	    	document.getElementById('mainForm_tabbedPane').style.height = document.documentElement.clientHeight - 68 + 'px';
+        	var featuresPanel = document.getElementById('mainForm:afTab:accessibilityFeaturesPanel');
+        	if (featuresPanel) {
+        		featuresPanel.style.display = 'none';
+        	}
+	    }
+	    
+	    function tagsToJSON() {
+	    	var elements = new Array();
+	        for (var i = 0; i < tagsTable.rows.length; i++) {
+	            var row = tagsTable.rows[i];
+	            var cell = row.cells[0];
+	            if (!cell.element.broken) {
+	                elements.push(cell.element);
+	            }
+	        }
+	    	return JSON.stringify(elements);
+	    }
+	    
+	    function tagsFromJSON() {
+	    	var elements = JSON.parse(document.getElementById('mainForm:tagsJSON').value);
+	    	for (var i = 0; i < elements.length; i++) {
+	    		var element = completeElement(elements[i]);
+	    		addTag(element);
+	    	}
+	    }
+	    
+	    function updateStatusAndSaveButton() {
+	        if (selectedTabIndex != 0) {
+	            return;
+	        }
+	        brokenElementCount = 0;
+	        brokenElementIds = "";
+            for (var i = 0; i < tagsTable.rows.length; i++) {
+                var row = tagsTable.rows[i];
+                var cell = row.cells[0];
+                var element = cell.element;
+                if (element.broken) {
+                    brokenElementCount++;
+                    brokenElementIds += (brokenElementIds.length > 0 ? ", " : "") + element.elementId;
+                }
+            }
+            var html = "";
+            if (brokenElementCount > 0) {
+                html = "<img class='warningButton' src='images/warning.png' title='Warning: broken links'/>&nbsp;&nbsp;" +
+                       "One or more accessibility tags point to deleted content (broken links): <b>" + brokenElementIds + "</b>";
+            } else {
+            }
+            if (cellToReassign) {
+                html += "<br>Selecting new content for <b>" + cellToReassign.element.elementId + "</b>";                
+            }
+            document.getElementById('aeTabBottomRow').innerHTML = html;
+            if (brokenElementCount > 0) {
+                document.getElementById("mainForm:aeTab:saveButton").disabled = false;
+            }
+	    }
+	    
+	    function completeElement(element) { 
+	        var tag = iframe.contentWindow.findElement(element.id); 
+	        if (!tag) {
+	            element.broken = true;
+	        } else {
+//	            if (element.textSelection) {
+//	                element.textSelection.text = iframe.contentWindow.getElementText(element);
+//	            }
+		    	if (element.tagName != 'TEXT') {
+		    		iframe.contentWindow.adjustElementType(element);
+		    	} else {
+		    	    element.tagText = iframe.contentWindow.getElementText(element);
+		    	}
+	        }
+	    	return element;
+	    }
+	    
+	    function onFormSubmit() {
+	    	if (changesMade && !saveClicked && !confirm('You may lose your unsaved changes. Continue?')) {
+	    		return false;
+	    	}
+	    	if (saveClicked && brokenElementCount > 0 && !confirm('All accessibility tags with broken links will be removed. Continue?')) {
+	    	    return false;
+	    	}
+	    	return true;
+	    }
+	    
+		           
+		//]]>  	    
+	</script>
+
+</h:head>
+
+<h:body>
+
+	<t:div id="outerDiv">
+	
+	<h:form id="mainForm" onsubmit="return onFormSubmit();">
+
+    <h:inputHidden id="itemOrPassageHTML" value="#{accessibilityTagging.itemOrPassageHTML}"/>   
+    <h:inputHidden id="stylesheetUrl" value="#{accessibilityTagging.stylesheetUrl}"/>   
+	<h:inputHidden id="tagsJSON" value="#{accessibilityTagging.tagsJSON}"/>
+    
+    <h:panelGrid styleClass="item" columns="2">
+        <h:outputText rendered="#{accessibilityTagging.item ne null}" value="Item:"/>
+        <h:panelGroup rendered="#{accessibilityTagging.item ne null}">
+            <h:outputText styleClass="itemId" value="#{accessibilityTagging.item.externalId}"/>
+            &nbsp;&lt;<h:outputText value="#{accessibilityTagging.item.itemBank.externalId}"/>&gt;
+        </h:panelGroup>
+        <h:outputText rendered="#{accessibilityTagging.passage ne null}" value="Passage:"/>
+        <h:panelGroup rendered="#{accessibilityTagging.passage ne null}" >
+            <h:outputText styleClass="itemId" value="#{accessibilityTagging.passage.name}"/>
+        </h:panelGroup>
+        <h:outputText rendered="#{accessibilityTagging.item ne null}" value="Description:"></h:outputText>
+        <h:outputText rendered="#{accessibilityTagging.item ne null}" value="#{accessibilityTagging.item.description}"/>
+    </h:panelGrid>
+
+	<h:messages class="error"/>
+	<t:panelTabbedPane id="tabbedPane" styleClass="tabbedPane" tabContentStyleClass="panelTab" activeTabStyleClass="activeTabCell" serverSideTabSwitch="true" selectedIndex="0">
+		
+		<t:panelTab id="aeTab" label="Apply Tags">
+			<table width="100%">
+				<tr>
+				<td width="700px">
+					<iframe id="frm1" src="" frameborder="1" height="500px" width="700px">
+					</iframe>
+				</td>
+				<td>
+					<div id="tagsDiv1" style="height: 500px; width: 250px; overflow-y: scroll; border: 1px solid lightgray;">
+						<table class="tagsTable" id="tagsTable1" width="100%"/>
+					</div>
+				</td>
+				<td style="vertical-align: top">
+					<t:div styleClass="buttonsDiv">
+						<h:commandButton id="saveButton" styleClass="button" value="Save Changes" disabled="true" onclick="saveClicked = true; document.getElementById('mainForm:tagsJSON').value = tagsToJSON();" action="#{accessibilityTagging.doSave}"/>
+						<h:commandButton id="cancelButton" styleClass="button" value="Cancel" disabled="true" action="#{accessibilityTagging.doCancel}"/>
+					</t:div>
+				</td></tr>
+				<tr><td width="700px" id="aeTabBottomRow"></td>
+				</tr>
+			</table>
+			
+	    </t:panelTab>
+	    
+		<t:panelTab id="afTab" label="Define Tags">
+			<table style="height: 100%; width: 100%;">
+				<tr>
+				<td width="700px">
+					<iframe id="frm2" src="" frameborder="1" height="450px" width="700px">
+					</iframe>
+				</td>
+				<td>
+					<div id="tagsDiv2" style="height: 450px; width: 250px; overflow-y: scroll; border: 1px solid lightgray;">
+						<table class="tagsTable" id="tagsTable2" width="100%"/>
+					</div>
+				</td>
+				<td style="vertical-align: top">
+					<t:div styleClass="buttonsDiv">
+						<h:commandButton id="saveFeaturesButton" styleClass="button" value="Save Changes" disabled="true" onclick="saveClicked = true; document.getElementById('mainForm:tagsJSON').value = '';" action="#{accessibilityTagging.doSaveFeatures}"/>
+						<h:commandButton id="cancelFeaturesButton" styleClass="button" value="Cancel" disabled="true" action="#{accessibilityTagging.doCancel}"/>
+					</t:div>
+				</td></tr>
+				<tr><td colspan="2">
+					<h:inputHidden id="selectedElementInput2" value="#{accessibilityTagging.selectedElementId}"></h:inputHidden>
+					<h:commandButton id="selectedElementRefresh" style="display: none;" value="Refresh" action="#{accessibilityTagging.doRefresh}">
+						<f:ajax execute="mainForm:afTab:selectedElementInput2" render="accessibilityFeaturesPanel"></f:ajax>
+					</h:commandButton>
+					<h:panelGroup id="accessibilityFeaturesPanel" styleClass="accessibilityFeaturesPanel" layout="block">
+						<ui:include src="AccessibilityFeatures.xhtml"/>
+					</h:panelGroup>
+				</td>
+				</tr>
+			</table>
+	    </t:panelTab>
+
+		<t:panelTab id="ioTab" label="Order Tags">
+			<table style="height: 100%; width: 100%;">
+				<tr>
+				<td width="700px">
+					<iframe id="frm3" src="" frameborder="1" height="450px" width="700px">
+					</iframe>
+				</td>
+				<td>
+					<div id="tagsDiv3" style="height: 450px; width: 250px; overflow-y: scroll; border: 1px solid lightgray;">
+						<table class="tagsTable" id="tagsTable3" width="100%"/>
+					</div>
+				</td>
+				<td style="vertical-align: top">
+					<t:div styleClass="buttonsDiv">
+						<h:commandButton id="saveInclusionOrderButton" styleClass="button" value="Save Changes" disabled="true" onclick="saveClicked = true; document.getElementById('mainForm:tagsJSON').value = '';" action="#{accessibilityTagging.doSaveInclusionOrder}"/>
+						<h:commandButton id="cancelInclusionOrderButton" styleClass="button" value="Cancel" disabled="true" action="#{accessibilityTagging.doCancel}"/>
+					</t:div>
+				</td></tr>
+				<tr><td colspan="2">
+					<h:panelGroup id="inclusionOrderPanelContainer" styleClass="accessibilityFeaturesPanel" layout="block">
+						<h:inputHidden id="selectedElementInput3" value="#{accessibilityTagging.selectedElementId}"></h:inputHidden>
+						<ui:include src="InclusionOrder.xhtml"/>
+					</h:panelGroup>
+				</td>
+				</tr>
+			</table>
+	    </t:panelTab>
+	    
+	    <t:tabChangeListener type="#{accessibilityTagging}"></t:tabChangeListener>
+		
+	</t:panelTabbedPane>
+	
+	</h:form>
+	
+	</t:div>
+
+</h:body>
+</html>

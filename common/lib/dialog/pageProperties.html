@@ -1,0 +1,401 @@
+<ul>
+    <li>
+        <a href="#pagePropertiesGeneralPage_{containerId}">[L_PAGE_PROPERTIES_GENERAL_PAGE_TAB]</a>    
+    </li>
+    <li>
+        <a href="#pagePropertiesFirstPage_{containerId}">[L_PAGE_PROPERTIES_FIRST_PAGE_TAB]</a>    
+    </li>
+    <li>
+        <a href="#pagePropertiesHeaderFooter_{containerId}">[L_PAGE_PROPERTIES_HEADER_FOOTER_TAB]</a>    
+    </li>
+</ul>
+<div id="pagePropertiesGeneralPage_{containerId}" class="dialogPanelContainer">
+    <table class="dialogPanels">
+        <tr>           
+            <td class="ribbonPanel ui-widget-content" style="vertical-align: top !important;">
+                <div class="dialogPanelInnerContainer">
+                    <fieldset>
+                        <legend>[L_PAGE_MARGINS]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <label id="page_margin_top_label_{containerId}" for="page_margin_top_{containerId}">[L_PAGE_MARGIN_TOP]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_margin_top_{containerId}" name="page-margin-top" value="2" />
+                                    <select class="spinnerUnit" id="page_margin_top_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <label id="page_margin_bottom_label_{containerId}" for="page_margin_bottom_{containerId}">[L_PAGE_MARGIN_BOTTOM]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_margin_bottom_{containerId}" name="page-margin-bottom" value="2" />
+                                    <select class="spinnerUnit" id="page_margin_bottom_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label id="page_margin_left_label_{containerId}" for="page_margin_left_{containerId}">[L_PAGE_MARGIN_LEFT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_margin_left_{containerId}" name="page-margin-left" value="2" />
+                                    <select class="spinnerUnit" id="page_margin_left_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <label id="page_margin_right_label_{containerId}" for="page_margin_right_{containerId}">[L_PAGE_MARGIN_RIGHT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_margin_right_{containerId}" name="page-margin-right" value="2" />
+                                    <select class="spinnerUnit" id="page_margin_right_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_PAGE_SIZE]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <select id="page_size_{containerId}">
+                                        <option value="A6">A6</option>
+                                        <option value="A5">A5</option>
+                                        <option value="A4">A4</option>
+                                        <option value="A3">A3</option>
+                                        <option value="B6">B6</option>
+                                        <option value="B5">B5</option>
+                                        <option value="B4">B4</option>
+                                        <option value="Letter" selected="selected">Letter</option>
+                                        <option value="Legal">Legal</option>
+                                        <option value="Ledger">Ledger</option>
+                                        <option value="Invoice">Invoice</option>
+                                        <option value="Custom">[L_CUSTOM]</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">
+                                    <label for="page_size_width_{containerId}">[L_PAGE_SIZE_WIDTH]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_size_width_{containerId}" name="page-size-width" value="8.5" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="page_size_height_{containerId}">[L_PAGE_SIZE_HEIGHT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="page_size_height_{containerId}" name="page-size-width" value="11" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="page_size_unit_{containerId}">[L_PAGE_SIZE_UNIT]</label>
+                                </td>
+                                <td>
+                                    <select class="spinnerUnit" id="page_size_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_PAGE_ORIENTATION]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td style="width: 5%">
+                                    <input type="radio" name="page_orientation_radio_{containerId}" value="0" checked="checked" />
+                                </td>
+                                <td>
+                                    <label for="table_rows">[L_PAGE_ORIENTATION_PORTRAIT]</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 5%">
+                                    <input type="radio" name="page_orientation_radio_{containerId}" value="1" />
+                                </td>
+                                <td>
+                                    <label for="table_rows">[L_PAGE_ORIENTATION_LANDSCAPE]</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_LAYOUT_SETTINGS]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td style="width: 20%;">
+                                    <label for="page_layout_{containerId}">[L_PAGE_LAYOUT]</label>
+                                </td>
+                                <td>
+                                    <select id="page_layout_{containerId}">
+                                        <option value="normal" selected=selected>[L_PAGE_LAYOUT_NORMAL]</option>
+                                        <option value="mirrored">[L_PAGE_LAYOUT_MIRRORED]</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="pagePropertiesFirstPage_{containerId}" class="dialogPanelContainer">
+    <table class="dialogPanels">
+        <tr>           
+            <td class="ribbonPanel ui-widget-content" style="vertical-align: top !important;">
+                <div class="dialogPanelInnerContainer">
+                    <fieldset>
+                        <legend>[L_FIRST_PAGE]</legend>
+                        <label for="first_page_enable_{containerId}">[L_ENABLE_FIRST_PAGE]</label>
+                        <input id="first_page_enable_{containerId}" type="checkbox" />
+                    </fieldset>
+                </div>
+                <div class="dialogPanelInnerContainer" id="first_page_settings_{containerId}" style="visibility: hidden;">
+                    <fieldset>
+                        <legend>[L_FIRST_PAGE_MARGINS]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <label id="first_page_margin_top_label_{containerId}" for="first_page_margin_top_{containerId}">[L_FIRST_PAGE_MARGIN_TOP]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_margin_top_{containerId}" name="first-page-margin-top" value="2" />
+                                    <select class="spinnerUnit" id="first_page_margin_top_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <label id="first_page_margin_bottom_label_{containerId}" for="first_page_margin_bottom_{containerId}">[L_FIRST_PAGE_MARGIN_BOTTOM]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_margin_bottom_{containerId}" name="first-page-margin-bottom" value="2" />
+                                    <select class="spinnerUnit" id="first_page_margin_bottom_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label id="first_page_margin_left_label_{containerId}" for="first_page_margin_left_{containerId}">[L_FIRST_PAGE_MARGIN_LEFT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_margin_left_{containerId}" name="first-page-margin-left" value="2" />
+                                    <select class="spinnerUnit" id="first_page_margin_left_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <label id="first_page_margin_right_label_{containerId}" for="first_page_margin_right_{containerId}">[L_FIRST_PAGE_MARGIN_RIGHT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_margin_right_{containerId}" name="first-page-margin-right" value="2" />
+                                    <select class="spinnerUnit" id="first_page_margin_right_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_FIRST_PAGE_SIZE]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <select id="first_page_size_{containerId}">
+                                        <option value="A6">A6</option>
+                                        <option value="A5">A5</option>
+                                        <option value="A4">A4</option>
+                                        <option value="A3">A3</option>
+                                        <option value="B6">B6</option>
+                                        <option value="B5">B5</option>
+                                        <option value="B4">B4</option>
+                                        <option value="Letter" selected="selected">Letter</option>
+                                        <option value="Legal">Legal</option>
+                                        <option value="Ledger">Ledger</option>
+                                        <option value="Invoice">Invoice</option>
+                                        <option value="Custom">[L_CUSTOM]</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">
+                                    <label for="first_page_size_width_{containerId}">[L_FIRST_PAGE_SIZE_WIDTH]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_size_width_{containerId}" name="first-page-size-width" value="8.5" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="first_page_size_height_{containerId}">[L_FIRST_PAGE_SIZE_HEIGHT]</label>
+                                </td>
+                                <td>
+                                    <input class="spinner" type="text" size="5" id="first_page_size_height_{containerId}" name="first-page-size-width" value="11" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="first_page_size_unit_{containerId}">[L_FIRST_PAGE_SIZE_UNIT]</label>
+                                </td>
+                                <td>
+                                    <select class="spinnerUnit" id="first_page_size_unit_{containerId}">
+                                        <option value="in" selected=selected>in</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_FIRST_PAGE_ORIENTATION]</legend>
+                        <table border="0" cellspacing="0">
+                            <tr>
+                                <td style="width: 5%">
+                                    <input type="radio" name="first_page_orientation_radio_{containerId}" value="0" checked="checked" />
+                                </td>
+                                <td>
+                                    <label for="table_rows">[L_FIRST_PAGE_ORIENTATION_PORTRAIT]</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 5%">
+                                    <input type="radio" name="first_page_orientation_radio_{containerId}" value="1" />
+                                </td>
+                                <td>
+                                    <label for="table_rows">[L_FIRST_PAGE_ORIENTATION_LANDSCAPE]</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="pagePropertiesHeaderFooter_{containerId}" class="dialogPanelContainer">
+    <table class="dialogPanels">
+        <tr>
+            <td class="ribbonPanel ui-widget-content">
+                <div class="dialogPanelInnerContainer">
+                    <fieldset>
+                        <legend>[L_DEFAULT_PAGE]</legend>
+                        <div>
+                            <input id="default_page_enable_header_{containerId}" type="checkbox" />
+                            <label for="default_page_enable_header_{containerId}">[L_ENABLE_HEADER_DEFAULT_PAGE]</label>
+                            <input id="default_page_edit_header_{containerId}" type="button" value="{L_EDIT_HEADER_DEFAULT_PAGE}" disabled="disabled" />
+                            <input type="hidden" id="default_page_edit_header_content_{containerId}"/>
+                        </div>
+                        <div>
+                            <input id="default_page_enable_footer_{containerId}" type="checkbox" />
+                            <label for="default_page_enable_footer_{containerId}">[L_ENABLE_FOOTER_DEFAULT_PAGE]</label>
+                            <input id="default_page_edit_footer_{containerId}" type="button" value="{L_EDIT_FOOTER_DEFAULT_PAGE}" disabled="disabled" />
+                            <input type="hidden" id="default_page_edit_footer_content_{containerId}"/>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_FIRST_PAGE]</legend>
+                        <div>
+                            <input id="first_page_enable_header_{containerId}" type="checkbox" />
+                            <label for="first_page_enable_header_{containerId}">[L_ENABLE_HEADER_FIRST_PAGE]</label>
+                            <input id="first_page_edit_header_{containerId}" type="button" value="{L_EDIT_HEADER_FIRST_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="first_page_edit_header_content_{containerId}"/>
+                        </div>
+                        <div>
+                            <input id="first_page_enable_footer_{containerId}" type="checkbox" />
+                            <label for="first_page_enable_footer_{containerId}">[L_ENABLE_FOOTER_FIRST_PAGE]</label>
+                            <input id="first_page_edit_footer_{containerId}" type="button" value="{L_EDIT_FOOTER_FIRST_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="first_page_edit_footer_content_{containerId}"/>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_LEFT_PAGE]</legend>
+                        <div>
+                            <input id="left_page_enable_header_{containerId}" type="checkbox" />
+                            <label for="left_page_enable_header_{containerId}">[L_ENABLE_HEADER_LEFT_PAGE]</label>
+                            <input id="left_page_edit_header_{containerId}" type="button" value="{L_EDIT_HEADER_LEFT_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="left_page_edit_header_content_{containerId}"/>
+                        </div>
+                        <div>
+                            <input id="left_page_enable_footer_{containerId}" type="checkbox" />
+                            <label for="left_page_enable_footer_{containerId}">[L_ENABLE_FOOTER_LEFT_PAGE]</label>
+                            <input id="left_page_edit_footer_{containerId}" type="button" value="{L_EDIT_FOOTER_LEFT_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="left_page_edit_footer_content_{containerId}"/>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>[L_RIGHT_PAGE]</legend>
+                        <div>
+                            <input id="right_page_enable_header_{containerId}" type="checkbox" />
+                            <label for="right_page_enable_header_{containerId}">[L_ENABLE_HEADER_RIGHT_PAGE]</label>
+                            <input id="right_page_edit_header_{containerId}" type="button" value="{L_EDIT_HEADER_RIGHT_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="right_page_edit_header_content_{containerId}"/>
+                        </div>
+                        <div>
+                            <input id="right_page_enable_footer_{containerId}" type="checkbox" />
+                            <label for="right_page_enable_footer_{containerId}">[L_ENABLE_FOOTER_RIGHT_PAGE]</label>
+                            <input id="right_page_edit_footer_{containerId}" type="button" value="{L_EDIT_FOOTER_RIGHT_PAGE}" disabled="disabled"/>
+                            <input type="hidden" id="right_page_edit_footer_content_{containerId}"/>
+                        </div>
+                    </fieldset>
+                </div>
+                
+            </td>
+        </tr>
+    </table>
+</div>

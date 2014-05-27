@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report8" language="groovy" pageWidth="1500" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7704c6fa-7572-4a38-9901-5344021f5610">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <property name="ireport.jasperserver.reportUnit" value="/Reports/qa/Psychometrics1"/>
+    <property name="ireport.jasperserver.url" value="http://localhost:8088/jasperserver/services/repository"/>
+    <property name="net.sf.jasperreports.export.csv.exclude.origin.band.pageHeader" value="pageHeader"/>
+    <property name="net.sf.jasperreports.export.csv.exclude.origin.band.pageFooter" value="pageFooter"/>
+    <property name="net.sf.jasperreports.export.csv.exclude.origin.band.columnHeader" value="columnHeader"/>
+    <style name="table">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TH" mode="Opaque" backcolor="#FAEBD7">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_CH" mode="Opaque" backcolor="#FFE4BF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+            <style backcolor="#FFF8EF"/>
+        </conditionalStyle>
+    </style>
+    <style name="table 1">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_TH" mode="Opaque" backcolor="#FAEBD7">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_CH" mode="Opaque" backcolor="#FFE4BF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+            <style backcolor="#FFF8EF"/>
+        </conditionalStyle>
+    </style>
+    <style name="cell_content">
+        <box leftPadding="4" rightPadding="4"/>
+    </style>
+    <subDataset name="stat_admin_item_value_ds" uuid="b0ac9850-bd1e-4777-b382-668cf8c4ef42">
+        <parameter name="heading1" class="java.lang.String"/>
+        <parameter name="heading2" class="java.lang.String"/>
+        <parameter name="heading3" class="java.lang.String"/>
+        <parameter name="heading4" class="java.lang.String"/>
+        <parameter name="heading5" class="java.lang.String"/>
+        <parameter name="heading6" class="java.lang.String"/>
+        <parameter name="heading7" class="java.lang.String"/>
+        <parameter name="heading8" class="java.lang.String"/>
+        <parameter name="heading9" class="java.lang.String"/>
+        <parameter name="heading10" class="java.lang.String"/>
+        <parameter name="dsNumberOfPoints" class="java.lang.Integer"/>
+        <parameter name="dsItemBankId" class="java.lang.Integer"/>
+        <parameter name="dsItemFormatId" class="java.lang.Integer"/>
+        <parameter name="dsGradeLevelId" class="java.lang.Integer"/>
+        <parameter name="dsPublicationStatusId" class="java.lang.Integer"/>
+        <parameter name="dsSpanStartGradeId" class="java.lang.Integer"/>
+        <parameter name="dsSpanEndGradeId" class="java.lang.Integer"/>
+        <parameter name="dsStatAdministrationId" class="java.lang.Integer"/>
+        <parameter name="dsContentAreaId" class="java.lang.Integer"/>
+        <parameter name="dsHierarchy1Id" class="java.lang.Integer"/>
+        <parameter name="dsHierarchy2Id" class="java.lang.Integer"/>
+        <parameter name="dsHierarchy3Id" class="java.lang.Integer"/>
+        <parameter name="dsHierarchy4Id" class="java.lang.Integer"/>
+        <parameter name="dsHierarchy5Id" class="java.lang.Integer"/>
+        <parameter name="dsItemId" class="java.lang.String"/>
+        <parameter name="dsItemIds" class="java.lang.String" nestedType="java.lang.Integer"/>
+        <parameter name="dsAdministrationPattern" class="java.lang.String"/>
+        <parameter name="dsItemViewURL" class="java.lang.String"/>
+        <parameter name="LoggedInUsername" class="java.lang.String" isForPrompting="false"/>
+        <queryString>
+            <![CDATA[SELECT i.i_id AS i_id,
+  i.i_external_id AS item_i_external_id,
+  ib.ib_external_id    AS item_bank,
+  cfi.points           AS points,
+  gl.gl_name           AS grade_level,
+  gss.gl_name          AS grade_span_start,
+  gse.gl_name          AS grade_span_end,
+  itf.itf_name           AS item_format,
+  ps.ps_name           AS publication_status,
+  ca.ca_name           AS content_area,
+  sa.sa_identifier AS stat_administration_sa_identifier,
+     saiv.`value1` AS stat_admin_item_value_view_value1,
+     saiv.`value2` AS stat_admin_item_value_view_value2,
+     saiv.`value3` AS stat_admin_item_value_view_value3,
+     saiv.`value4` AS stat_admin_item_value_view_value4,
+     saiv.`value5` AS stat_admin_item_value_view_value5,
+     saiv.`value6` AS stat_admin_item_value_view_value6,
+     saiv.`value7` AS stat_admin_item_value_view_value7,
+     saiv.`value8` AS stat_admin_item_value_view_value8,
+     saiv.`value9` AS stat_admin_item_value_view_value9,
+     saiv.`value10` AS stat_admin_item_value_view_value10
+FROM
+item i
+INNER JOIN stat_admin_item_value_view saiv ON i.i_id = saiv.i_id
+INNER JOIN item_bank ib ON i.ib_id = ib.ib_id  AND ib.`ib_id` IN (SELECT up_value FROM user_permission WHERE up_type=1 AND u_id=(SELECT u_id FROM user WHERE u_username=$P{LoggedInUsername}))
+INNER JOIN characterization_for_item_view cfi ON i.i_id = cfi.i_id
+LEFT OUTER JOIN content_area ca ON cfi.content_area = ca.ca_id
+LEFT OUTER JOIN item_format itf ON i.i_format = itf.itf_id
+LEFT OUTER JOIN publication_status ps ON i.i_publication_status = ps.ps_id
+LEFT OUTER JOIN grade_level gl ON cfi.grade_level = gl.gl_id
+LEFT OUTER JOIN grade_level gss ON cfi.grade_span_start = gss.gl_id
+LEFT OUTER JOIN grade_level gse ON cfi.grade_span_end = gse.gl_id
+LEFT OUTER JOIN stat_administration sa ON saiv.sa_id = sa.sa_id
+WHERE
+     ($P{dsItemBankId} IS NULL OR i.ib_id = $P{dsItemBankId})
+     AND ($P{dsItemFormatId} IS NULL OR i.i_format = $P{dsItemFormatId})
+     AND ($P{dsPublicationStatusId} IS NULL OR i.i_publication_status = $P{dsPublicationStatusId})
+     AND ($P{dsStatAdministrationId} IS NULL OR sa.sa_id = $P{dsStatAdministrationId})
+     AND ($P{dsAdministrationPattern} IS NULL OR TRIM($P{dsAdministrationPattern}) = '' OR sa.sa_identifier LIKE pattern($P{dsAdministrationPattern}))
+     AND ($P{dsNumberOfPoints} IS NULL OR cfi.points = $P{dsNumberOfPoints})
+     AND ($P{dsContentAreaId} IS NULL OR cfi.content_area = $P{dsContentAreaId})
+     AND ($P{dsGradeLevelId} IS NULL OR cfi.grade_level = $P{dsGradeLevelId})
+     AND ($P{dsSpanStartGradeId} IS NULL OR cfi.grade_span_start = $P{dsSpanStartGradeId})
+     AND ($P{dsSpanEndGradeId} IS NULL OR cfi.grade_span_end = $P{dsSpanEndGradeId})
+     AND ($P{dsItemId} IS NULL OR TRIM($P{dsItemId}) = '' OR i.i_external_id = $P{dsItemId})
+     AND ($P{dsItemIds} IS NULL OR TRIM($P{dsItemIds}) = '' OR i.i_id IN (0$P!{dsItemIds}))
+     AND (cfi.item_standard IS NULL OR 1 = check_hierarchy_definition(cfi.item_standard,$P{dsHierarchy1Id},$P{dsHierarchy2Id},$P{dsHierarchy3Id},$P{dsHierarchy4Id},$P{dsHierarchy5Id}))]]>
+        </queryString>
+        <field name="item_i_external_id" class="java.lang.String"/>
+        <field name="stat_administration_sa_identifier" class="java.lang.String"/>
+        <field name="stat_admin_item_value_view_value1" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value2" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value3" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value4" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value5" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value6" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value7" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value8" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value9" class="java.lang.Float"/>
+        <field name="stat_admin_item_value_view_value10" class="java.lang.Float"/>
+        <field name="item_bank" class="java.lang.String"/>
+        <field name="points" class="java.lang.Integer"/>
+        <field name="grade_level" class="java.lang.String"/>
+        <field name="grade_span_start" class="java.lang.String"/>
+        <field name="grade_span_end" class="java.lang.String"/>
+        <field name="content_area" class="java.lang.String"/>
+        <field name="item_format" class="java.lang.String"/>
+        <field name="publication_status" class="java.lang.String"/>
+        <field name="i_id" class="java.lang.Integer"/>
+    </subDataset>
+    <parameter name="StatKeyIds" class="java.util.Collection" nestedType="java.lang.Integer"/>
+    <parameter name="NumberOfPoints" class="java.lang.Integer"/>
+    <parameter name="ItemBankId" class="java.lang.Integer"/>
+    <parameter name="ItemFormatId" class="java.lang.Integer"/>
+    <parameter name="GradeLevelId" class="java.lang.Integer"/>
+    <parameter name="PublicationStatusId" class="java.lang.Integer"/>
+    <parameter name="SpanStartGradeId" class="java.lang.Integer"/>
+    <parameter name="SpanEndGradeId" class="java.lang.Integer"/>
+    <parameter name="StatAdministrationId" class="java.lang.Integer"/>
+    <parameter name="ContentAreaId" class="java.lang.Integer"/>
+    <parameter name="Hierarchy1Id" class="java.lang.Integer"/>
+    <parameter name="Hierarchy2Id" class="java.lang.Integer"/>
+    <parameter name="Hierarchy3Id" class="java.lang.Integer"/>
+    <parameter name="Hierarchy4Id" class="java.lang.Integer"/>
+    <parameter name="Hierarchy5Id" class="java.lang.Integer"/>
+    <parameter name="Psychometrics_Item_Data" class="java.util.Collection" nestedType="java.lang.Integer"/>
+    <parameter name="ItemId" class="java.lang.String"/>
+    <parameter name="ItemIds" class="java.lang.String" nestedType="java.lang.Integer"/>
+    <parameter name="AdministrationPattern" class="java.lang.String"/>
+    <parameter name="ItemViewURL" class="java.lang.String"/>
+    <parameter name="LoggedInUsername" class="java.lang.String" isForPrompting="false"/>
+    <queryString>
+        <![CDATA[SELECT
+     *
+FROM
+     `stat_key_name_view` stat_key_name_view]]>
+    </queryString>
+    <field name="name1" class="java.lang.String"/>
+    <field name="name2" class="java.lang.String"/>
+    <field name="name3" class="java.lang.String"/>
+    <field name="name4" class="java.lang.String"/>
+    <field name="name5" class="java.lang.String"/>
+    <field name="name6" class="java.lang.String"/>
+    <field name="name7" class="java.lang.String"/>
+    <field name="name8" class="java.lang.String"/>
+    <field name="name9" class="java.lang.String"/>
+    <field name="name10" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="42" splitType="Stretch">
+            <staticText>
+                <reportElement uuid="ade770a2-98a7-42c4-a9ba-d7de1a3f0e6c" x="0" y="0" width="421" height="42"/>
+                <textElement>
+                    <font fontName="SansSerif" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Psychometrics Report]]></text>
+            </staticText>
+        </band>
+    </title>
+    <detail>
+        <band height="44" splitType="Stretch">
+            <componentElement>
+                <reportElement uuid="cbdfae9e-a833-4642-9bd8-5dab32a5c36a" key="table 2" style="table 2" x="0" y="0" width="1460" height="44"/>
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+                    <datasetRun subDataset="stat_admin_item_value_ds" uuid="da333322-f559-4c9b-9bb1-31138fd1f632">
+                        <datasetParameter name="heading1">
+                            <datasetParameterExpression><![CDATA[$F{name1}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading2">
+                            <datasetParameterExpression><![CDATA[$F{name2}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading3">
+                            <datasetParameterExpression><![CDATA[$F{name3}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading4">
+                            <datasetParameterExpression><![CDATA[$F{name4}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading5">
+                            <datasetParameterExpression><![CDATA[$F{name5}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading6">
+                            <datasetParameterExpression><![CDATA[$F{name6}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading7">
+                            <datasetParameterExpression><![CDATA[$F{name7}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading8">
+                            <datasetParameterExpression><![CDATA[$F{name8}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading9">
+                            <datasetParameterExpression><![CDATA[$F{name9}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="heading10">
+                            <datasetParameterExpression><![CDATA[$F{name10}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsItemFormatId">
+                            <datasetParameterExpression><![CDATA[$P{ItemFormatId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsItemBankId">
+                            <datasetParameterExpression><![CDATA[$P{ItemBankId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsNumberOfPoints">
+                            <datasetParameterExpression><![CDATA[$P{NumberOfPoints}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsGradeLevelId">
+                            <datasetParameterExpression><![CDATA[$P{GradeLevelId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsPublicationStatusId">
+                            <datasetParameterExpression><![CDATA[$P{PublicationStatusId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsSpanStartGradeId">
+                            <datasetParameterExpression><![CDATA[$P{SpanStartGradeId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsSpanEndGradeId">
+                            <datasetParameterExpression><![CDATA[$P{SpanEndGradeId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsStatAdministrationId">
+                            <datasetParameterExpression><![CDATA[$P{StatAdministrationId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsContentAreaId">
+                            <datasetParameterExpression><![CDATA[$P{ContentAreaId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsHierarchy1Id">
+                            <datasetParameterExpression><![CDATA[$P{Hierarchy1Id}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsHierarchy2Id">
+                            <datasetParameterExpression><![CDATA[$P{Hierarchy2Id}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsHierarchy3Id">
+                            <datasetParameterExpression><![CDATA[$P{Hierarchy3Id}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsHierarchy4Id">
+                            <datasetParameterExpression><![CDATA[$P{Hierarchy4Id}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsHierarchy5Id">
+                            <datasetParameterExpression><![CDATA[$P{Hierarchy5Id}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsItemId">
+                            <datasetParameterExpression><![CDATA[$P{ItemId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsItemIds">
+                            <datasetParameterExpression><![CDATA[$P{ItemIds}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsAdministrationPattern">
+                            <datasetParameterExpression><![CDATA[$P{AdministrationPattern}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="dsItemViewURL">
+                            <datasetParameterExpression><![CDATA[$P{ItemViewURL}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="LoggedInUsername">
+                            <datasetParameterExpression><![CDATA[$P{LoggedInUsername}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+                    </datasetRun>
+                    <jr:column width="130" uuid="c3e3c977-35e4-4100-a0ae-6049de403e55">
+                        <jr:tableFooter height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="9cbe9c6e-bb9f-4b09-aa5e-e9f8a01b7878" x="0" y="0" width="130" height="30">
+                                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} == 0]]></printWhenExpression>
+                                </reportElement>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font size="12" isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[No results found]]></text>
+                            </staticText>
+                        </jr:tableFooter>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="58b442c2-3bcb-47bf-ac9e-9cee6aaf4f61" x="0" y="0" width="130" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Item ID]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField hyperlinkType="Reference" hyperlinkTarget="Blank">
+                                <reportElement uuid="58248da1-e012-4c47-a3ce-3a13094ae510" style="cell_content" mode="Transparent" x="0" y="7" width="130" height="16" forecolor="#000000"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{item_i_external_id}]]></textFieldExpression>
+                                <hyperlinkReferenceExpression><![CDATA[$P{dsItemViewURL} + $F{i_id}]]></hyperlinkReferenceExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="90" uuid="4be0f571-62bd-453f-aff0-eadfdac99a1b">
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="90" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Administration]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="90" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_administration_sa_identifier}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="90" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(1)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="90" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Program]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="90" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{item_bank}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="60" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(2)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="60" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Content Area]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="60" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{content_area}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="60" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(3)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="60" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Item Type]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="60" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{item_format}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="40" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(4)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="40" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Points]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="40" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{points}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="50" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(5)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="50" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Pub Status]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="50" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{publication_status}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="40" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(6)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="40" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Grade Level]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="40" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{grade_level}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="50" uuid="e8096bd5-279f-49fe-81e2-381ed5481bb0">
+                        <printWhenExpression><![CDATA[$P{Psychometrics_Item_Data}.contains(7)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement uuid="fcad6885-50e0-46e7-aacd-52f82f79d87a" x="0" y="0" width="50" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <text><![CDATA[Grade Span]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="2fb1d2eb-f96c-47b3-b9f9-85fd6dd5dd9b" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="50" height="16">
+                                    <printWhenExpression><![CDATA[$F{grade_span_start} != null && $F{grade_span_end} != null]]></printWhenExpression>
+                                </reportElement>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{grade_span_start} + " - " + $F{grade_span_end}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="8a42b1b2-61e0-4b24-8be4-1ed1c346199c">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(1)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading1}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="d5657cb7-b1a3-4baa-acbc-1dd309dea807" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value1}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="e5d2a725-9676-4735-94e1-dd45893246ce">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(2)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading2}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="a7a54748-8c2a-4f5f-9d9f-17780adbecee" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value2}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="45fe82e5-ae5f-41a3-ac10-c3e2220697ea">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(3)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading3}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="21111ddc-5123-4b5e-a9d0-e40db4c38645" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value3}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="53c1ba5c-4479-4352-bfa4-9e6c8237c989">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(4)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading4}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="88fe8c64-bde5-44ba-a899-1ccabcb6a777" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value4}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(5)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading5}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value5}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(6)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading6}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value6}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(7)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading7}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value7}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(8)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading8}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value8}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(9)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading9}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value9}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="45" uuid="ef56cdf5-7eb1-4ff3-9322-76128e4795c8">
+                        <printWhenExpression><![CDATA[$P{StatKeyIds}.contains(10)]]></printWhenExpression>
+                        <jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+                            <textField>
+                                <reportElement uuid="4b03e7cd-5620-4459-8151-5825c4c05c03" x="0" y="0" width="45" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                    <paragraph leftIndent="3" rightIndent="2"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$P{heading10}]]></textFieldExpression>
+                            </textField>
+                        </jr:columnHeader>
+                        <jr:detailCell style="table 2_TD" height="30" rowSpan="1">
+                            <textField isBlankWhenNull="true">
+                                <reportElement uuid="7f72ac30-5aa2-479f-8659-946af8934d8a" style="cell_content" positionType="Float" mode="Transparent" x="0" y="7" width="45" height="16"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stat_admin_item_value_view_value10}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+        </band>
+    </detail>
+</jasperReport>

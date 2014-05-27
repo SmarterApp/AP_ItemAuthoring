@@ -1,0 +1,505 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<title>Hierarchy Manager</title>
+<link rel="stylesheet" href="../style/text.css" />
+<style>
+.red-text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12pt;
+        font-weight: bold;
+        color: #FF0000;
+
+}
+
+</style>
+
+<link type="text/css" rel="stylesheet" href="/common/js/jstree/_docs/!style.css"/>
+<script type="text/javascript" src="/common/js/encoder.js"></script>
+<script type="text/javascript" src="/common/js/jstree/_lib/jquery.js"></script>
+<script type="text/javascript" src="/common/js/jstree/_lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="/common/js/jstree/_lib/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/common/js/jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="/common/js/jstree/_docs/syntax/!script.js"></script>
+
+<script>
+var hde = { 'progress_bar' : '<img src="/common/images/spinner.gif" />', 'hd_id' : '<TMPL_VAR NAME="hierarchy_id">',
+	     's_hd_id' : '<TMPL_VAR NAME="hierarchy_id">', 'sh_id' : '<TMPL_VAR NAME="sh_id" DEFAULT="0">',
+	    'hd_parent_id' : 0, 'hd_posn_in_parent' : 0, 'hd_parent_path' : 0
+	  };
+var hierarchy_defn = <TMPL_VAR NAME="hierarchy_json">;
+var standards_defn = <TMPL_VAR NAME="standards_json">;
+<TMPL_IF NAME="hierarchy_id">hde.sh_id = standards_defn[<TMPL_VAR NAME="hierarchy_id">].sh_id;</TMPL_IF>
+
+	function showSH(f, id) {
+		document.getElementById('sh_view').style.display = 'block';
+		document.getElementById('hd_view').style.display = 'none';
+		document.getElementById('messages').innerHTML    = '';
+
+		if( id > 0 ) {
+		    f.sh_external_id.value 	= standards_defn[id].sh_external_id;
+		    f.sh_name.value  	= standards_defn[id].sh_name 	    ? standards_defn[id].sh_name 	: '';
+		    f.sh_description.value 	= standards_defn[id].sh_description ? standards_defn[id].sh_description : '';
+		    f.sh_source.value 	= standards_defn[id].sh_source 	    ? standards_defn[id].sh_source 	: '';
+		    hde.hd_id = id;
+		    hde.sh_id = standards_defn[id].sh_id;
+		    showTree(f, hde.hd_id);
+		}
+		else {
+		    f.sh_external_id.value = '';
+		    f.sh_name.value  	   = '';
+		    f.sh_description.value = '';
+		    f.sh_source.value 	   = '';
+		    hde.hd_id = 0;
+		    hde.sh_id = 0;
+		}
+	}
+
+	function showHD(id) {
+		document.getElementById('sh_view').style.display = 'none';
+		document.getElementById('hd_view').style.display = 'block';
+		document.getElementById('messages').innerHTML    = '';
+
+		var f = document.cde;
+		if( id ) {
+		    f.hd_value.value 	     = Encoder.htmlDecode(hierarchy_defn[id].hd_value);
+		    f.hd_std_desc.value      = hierarchy_defn[id].hd_std_desc ? Encoder.htmlDecode(hierarchy_defn[id].hd_std_desc) : '';
+		    f.hd_extended_desc.value = hierarchy_defn[id].hd_extended_desc ? Encoder.htmlDecode(hierarchy_defn[id].hd_extended_desc) : '';
+		    for(var i=0; i<f.hd_type.length; i++) {
+		    	if( f.hd_type.options[i].value == hierarchy_defn[id].hd_type ) {
+			   f.hd_type.selectedIndex = i;
+			   break;
+		    	}
+		    }
+		    hde.hd_id = id;
+		    hde.hd_parent_id      = hierarchy_defn[id].hd_parent_id;
+		    hde.hd_posn_in_parent = hierarchy_defn[id].hd_posn_in_parent;
+		    hde.hd_parent_path    = hierarchy_defn[id].hd_parent_path;
+		}
+		else {
+		    f.hd_value.value 	     = 'New child';
+		    f.hd_std_desc.value      = '';
+		    f.hd_extended_desc.value = '';
+		}
+		    
+		//document.getElementById('hd_value_txt').innerHTML 	  = f.hd_value.value;
+		//document.getElementById('hd_type_txt').innerHTML 	  = f.hd_type.options[f.hd_type.selectedIndex].text;
+		//document.getElementById('hd_std_desc_txt').innerHTML 	  = f.hd_std_desc.value;
+		//document.getElementById('hd_extended_desc_txt').innerHTML = f.hd_extended_desc.value;
+	}
+	function createHD(r) {
+		alert( 'Level Created : ' + r.hd_value );
+	}
+
+	function showTree(f, h_id) {
+		if( h_id == 0 ) {
+		    alert('Please select A Hierarchy to Continue!');
+		    f.hierarchy_id.focus();
+		    return false;
+		}
+		document.getElementById('progress_bar').innerHTML = hde.progress_bar;
+		f.action.value = 'displayEditor'
+		f.submit();
+	}
+	function saveSH(f, action) {
+		if( f.sh_external_id.value.match(/^\s*$/) ) {
+		    alert("Please Enter Required Field 'Short Name'!");
+		    f.sh_external_id.focus();
+		    return false;
+		}
+		if( f.sh_name.value.match(/^\s*$/) ) {
+		    alert("Please Enter Required Field 'Long Name'!");
+		    f.sh_name.focus();
+		    return false;
+		}
+		if(confirm('Save Changes?')) {
+		    f.sh_id.value  = hde.sh_id;
+		    f.hd_id.value  = hde.hd_id;
+		    f.action.value = action;
+		    f.submit();
+		}
+	}
+	function saveHD(f, action) {
+		if( f.hd_value.value.match(/^\s*$/) ) {
+		    alert("Please Enter Required Field 'Name'!");
+		    f.hd_value.focus();
+		    return false;
+		}
+		if( f.hd_type.selectedIndex == 0 ) {
+		    alert("Please Select Required field 'Type'!");
+		    f.hd_type.focus();
+		    return false;
+		}
+		if(confirm('Save Changes?')) {
+		    f.hd_id.value  = hde.hd_id ? hde.hd_id : 0;
+		    f.hd_data.value = hde.hd_parent_id + '|' + hde.hd_posn_in_parent + '|' + hde.hd_parent_path;
+		    f.action.value = action;
+		    f.submit();
+		}
+	}
+	function exportXML(f, action) {
+		if(hde.s_hd_id.match(/^\s*$/) ) return false;
+
+		if(confirm('Export From ' + hierarchy_defn[hde.s_hd_id].hd_value + '?')) {
+		    f.hd_id.value = hde.s_hd_id;
+		}
+		else if( hde.hd_id > 0 ) {
+		    if(confirm('Export From ' + hierarchy_defn[hde.hd_id].hd_value + '?')) {
+		    	f.hd_id.value = hde.hd_id;
+		    }
+		    else {
+		        return false;
+		    }
+		}
+		else {
+		    return false;
+		}
+		f.action.value = action;
+		f.submit();
+	}
+	function myOpen(name,url,w,h) {
+         	var myWin = window.open(url,name,'width='+w+',height='+h+',left=60,top=60,resizable=yes,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
+         	return true;
+	}
+	function deleteLevel() {
+		if(! confirm('Delete this Level Down?')) {
+		    return false;
+		}
+		document.getElementById('delete_progress_bar').innerHTML = hde.progress_bar;
+		var f = document.cde;
+		f.action.value 	= 'deleteLevel';
+		f.sh_id.value   = hde.sh_id;
+		f.hd_id.value   = hde.hd_id;
+		f.hd_data.value = 1;
+		if( hierarchy_defn[hde.hd_id] ) {
+		    f.hd_data.value = hierarchy_defn[hde.hd_id].hd_type;
+		}
+		f.submit();
+	}
+	function createLevel() {
+		var f = document.cde;
+		f.action.value 	= 'createLevel';
+		f.sh_id.value   = hde.sh_id;
+		f.hd_id.value   = hde.hd_id;
+		f.hd_data.value = prompt('Enter New Level Name:');
+		if( f.hd_data.value == 'undefined' || f.hd_data.value == 'null' || f.hd_data.value.match(/^\s*$/) ) {
+		    alert('Name not entered!');
+		    return false;
+		}
+		f.submit();
+	}
+</script>
+
+</head>
+
+<body class="no-style">
+<form action="standards_manager.pl" method="post" enctype="multipart/form-data" name="cde" id="cde">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="action" value="" />
+<input type="hidden" name="hd_id" value="<TMPL_VAR NAME="hierarchy_id">" />
+<input type="hidden" name="sh_id" value="<TMPL_VAR NAME="sh_id">" />
+<input type="hidden" name="hd_data" value="" />
+
+<div class="title">Hierarchy Manager</div>
+<table width="100%" border="2" cellpadding="0" cellspacing="0" bordercolor="#9999FF">
+  <tr>
+    <td align="left" valign="top">
+	<table width="650" border="0" cellspacing="5" cellpadding="5" class="no-style">
+  	  <tr>
+	    <td align="center" valign="top">
+                <input name="add_sibling" type="button" id="add_sibling" value="Add Sibling"  class="action_button" />
+            </td>
+    	    <td align="center" valign="top">
+      		<input name="add_child" type="button" id="add_child" value="Add Child" class="action_button"  />
+    	    </td>
+    	    <td align="left" valign="top">
+		<input name="delete_level" type="button" id="delete_level" value="Delete" class="action_button"  />
+		<span id="delete_progress_bar"></span>
+	    </td>
+  	  </tr>
+  	  <tr>
+    	    <td align="center" valign="top">
+		<input name="import_btn" type="button" id="import_btn" value="Import" class="action_button" onClick="myOpen(this.name, 'importStandardXml.pl', 600, 600)" />
+	    </td>
+    	    <td align="center" valign="top">
+		<input name="exportHierarchyXML" type="button" id="export_node" value="Export" onClick="exportXML(document.she, this.name)" class="action_button"  />
+	    </td>
+    	    <td align="left" valign="top">
+      		<input name="search_text" type="text" id="search_text" class="value-long" />
+      		<input name="search_tree" type="button" id="search_tree" value="Search" class="action_button"  />
+      		<input name="search_clear" type="button" id="search_clear" value="Clear" class="action_button"  />
+	    </td>
+    	  </tr>
+	</table>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="no-style">
+      	  <tr>
+            <td align="left" valign="top" nowrap>
+		<br/>
+                <select name="hierarchy_id" id="hierarchy_id" class="chzn-select" style="width:180px;" onChange="showSH(this.form, this.value)">
+		    <option value="0">Select A Hierarchy</option>
+		    <TMPL_LOOP NAME="standards">
+			<option value="<TMPL_VAR NAME="hd_id">" <TMPL_IF EXPR="hd_id == hierarchy_id">selected</TMPL_IF>><TMPL_VAR NAME="sh_external_id"></option>
+		    </TMPL_LOOP> 
+                </select> <span id="progress_bar"></span>
+		<br/>
+		<br/>
+		<TMPL_INCLUDE NAME="tree.thtml">
+		<script type="text/javascript" >
+		    $(function () {
+			$("#add_sibling").click(function () {
+				if( hde.hd_id == 0 ) {
+				    alert('Please select a Hierarchy first.');
+				    return false;
+				}
+				createLevel();  
+			});
+			$("#add_child").click(function () {
+				if( hde.hd_posn_in_parent == 0 ) {
+				    alert('Please select a Node first.');
+				    return false;
+				}
+				$("#demo3").jstree("create");  
+			});
+			$("#delete_level").click(function () {
+				deleteLevel();  
+			});
+			$("#search_tree").click(function () {
+				$("#demo3").jstree("search", document.getElementById("search_text").value);  
+			});
+			$("#search_clear").click(function () {
+				$("#demo3").jstree("clear_search");  
+				document.getElementById("search_text").value = '';
+			});
+        		$("#demo3")
+                	    .jstree(
+				{ 
+                                  "crrm" : {
+	            			"move" : {
+	                			"check_move" : function (m) {
+	                    			    var p = this._get_parent(m.o);
+	                    			    if(!p) return false;
+	                    			    p = p == -1 ? this.get_container() : p;
+	                    			    if(p === m.np) return true;
+	                    			    if(p[0] && m.np[0] && p[0] === m.np[0]) return true;
+	                    			    return false;
+	                			}
+	            		  	}
+	                          },
+				  "dnd" : {
+					"drop_finish" : function() { alert('Drop'); },
+					"drag_finish" : function() { alert('Drag'); }
+				  },
+				  "themes" : {
+					"theme" : "classic",
+				  },
+				  "plugins" : ["themes", "html_data", "ui", "dnd", "crrm", "search" ] })
+                		    // 1) if using the UI plugin bind to select_node
+                		    .bind("select_node.jstree", function (event, data) {
+                        		// `data.rslt.obj` is the jquery extended node that was clicked
+                        		showHD(data.rslt.obj.attr("id"));
+                		    })
+				    .bind("create.jstree", function (e, data) {
+					$.post(
+					    "standards_manager.pl", 
+					    { 
+						"operation" : "create_node", 
+						"id" : data.rslt.parent.attr("id").replace("node_",""), 
+						"position" : data.rslt.position,
+						"title" : Encoder.htmlEncode(data.rslt.name),
+						"sess_id" : '<TMPL_VAR NAME="sess_id">',
+						"instance_name" : '<TMPL_VAR NAME="instance_name">',
+						"action" : 'createHD',
+						"type" : data.rslt.obj.attr("rel")
+					    }, 
+					    function (r) {
+						if(r.status) {
+						    $(data.rslt.obj).attr("id", r.id);
+						    $(data.rslt.obj).attr("name", data.rslt.name);
+						    r.hd_value = data.rslt.name;
+						    hierarchy_defn[r.id] = r;
+						    createHD(r);
+						}
+						else {
+						    alert( r.id );
+						    $.jstree.rollback(data.rlbk);
+						}
+					   }
+					);
+				    })
+				    .bind("move_node.jstree", function (e, data) {
+					$.post(
+					    "standards_manager.pl", 
+					    { 
+						"hd_id" : data.rslt.o.attr("id"),
+						"position" : hierarchy_defn[data.rslt.o.attr("id")].hd_posn_in_parent > data.rslt.cp ? data.rslt.cp + 1 : data.rslt.cp,
+						"sess_id" : '<TMPL_VAR NAME="sess_id">',
+						"instance_name" : '<TMPL_VAR NAME="instance_name">',
+						"action" : 'reorderSiblings'
+					    }, 
+					    function (r) {
+						if(r.status) {
+						    hierarchy_defn[data.rslt.o.attr("id")].hd_posn_in_parent = r.new_posn;
+						}
+						else {
+						    alert( 'An Error Has Occurred. Please refresh and try again.' );
+						    $.jstree.rollback(data.rlbk);
+						}
+					   }
+					);
+				    })
+
+                		    // 2) if not using the UI plugin - the Anchor tags work as expected
+                		    //    so if the anchor has a HREF attirbute - the page will be changed
+                		    //    you can actually prevent the default, etc (normal jquery usage)
+                		    .delegate("a", "click", function (event, data) { event.preventDefault(); })
+		   		}
+			    );
+			<TMPL_IF NAME="hd_id">
+			setTimeout(function () { $.jstree._focused().select_node("#<TMPL_VAR NAME="hd_id">"); }, 500);
+			</TMPL_IF>
+</script>
+	    </td>
+            <td width="890px" align="left" valign="top">
+	  	<table width="90%" border="0" cellspacing="5" cellpadding="5" class="no-style">
+          	  <tr>
+            	    <td width="49%">
+		      <span id="messages" class="red-text"><TMPL_VAR NAME="msg"></span>
+		      <div id="sh_view" style="display:block;">
+			<table width="100%" border="0" cellspacing="5" cellpadding="5" class="no-style">
+			  <tr>
+                            <td width="20%" align="right" valign="middle">
+                                <span class="required-value">Short Name :</span>
+                            </td>
+                            <td width="40%" align="left" valign="top">
+                                <input name="sh_external_id" type="text" id="sh_external_id" size="30" class="value-long" value="<TMPL_VAR NAME="sh_external_id">" />
+                            </td>
+                            <td width="40%" align="left" valign="top">
+				<span id="sh_external_id_txt" style="display:none;"><TMPL_VAR NAME="sh_external_id"></span>
+                            </td>
+                          </tr>
+			  <tr>
+                            <td width="20%" align="right" valign="middle">
+                                <span class="required-value">Long Name :</span>
+                            </td>
+                            <td width="40%" align="left" valign="top">
+                                <input name="sh_name" type="text" id="sh_name" size="50" class="value-long" value="<TMPL_VAR NAME="sh_name">" />
+                            </td>
+                            <td width="40%" align="left" valign="top">
+				<span id="sh_name_txt" style="display:none;"><TMPL_VAR NAME="sh_name"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td align="right" valign="middle">Desc: </td>
+                            <td align="left" valign="top">
+                                <textarea name="sh_description" cols="28" rows="3" id="sh_description" class="value-long"><TMPL_VAR NAME="sh_description"></textarea>
+                            </td>
+                            <td width="40%" align="left" valign="top">
+				<span id="sh_description_txt" style="display:none;"><TMPL_VAR NAME="sh_description"></span>
+                            </td>
+                          </tr>
+			  <tr>
+                            <td width="20%" align="right" valign="middle">
+                                Source:
+                            </td>
+                            <td width="40%" align="left" valign="top">
+                                <input name="sh_source" type="text" id="sh_source" size="50" class="value-long" value="<TMPL_VAR NAME="sh_source">" />
+                            </td>
+                            <td width="40%" align="left" valign="top">
+				<span id="sh_source_txt" style="display:none;"><TMPL_VAR NAME="sh_source"></span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                            </td>
+                            <td align="center" valign="top">
+                                <input name="saveStandardHierarchy" type="button" id="save_node" value="Save" onClick="saveSH(this.form, this.name)" class="action_button" style="width:85px"/>
+                            </td>
+                            <td>
+                            </td>
+                          </tr>
+            		</table>
+		      </div>
+		      <div id="hd_view" style="display:none;">
+			<table width="100%" border="0" cellspacing="5" cellpadding="5" class="no-style">
+              		  <tr>
+                	    <td width="20%" align="right" valign="middle">
+				<span class="required-value">Name:</span> 
+			    </td>
+                	    <td width="40%" align="left" valign="top">
+				<input name="hd_value" type="text" id="hd_value" size="30" class="value-long" />
+			    </td>
+                            <td width="40%" align="left" valign="top"> <span id="hd_value_txt" style="display:none;"></span> </td>
+              		  </tr>
+              		  <tr>
+                	    <td align="right" valign="middle">
+				<span class="required-value">Type:</span> 
+			    </td>
+                	    <td align="left" valign="top">
+                  		<select name="hd_type" id="hd_type" class="chzn-select" style="width:180px;">
+					<option value="">- - - - -</option>
+					<TMPL_LOOP NAME="types">
+					<option value="<TMPL_VAR NAME="ql_type">"><TMPL_VAR NAME="ql_label"></option>
+					</TMPL_LOOP>
+                  		</select>
+                	    </td>
+                            <td width="40%" align="left" valign="top"> <span id="hd_type_txt" style="display:none;"></span> </td>
+              		  </tr>
+              		  <tr>
+                	    <td align="right" valign="middle">Desc: </td>
+                	    <td align="left" valign="top">
+                  		<textarea name="hd_std_desc" cols="28" rows="3" id="hd_std_desc" class="value-long"></textarea>
+                	    </td>
+                            <td width="40%" align="left" valign="top"> <span id="hd_std_desc_txt" style="display:none;"></span> </td>
+              		  </tr>
+              		  <tr>
+                	    <td align="right" valign="middle">
+				Ext. Desc: 
+			    </td>
+                	    <td align="left" valign="top">
+				<textarea name="hd_extended_desc" id="hd_extended_desc" class="value-long"></textarea>
+			    </td>
+                            <td width="40%" align="left" valign="top"> <span id="hd_extended_desc_txt" style="display:none;"></span> </td>
+              		  </tr>
+              		  <tr>
+                	    <td>
+			    </td>
+                	    <td align="center" valign="top">
+				<input name="saveHierarchyDefinition" type="button" id="save_node" value="Save" onClick="saveHD(this.form, this.name)" />
+			    </td>
+                	    <td>
+			    </td>
+                	    <td align="center" valign="top">
+                	  </tr>
+            		</table>
+		      </div>
+		     </td>
+          	  </tr>
+      	  	  <tr>
+	    	    <td valign="top">
+			<span class="required-value">Red label</span> = required field
+	    	    </td>
+      	  	  </tr>
+        	</table>
+	    </td>
+      	  </tr>
+    	</table>
+    </td>
+  </tr>
+</table>
+</form>
+<form action="standards_manager.pl" method="post" enctype="multipart/form-data" name="she" id="she" target="_blank">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="action" value="" />
+<input type="hidden" name="hd_id" value="<TMPL_VAR NAME="hierarchy_id">" />
+</form>
+</body>
+</html>

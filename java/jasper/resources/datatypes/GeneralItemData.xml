@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl>
+    <folder>/datatypes</folder>
+    <name>GeneralItemData</name>
+    <version>4</version>
+    <label>Select Item Data:</label>
+    <description></description>
+    <creationDate>2013-03-16T13:13:06.000-06:00</creationDate>
+    <updateDate>2012-11-19T15:21:03.000-07:00</updateDate>
+    <type>6</type>
+    <mandatory>false</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <listOfValues>
+        <localResource
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="listOfValues">
+            <folder>/datatypes/GeneralItemData_files</folder>
+            <name>ItemData</name>
+            <version>1</version>
+            <label>ItemData</label>
+            <description></description>
+            <creationDate>2013-03-16T13:13:06.000-06:00</creationDate>
+            <updateDate>2012-11-19T15:21:03.000-07:00</updateDate>
+            <item>
+                <itemLabel>Program</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">1</itemValue>
+            </item>
+            <item>
+                <itemLabel>Content Area</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">2</itemValue>
+            </item>
+            <item>
+                <itemLabel>Item Type</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">3</itemValue>
+            </item>
+            <item>
+                <itemLabel>Points</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">4</itemValue>
+            </item>
+            <item>
+                <itemLabel>Publication Status</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">5</itemValue>
+            </item>
+            <item>
+                <itemLabel>Grade Level</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">6</itemValue>
+            </item>
+            <item>
+                <itemLabel>Grade Span</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">7</itemValue>
+            </item>
+            <item>
+                <itemLabel>Description</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">8</itemValue>
+            </item>
+            <item>
+                <itemLabel>Development State</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">9</itemValue>
+            </item>
+            <item>
+                <itemLabel>Difficulty</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">10</itemValue>
+            </item>
+            <item>
+                <itemLabel>Item Author</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">11</itemValue>
+            </item>
+            <item>
+                <itemLabel>Readability Index</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">12</itemValue>
+            </item>
+            <item>
+                <itemLabel>Depth Of Knowledge</itemLabel>
+                <itemValue xsi:type="java:java.lang.String">13</itemValue>
+            </item>
+        </localResource>
+    </listOfValues>
+</inputControl>

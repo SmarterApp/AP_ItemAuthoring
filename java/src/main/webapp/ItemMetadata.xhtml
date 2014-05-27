@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<h:head>
+    <h:outputStylesheet name="css/basic.css"/>
+    <!-- h:outputStylesheet name="css/Psychometrics.css"/-->
+    <h:outputScript library="javascript" name="common.js"/>
+</h:head>        
+
+<body>
+<f:view>
+
+    <h2>Item Metadata</h2>
+
+    <h:panelGroup rendered="#{itemMetadata.treeData != null}">
+    <t:tree2 id="clientTree" value="#{itemMetadata.treeData}" var="node" varNodeToggler="t">
+    
+        <f:facet name="folder">
+            <h:panelGroup>
+                <f:facet name="expand">
+                    <t:graphicImage value="images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0" alt="Open Folder"/>
+                </f:facet>
+                <f:facet name="collapse">
+                    <t:graphicImage value="images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0" alt="Closed Folder"/>
+                </f:facet>
+                <h:outputText value="#{node.description}" styleClass="nodeFolder"/>
+            </h:panelGroup>
+        </f:facet>
+        
+        <f:facet name="document">
+            <h:panelGroup>
+                <t:graphicImage value="images/document.png" border="0" alt="Document"/>
+                <h:outputText value="#{node.description}" styleClass="document"/>
+            </h:panelGroup>
+        </f:facet>
+        
+    </t:tree2>
+    </h:panelGroup>
+
+</f:view>  
+</body>
+</html>    

@@ -1,0 +1,450 @@
+<workflow_set>
+  <workflow>
+    <user_type>editor</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Edit Item</label>
+        <from_state>development</from_state>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>content_review_1</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>content_specialist</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Content Review 1</label>
+        <from_state>content_review_1</from_state>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>qc_presentation</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>development</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_art</transition_type>
+            <label>New Art</label>
+            <to_state>new_art</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_media</transition_type>
+            <label>New Media</label>
+            <to_state>new_media</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_accessibility</transition_type>
+            <label>New Accessibility</label>
+            <to_state>new_accessibility</to_state>
+          </transition>
+          <transition>
+            <transition_type>fix_accessibility</transition_type>
+            <label>Edit Accessibility</label>
+            <to_state>fix_accessibility</to_state>
+          </transition>
+          <transition>
+            <transition_type>expedite</transition_type>
+            <label>DNU Pool</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <label>Content Review 2</label>
+        <from_state>content_review_2</from_state>
+        <use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>copy_review</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_art</transition_type>
+            <label>New Art</label>
+            <to_state>new_art</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_media</transition_type>
+            <label>New Media</label>
+            <to_state>new_media</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_accessibility</transition_type>
+            <label>New Accessibility</label>
+            <to_state>new_accessibility</to_state>
+          </transition>
+          <transition>
+            <transition_type>fix_accessibility</transition_type>
+            <label>Edit Accessibility</label>
+            <to_state>fix_accessibility</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>3</sequence>
+        <label>Query Resolution</label>
+        <from_state>query_resolution</from_state>
+        <use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>consortium_review</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_art</transition_type>
+            <label>New Art</label>
+            <to_state>new_art</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_media</transition_type>
+            <label>New Media</label>
+            <to_state>new_media</to_state>
+          </transition>
+        </transitions> 
+      </action>
+      <action>
+        <sequence>4</sequence>
+        <label>Content Review 3</label>
+        <from_state>content_review_3</from_state>
+        <use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>consortium_review</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_art</transition_type>
+            <label>New Art</label>
+            <to_state>new_art</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_media</transition_type>
+            <label>New Media</label>
+            <to_state>new_media</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_accessibility</transition_type>
+            <label>New Accessibility</label>
+            <to_state>new_accessibility</to_state>
+          </transition>
+          <transition>
+            <transition_type>fix_accessibility</transition_type>
+            <label>Edit Accessibility</label>
+            <to_state>fix_accessibility</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>5</sequence>
+        <label>Banked</label>
+        <from_state>banked</from_state>
+	<use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>data_review</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>6</sequence>
+        <label>Post Admin Review</label>
+        <from_state>post_admin_review</from_state>
+        <use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>operational_item_pool</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_art</transition_type>
+            <label>New Art</label>
+            <to_state>new_art</to_state>
+          </transition>
+          <transition>
+            <transition_type>new_media</transition_type>
+            <label>New Media</label>
+            <to_state>new_media</to_state>
+          </transition>
+          <transition>
+            <transition_type>expedite</transition_type>
+            <label>Bank</label>
+            <to_state>banked</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>copy_editor</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Copy Review</label>
+        <from_state>copy_review</from_state>
+	<use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>content_review_3</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>query_resolution</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>graphic_designer</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <from_state>new_art</from_state>
+        <use_compare>1</use_compare>
+        <label>Create Art</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Art</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <from_state>fix_art</from_state>
+        <use_compare>1</use_compare>
+        <label>Edit Art</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Art</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>media_designer</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <from_state>new_media</from_state>
+        <use_compare>1</use_compare>
+        <label>Create Media</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Media</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <from_state>fix_media</from_state>
+        <use_compare>1</use_compare>
+        <label>Edit Media</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Media</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>accessibility_specialist</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <from_state>new_accessibility</from_state>
+        <use_compare>1</use_compare>
+        <label>Create Accessibility</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Accessibility</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <from_state>fix_accessibility</from_state>
+        <use_compare>1</use_compare>
+        <label>Edit Accessibility</label>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Approve Accessibility</label>
+            <to_state>last_state</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>committee_reviewer</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Committee Review</label>
+        <from_state>committee_review</from_state>
+        <use_compare>1</use_compare>
+	<is_group_review>1</is_group_review>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>data_reviewer</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Data Review</label>
+        <from_state>data_review</from_state>
+        <use_compare>1</use_compare>
+	<is_group_review>1</is_group_review>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>committee_facilitator</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>Committee Review</label>
+        <from_state>committee_review</from_state>
+	<use_compare>1</use_compare>
+	<is_group_review_lead>1</is_group_review_lead>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>content_review_2</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <label>Data Review</label>
+        <from_state>data_review</from_state>
+        <use_compare>1</use_compare>
+	<is_group_review_lead>1</is_group_review_lead>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>post_admin_review</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+  <workflow>
+    <user_type>qc_presentation</user_type>
+    <actions>
+      <action>
+        <sequence>1</sequence>
+        <label>QC Review</label>
+        <from_state>qc_presentation</from_state>
+	<use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>committee_review</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>content_review_1</to_state>
+          </transition>
+          <transition>
+            <transition_type>branch</transition_type>
+            <label>DNU Pool</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+        </transitions>
+      </action>
+      <action>
+        <sequence>2</sequence>
+        <label>Consortium Review</label>
+        <from_state>consortium_review</from_state>
+        <use_compare>1</use_compare>
+        <transitions>
+          <transition>
+            <transition_type>accept</transition_type>
+            <label>Accept Item</label>
+            <to_state>banked</to_state>
+          </transition>
+          <transition>
+            <transition_type>reject</transition_type>
+            <label>Reject Item</label>
+            <to_state>content_review_3</to_state>
+          </transition>
+          <transition>
+            <transition_type>branch</transition_type>
+            <label>DNU Pool</label>
+            <to_state>dnu_item_pool</to_state>
+          </transition>
+        </transitions>
+      </action>
+    </actions>
+  </workflow>
+</workflow_set>

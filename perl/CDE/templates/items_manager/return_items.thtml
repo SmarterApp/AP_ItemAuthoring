@@ -1,0 +1,152 @@
+<TMPL_IF EXPR="item_cnt > 0">
+  <h4>Search Results : <font size="2"><TMPL_VAR NAME="item_cnt"> Item(s) found.</font></h4><br/>
+
+  <TMPL_IF EXPR="subaction eq 'search_metadata_msie'">
+     <table id="itemTable" class="tablesorter">
+        <thead>
+        <tr>
+         <td bgcolor="#e6EEEE"><span class="text"><img src="/common/images/green_check.gif" border="0" onClick="checkAll(document.cde.item_chk)" onmouseover="this.style.cursor='pointer'" alt="Check All" title="Check/Uncheck All" /></span></td>
+            <th nowrap>Name</th>
+	    <th nowrap>Version</th>
+            <th nowrap>Description</th>
+            <th nowrap>Item Format</th>
+            <th nowrap>Dev State</th>
+            <th nowrap>Editor</th>
+            <th nowrap>Difficulty</th>
+            <th nowrap>Source Document</th>
+            <th nowrap>Review</th>
+            <td bgcolor="#e6EEEE"></td>
+        </tr>
+	</thead>
+     </table>
+  </TMPL_IF>
+
+  <TMPL_IF EXPR="subaction eq 'search_metadata'">
+     <table id="itemTable" class="tablesorter">
+        <thead>
+        <tr>
+         <td bgcolor="#e6EEEE"><span class="text"><img src="/common/images/green_check.gif" border="0" onClick="checkAll(document.cde.item_chk)" onmouseover="this.style.cursor='pointer'" alt="Check All" title="Check/Uncheck All" /></span></td>
+            <th nowrap>Name</th>
+	    <th nowrap>Version</th>
+            <th nowrap>Description</th>
+            <th nowrap>Item Format</th>
+            <th nowrap>Dev State</th>
+            <th nowrap>Editor</th>
+            <th nowrap>Difficulty</th>
+            <th nowrap>Source Document</th>
+            <th nowrap>Review</th>
+            <td bgcolor="#e6EEEE"></td>
+        </tr>
+	</thead>
+        <tbody>
+        <TMPL_LOOP NAME="items">
+        <tr>
+        <td align="center" style="width:30px;"><input type="checkbox" name="item_chk" value="<TMPL_VAR NAME="i_id">" /></td>
+            <td nowrap>
+	      <span <TMPL_IF EXPR="i_is_old_version == 1">style="color:red;"</TMPL_IF> >
+	        <TMPL_VAR NAME="i_external_id">&nbsp;</span></td>
+	    <td nowrap><TMPL_VAR NAME="i_version">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="i_description">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="i_format">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="i_dev_state">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="u_last_name">, <TMPL_VAR NAME="u_first_name">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="i_difficulty">&nbsp;</td>
+            <td><TMPL_VAR NAME="i_source_document">&nbsp;</td>
+            <td><TMPL_IF EXPR="i_review_lock == 1"><i>Locked</i><TMPL_ELSE>Unlocked</TMPL_IF></td>
+        <td>
+                <select name="tools" onChange="doTool(this.form, this.value, this)">
+                    <option value="">-- Options --</option>
+                    <option value="editItem_<TMPL_VAR NAME="i_id">">Edit</option>
+                    <option value="viewItem_<TMPL_VAR NAME="i_id">">View</option>
+                    <option value="itemAccessibility_<TMPL_VAR NAME="i_id">">Accessibility</option>
+                    <option value="itemHistoryReport_<TMPL_VAR NAME="i_id">">Item History Report</option>
+                </select>
+                <div style="display:none;">
+                    <input type="button" class="go" name="editItem_<TMPL_VAR NAME="i_id">" id="editItem_<TMPL_VAR NAME="i_id">" value="Edit" onClick="editItem(document.item_edit, '<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="viewItem_<TMPL_VAR NAME="i_id">" id="viewItem_<TMPL_VAR NAME="i_id">" value="View" onClick="viewItem(document.item_view, '<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="itemAccessibility_<TMPL_VAR NAME="i_id">" id="itemAccessibility_<TMPL_VAR NAME="i_id">" value="Accessibility" onClick="itemAccessibility('<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="itemHistoryReport_<TMPL_VAR NAME="i_id">" id="itemHistoryReport_<TMPL_VAR NAME="i_id">" value="Item History Report" onClick="itemHistoryReport('<TMPL_VAR NAME="i_id">')" />
+        </div>
+        </td>
+        </tr>
+        </TMPL_LOOP>
+	</tbody>
+    </table>
+  </TMPL_IF>
+
+  <TMPL_IF EXPR="subaction eq 'search_standards_msie'">
+        <table id="itemTable" class="tablesorter" border="1" cellspacing="2" cellpadding="2" align="left">
+        <thead>
+        <tr>
+             <td bgcolor="#e6EEEE"><span class="text"><img src="/common/images/green_check.gif" border="0" onClick="checkAll(document.cde.item_chk)" onmouseover="this.style.cursor='pointer'" alt="Check All" title="Check/Uncheck All" /></span></td>
+            <th nowrap>Name</th>
+            <th nowrap>Hierarchy</th>
+            <th nowrap>Test Subject</th>
+            <th nowrap>Area</th>
+            <th nowrap>General Content</th>
+            <th nowrap>Specific Content</th>
+            <th nowrap>Sub-Specific Content</th>
+            <th nowrap>Dev State</th>
+            <th nowrap>Editor</th>
+            <th nowrap>Review</th>
+            <td bgcolor="#e6EEEE"></td>
+        </tr>
+        </thead>
+    </table>
+  </TMPL_IF>
+
+  <TMPL_IF EXPR="subaction eq 'search_standards'">
+        <table id="itemTable" class="tablesorter" border="1" cellspacing="2" cellpadding="2" align="left">
+        <thead>
+        <tr>
+             <td bgcolor="#e6EEEE"><span class="text"><img src="/common/images/green_check.gif" border="0" onClick="checkAll(document.cde.item_chk)" onmouseover="this.style.cursor='pointer'" alt="Check All" title="Check/Uncheck All" /></span></td>
+            <th nowrap>Name</th>
+            <th nowrap>Hierarchy</th>
+            <th nowrap>Test Subject</th>
+            <th nowrap>Area</th>
+            <th nowrap>General Content</th>
+            <th nowrap>Specific Content</th>
+            <th nowrap>Sub-Specific Content</th>
+            <th nowrap>Dev State</th>
+            <th nowrap>Editor</th>
+            <td bgcolor="#e6EEEE"></td>
+        </tr>
+        </thead>
+        <tbody>
+        <TMPL_LOOP NAME="items">
+        <tr>
+            <td align="center" style="width:30px;"><input type="checkbox" name="item_chk" value="<TMPL_VAR NAME="i_id">" /></td>
+            <td nowrap><TMPL_VAR NAME="i_external_id">&nbsp;</td>
+            <td nowrap><TMPL_VAR NAME="level1" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="level2" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="level3" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="level4" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="level5" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="level6" DEFAULT="--"></td>
+            <td nowrap><TMPL_VAR NAME="i_dev_state"></td>
+            <td nowrap><TMPL_VAR NAME="u_last_name">, <TMPL_VAR NAME="u_first_name"></td>
+        <td>
+                <select name="tools" onChange="doTool(this.form, this.value, this)">
+                    <option value="">-- Options --</option>
+                    <option value="editItem_<TMPL_VAR NAME="i_id">">Edit</option>
+                    <option value="viewItem_<TMPL_VAR NAME="i_id">">View</option>
+                    <option value="itemAccessibility_<TMPL_VAR NAME="i_id">">Accessibility</option>
+                    <option value="itemHistoryReport_<TMPL_VAR NAME="i_id">">Item History Report</option>
+                </select>
+                <div style="display:none;">
+                    <input type="button" class="go" name="editItem_<TMPL_VAR NAME="i_id">" id="editItem_<TMPL_VAR NAME="i_id">" value="Edit" onClick="editItem(document.item_edit, '<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="viewItem_<TMPL_VAR NAME="i_id">" id="viewItem_<TMPL_VAR NAME="i_id">" value="View" onClick="viewItem(document.item_view, '<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="itemAccessibility_<TMPL_VAR NAME="i_id">" id="itemAccessibility_<TMPL_VAR NAME="i_id">" value="Accessibility" onClick="itemAccessibility('<TMPL_VAR NAME="i_id">')" />
+                    <input type="button" class="go" name="itemHistoryReport_<TMPL_VAR NAME="i_id">" id="itemHistoryReport_<TMPL_VAR NAME="i_id">" value="Item History Report" onClick="itemHistoryReport('<TMPL_VAR NAME="i_id">')" />
+        </div>
+        </td>
+        </tr>
+        </TMPL_LOOP>
+    </tbody>
+    </table>
+  </TMPL_IF>
+
+<TMPL_ELSE>
+<span class="red-text" id="msg">No records found</span>
+</TMPL_IF>
+<json_data><TMPL_VAR NAME="item_json">
