@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <user u_id="1" u_username="john" />
+    <user u_id="2" u_username="jingleheimer" />
+    <user u_id="3" u_username="schmidt" />
+    <user_permission u_id="1" up_type="1" up_value="1"/> 
+    <user_permission u_id="2" up_type="2" up_value="2"/> 
+    <user_permission u_id="3" up_type="3" up_value="3"/> 
+</dataset>

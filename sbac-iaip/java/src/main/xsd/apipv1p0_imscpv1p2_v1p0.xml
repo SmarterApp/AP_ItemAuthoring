@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:manifest identifier="idvalue0" xmlns:p="http://www.imsglobal.org/xsd/apip/apipv1p0/imscp_v1p1" xmlns:p1="http://ltsc.ieee.org/xsd/apipv1p0/LOM/manifest" xmlns:p2="http://www.imsglobal.org/xsd/imsccv1p2/imscsmd_v1p0"
+    xmlns:p3="http://www.imsglobal.org/xsd/apip/apipv1p0/imscp_extensionv1p2" xmlns:p4="http://www.imsglobal.org/xsd/apip/apipv1p0/imsafa_drdv2p0" xmlns:p5="http://ltsc.ieee.org/xsd/apipv1p0/LOM/resource"
+    xmlns:p6="http://www.imsglobal.org/xsd/apip/apipv1p0/qtimetadata/imsqti_v2p1" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/imscp_v1p1 apipv1p0_imscpv1p2_v1p0.xsd ">
+  <p:metadata>
+    <p:schema>APIP Package</p:schema>
+    <p:schemaversion>1.0.0</p:schemaversion>
+    <p1:lom>
+      <p1:general>
+        <p1:identifier>
+          <p1:catalog>p1:catalog</p1:catalog>
+        </p1:identifier>
+      </p1:general>
+    </p1:lom>
+    <p2:curriculumStandardsMetadataSet resourceLabel="" resourcePartId="">
+      <p2:curriculumStandardsMetadata providerId="">
+        <p2:setOfGUIDs region="" version="">
+          <p2:labelledGUID>
+            <p2:label>p2:label</p2:label>
+            <p2:GUID>p2:GUID</p2:GUID>
+          </p2:labelledGUID>
+        </p2:setOfGUIDs>
+      </p2:curriculumStandardsMetadata>
+    </p2:curriculumStandardsMetadataSet>
+  </p:metadata>
+  <p:organizations/>
+  <p:resources>
+    <p:resource href="http://tempuri.org" identifier="idvalue1" type="imsqti_apiptest_xmlv2p1">
+      <p:metadata>
+        <p5:lom>
+          <p5:general>
+            <p5:identifier>
+              <p5:catalog>p5:catalog</p5:catalog>
+            </p5:identifier>
+          </p5:general>
+        </p5:lom>
+        <p2:curriculumStandardsMetadataSet resourceLabel="" resourcePartId="">
+          <p2:curriculumStandardsMetadata providerId="">
+            <p2:setOfGUIDs region="" version="">
+              <p2:labelledGUID>
+                <p2:label>p2:label</p2:label>
+                <p2:GUID>p2:GUID</p2:GUID>
+              </p2:labelledGUID>
+            </p2:setOfGUIDs>
+          </p2:curriculumStandardsMetadata>
+        </p2:curriculumStandardsMetadataSet>
+      </p:metadata>
+      <p:file href="http://tempuri.org">
+        <p:metadata/>
+      </p:file>
+      <p:dependency identifierref="idvalue0"/>
+      <p3:variant identifier="idvalue2" identifierref="idvalue0">
+        <p3:metadata>
+          <p4:accessForAllResource>
+            <p4:accessModeStatement>
+              <p4:originalAccessMode>auditory</p4:originalAccessMode>
+              <p4:accessModeUsage>informative</p4:accessModeUsage>
+            </p4:accessModeStatement>
+            <p4:controlFlexibility>full keyboard control</p4:controlFlexibility>
+            <p4:hasControlFlexibilityStatement>http://tempuri.org</p4:hasControlFlexibilityStatement>
+            <p4:displayTransformability>font size</p4:displayTransformability>
+            <p4:hasDisplayTransformabilityStatement>http://tempuri.org</p4:hasDisplayTransformabilityStatement>
+            <p4:colourCoding>true</p4:colourCoding>
+            <p4:hazard>flashing</p4:hazard>
+            <p4:hasAdaptation>http://tempuri.org</p4:hasAdaptation>
+            <p4:hasPart>http://tempuri.org</p4:hasPart>
+            <p4:isAdaptation>
+              <p4:isAdaptationOf>http://tempuri.org</p4:isAdaptationOf>
+              <p4:extent>all</p4:extent>
+            </p4:isAdaptation>
+            <p4:isDisplayTransformabilityStatementOf>http://tempuri.org</p4:isDisplayTransformabilityStatementOf>
+            <p4:isControlFlexibilityStatementOf>http://tempuri.org</p4:isControlFlexibilityStatementOf>
+            <p4:isPartOf>http://tempuri.org</p4:isPartOf>
+            <p4:adaptationStatement>
+              <p4:adaptationType>audio representation</p4:adaptationType>
+              <p4:originalAccessMode>auditory</p4:originalAccessMode>
+              <p4:extent>all</p4:extent>
+              <p4:representationForm>enhanced</p4:representationForm>
+              <p4:language>p4:language</p4:language>
+              <p4:readingRate>0</p4:readingRate>
+              <p4:educationLevel>p4:educationLevel</p4:educationLevel>
+            </p4:adaptationStatement>
+            <p4:supportTool>dictionary</p4:supportTool>
+          </p4:accessForAllResource>
+        </p3:metadata>
+      </p3:variant>
+    </p:resource>
+  </p:resources>
+</p:manifest>

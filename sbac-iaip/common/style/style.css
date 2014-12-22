@@ -1,0 +1,265 @@
+    /* RESET */
+   html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, a, font, img, dl, dt, dd, ol, ul, li, legend, table, tbody, tr, th, td {
+     border: 0pt none;
+     list-style: none outside none;
+     margin: 0px;
+     outline: 0pt none;
+     padding: 0px;
+}
+
+a img {
+     border: medium none;
+}
+
+ol li {
+     list-style: decimal outside none;
+}
+
+fieldset {
+     border: 0pt none;
+     padding: 0pt;
+}
+
+body {
+     font-family: Arial,Helvetica,sans-serif;
+     font-size: 1em;
+}
+
+p {
+	line-height:1.5;
+	margin:0 0 1em 0;
+}
+
+#wrapper {
+     padding: 20px;
+}
+
+h1 {
+	margin:0 0 30px 0;	
+}
+
+h2 {
+     font-size: 1.5em;
+     margin: 10px 0;
+}
+
+h3{
+	margin:0 0 1em 0;	
+}
+
+label {
+     display: block;
+     margin: 0pt 0pt 10px;
+}
+
+#create, #edit, #assemble {
+     float: left;
+     position: relative;
+     width: 290px;
+}
+
+#assemble {
+     float: none;
+	 clear:left;
+}
+
+#edit {
+     border-left: 1px solid #CCCCCC;
+
+     margin-right: 20px;
+     padding: 0pt 0px 0pt 20px;
+}
+
+.submit {
+     position: absolute;
+     right: 90px;
+     top: 68px;
+}
+
+.go{
+	margin:10px 0 0 0;
+}
+
+hr {
+     background: #CCCCCC;
+     border: none;
+	 height:1px;
+     clear: both;
+     margin: 20px 0pt;
+	 width:480px;
+}
+
+input {
+     
+     border-radius: 3px 3px 3px 3px;
+     border: 1px solid #AAAAAA;
+     font-family: sans-serif;
+     font-size: 1em;
+     margin: 0px;
+     outline: medium none;
+     padding: 4px 5px;
+}
+
+select {
+     padding: 4px 5px;
+    border-radius: 3px 3px 3px 3px;
+     border: 1px solid #AAAAAA;
+    vertical-align: middle;
+    background-color: transparent;
+}
+
+.group {
+    border-bottom: 1px solid #ccc;
+clear:left;
+height:120px;
+margin:0 0 20px 0;
+width:650px;
+}
+
+/* ========== TABLE PROPERTIES =========== */
+table{
+    border:1px solid #ccc;
+border-bottom:0;
+border-right:0;
+
+}
+
+table th {
+    background:#ccc;
+}
+
+table td{
+    border-bottom:1px solid #ccc;
+	border-right:1px solid #ccc
+}
+
+table th, table td{
+    text-align:left;
+padding:5px
+}
+
+table tr.even td{
+	background:#eee;
+}
+
+.criteria{
+	width:480px;
+	text-align:Right;	
+	border-bottom:1px solid #ccc;
+	padding:0 0 20px 0;
+}
+
+.criteria table{
+	width:100%;	
+}
+
+.criteria p{
+	padding:10px 0;
+}
+
+.criteria .go{
+	text-align:right;	
+	margin:10px 0px 0 0;
+}
+
+.value{
+    width:50px;
+}
+
+.value-long{
+	width:170px;
+}
+
+#results{
+	margin:20px 0 0 0;
+	padding:20px 0 0 0;
+}
+
+table th.sort span {
+    display: block;
+    background:transparent url(chosen-sprite.png) no-repeat -2px -8px ;
+    height: 10px;
+    width: 10px;
+    float:right;
+    margin:5px;
+}
+
+table.no-style, table.no-style td{
+	border:0;	
+}
+
+textarea {
+	width:400px;
+	height:75px;
+}
+
+.buttons{
+	padding:10px;
+	width:620px;	
+}
+
+.remove{
+	float:Right;
+	margin-top:10px;
+}
+
+#wrapper.item-management {
+     width: 700px;
+	 padding-bottom:0;
+}
+
+#wrapper.item-management hr{
+	width:100%;	
+}
+
+
+#wrapper.item-management #content{
+border:1px solid #ccc;
+margin-top:-1px;
+padding:20px;
+}
+
+
+.item-management table, .item-management table td{
+    border:0;
+}
+
+
+#results.items {
+    margin:0 0 20px 0;
+padding:0 20px;
+}
+
+#results.items table.table-results {
+    margin:20px 0;
+}
+
+/* ========== TABS =========== */
+
+  	.tabs{
+		display:block;	
+	}
+	
+	.tabs li {
+		float:left;
+		padding:5px;
+		border:1px solid #ccc;
+		margin-right:5px;
+		background:#ddd;
+		font-weight:Bold;
+	}
+	
+	.tabs li.current {
+		background:#fff;
+		border-bottom:1px solid #fff;
+
+	}
+	
+/* ========== MISC =========== */
+	.clear{
+		clear:left;	
+	}
+	
+	.hidden {
+    display:none;
+}

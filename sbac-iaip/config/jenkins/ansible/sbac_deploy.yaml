@@ -1,0 +1,62 @@
+- hosts: ${host}
+  sudo: yes
+  tasks:
+  - include: /home/robot/ansible/include/transfer.yaml
+  # perl files
+  - action: command mkdir /builds/cde/sbac-build${build_number}
+  - name: Copy perl files
+    action: command cp -r ./ /builds/cde/sbac-build${build_number}/ chdir=/home/robot/${file_uuid.stdout}/Perl/sbac/
+  - name: Change file ownership to apache
+    action: command chown -R apache.apache /builds/cde/sbac-build${build_number}/
+  - name: Update ${app_name} symbolic link
+    action: command ln -n -f -s /builds/cde/sbac-build${build_number} /www/${app_name}
+  - name: Change ownership to apache for ${app_name} symbolic link
+    action: command chown -h apache.apache /www/${app_name}
+  # clean filesystem
+  #- name: Clean up file system
+  #  action: shell find /www/cde_resources/${app_name}/ -depth -name lib* | xargs rm -rf
+  - name: Create symbolic links to resource directories
+    action: shell find /www/cde_resources/${app_name}/ -maxdepth 1 -mindepth 1 | xargs -I{} ln -f -n -s {} chdir=/www/${app_name}
+  - name: Change ownership to apache for sybolic links to resource directories
+    action: shell find /www/${app_name}/ -type l | xargs -I{} chown -h apache.apache {}
+  - name: change ownership to pacific for resource directories
+    action: shell find /www/${app_name}/ -type l | xargs -I{} chown -R pacific.pacific {} 
+  - name: change ownership to tomcat for itembank-metafiles
+    action: command chown -R tomcat.tomcat /www/${app_name}/itembank-metafiles
+  # common files
+  - action: command mkdir /builds/cde/sbac_common-build${build_number}
+  - name: Copy common files
+    action: command cp -r ./ /builds/cde/sbac_common-build${build_number} chdir=/home/robot/${file_uuid.stdout}/Perl/sbac_common/
+  - name: Change file ownership to apache
+    action: command chown -R apache.apache /builds/cde/sbac_common-build${build_number}/
+  - name: Update common symbolic link
+    action: command ln -n -f -s /builds/cde/sbac_common-build${build_number} /www/common
+  - name: Change ownership to apache for common symbolic link
+    action: command chown -h apache.apache /www/common
+  # js link
+  - name: Update js symbolic link
+    action: command ln -n -f -s /www/common/js /www/${app_name}/js
+  - name: Change ownership to apache for js symbolic link
+    action: command chown -h apache.apache /www/${app_name}/js
+  # httpd config
+ # - name: Clear httpd logs
+ #   action: command rm -rf /var/log/httpd/*
+  #- name: Stop httpd service
+  #  action: command /sbin/service httpd stop
+  - name: Update configuration
+    action: command cp -r ./ /etc/httpd/ chdir=/home/robot/${file_uuid.stdout}/Config/default/httpd
+  - name: Update www dir
+    action: command cp -r ./ /www chdir=/home/robot/${file_uuid.stdout}/Config/default/www
+  - name: update permissions for cgi-bin
+    action: shell chmod +x /www/${app_name}/cgi-bin/*.pl
+  - name: update permissions for login
+    action: shell chmod a+x /www/${app_name}/login/cgi-bin/*.pl
+  #- name: Start httpd service
+  #  action: command /sbin/service httpd start
+  # starlet
+ # - name: Clear startlet logs
+ #   action: command rm /home/pacific/${app_name}-*.txt
+  - name: Set permissions for starlet
+    action: command chmod 755 /www/${app_name}/cgi-bin/run.sh
+  - name: Restart starlet
+    action: shell ./run.sh chdir=/www/${app_name}/cgi-bin

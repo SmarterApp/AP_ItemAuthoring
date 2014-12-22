@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<h:head>
+    <ui:remove>
+    <!--
+    <h:outputScript library="javascript" name="jquery-1.7.2.js"/>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        setInterval(function() {
+            $.get('sessionKeepAlive');
+        }, ${(session.maxInactiveInterval - 10) * 1000});
+    });
+    </script>
+    -->
+    </ui:remove>
+	<h:outputStylesheet name="css/basic.css" />
+	<h:outputStylesheet name="css/ItemAlternate.css" />
+</h:head>
+
+<h:body>
+	<ui:remove>
+		TODO: ensure renders correctly
+	</ui:remove>
+	<h:messages id="errorMessages" styleClass="error" />
+	<h:form id="mainForm">
+		<t:div styleClass="sectionHeader">
+			<h:commandButton alt="#{text['Common.Add']}"
+				value="#{text['Common.Add']}"
+				title="#{text['ItemAlternate.AddWindowTooltip']}"
+				action="#{itemAlternate.addWindow()}" />
+		</t:div>
+		<t:div styleClass="sectionHeaderSpacer" />
+		<t:div>
+			<t:div>
+				<t:div styleClass="leftColumn">
+					<h:panelGrid styleClass="standardTable"
+						headerClass="standardTable_Header">
+						<f:facet name="header">
+							<t:div styleClass="columnHeader">
+								<h:outputText
+									value="#{text['ItemAlternate.OriginalItemLabel']} : #{itemAlternate.getOriginalItemName()}" />
+							</t:div>
+						</f:facet>
+						<iframe src="#{itemAlternate.originalItemViewUrl}" class="iframe" />
+					</h:panelGrid>
+				</t:div>
+				<ui:repeat value="#{itemAlternate.windows}" var="item"
+					varStatus="itemStatus">
+					<t:div
+						styleClass="#{itemStatus.even ? 'rightColumn' : 'leftColumn'}">
+						<h:panelGrid id="itemView" styleClass="standardTable"
+							headerClass="standardTable_Header">
+							<f:facet name="header">
+								<t:div styleClass="columnHeader">
+									<h:selectOneMenu id="itemSelection"
+										title="#{text['ItemAlternate.AlternateSelectionTooltip']}"
+										onchange="submit()"
+										valueChangeListener="#{itemAlternate.selectItemAlternateId}"
+										rendered="#{not empty itemAlternate.itemAlternateSelectItems}">
+										<f:selectItems
+											value="#{itemAlternate.itemAlternateSelectItems}" />
+										<f:attribute name="index" value="#{itemStatus.index}" />
+										<ui:remove>
+											TODO: Switch to ajax exection
+											<!-- <f:ajax execute="@this" listener="#{itemAlternate.itemAlternateSelected}" render="itemAlternateView"/> -->
+										</ui:remove>
+									</h:selectOneMenu>
+									<h:outputText
+										value=" > #{itemAlternate.getAlternateLabel(item.id)} : #{item.externalId}"
+										rendered="#{not empty itemAlternate.itemAlternateSelectItems and not empty item}" />
+									<h:outputText
+										value=" > #{text['ItemAlternate.AlternateItemLabel']}"
+										rendered="#{not empty itemAlternate.itemAlternateSelectItems and empty item}" />
+									<h:outputText
+										value="#{text['ItemAlternate.NoAlternateItemLabel']}"
+										rendered="#{empty itemAlternate.itemAlternateSelectItems}" />
+									<h:commandLink
+										action="#{itemAlternate.removeWindow(itemStatus.index)}">
+										<t:graphicImage url="images/close.png"
+											alt="#{text['Common.CloseImageAlt']}"
+											title="#{text['ItemAlternate.CloseWindowTooltip']}"
+											styleClass="closeImage" />
+									</h:commandLink>
+								</t:div>
+							</f:facet>
+							<iframe
+								src="#{itemAlternate.getViewUrl(item.id)}"
+								class="iframe" />
+						</h:panelGrid>
+					</t:div>
+				</ui:repeat>
+			</t:div>
+		</t:div>
+	</h:form>
+</h:body>
+
+</html>

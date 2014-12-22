@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <link rel="stylesheet" href="../style/text.css" />
+  <link rel="stylesheet" href="/common/style/tabber.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/common/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/common/js/tabber.js"></script>
+
+<TMPL_INCLUDE NAME="common.tjs">
+<TMPL_INCLUDE NAME="results_table_functions.tjs">
+<style>
+.inputtype_text{width:80px;}
+.main_table td
+{border:0px !important;}
+.clear{height:0;width:0;padding:0;clear:both}
+.sub_td{  padding-right: 50px;}
+</style>
+<script>
+var item_bank = <TMPL_VAR NAME="item_bank">;
+var lists = {};
+var hierarchy = <TMPL_VAR NAME="hierarchy_json" DEFAULT="{}">;
+    $(document).ready(function() {
+      $('#msgdialog').hide();
+      //$('#msgdialog').dialog({autoOpen : false, msgdialog : true});
+
+   $(".inputtype_text").change(function(event) {
+  
+       var flag = !isNaN(parseFloat($(this).val().trim()))&& isFinite($(this).val().trim());
+       if (!flag){
+           alert('plesae enter numeric value only');  
+           $(this).val('');
+       }
+                            /*    // Allow only backspace and delete
+                                if (event.keyCode == 109 || event.keyCode == 189 || event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||event.keyCode == 13 || event.keyCode == 190 || event.keyCode == 110 ||(event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)  ) {
+                                                // let it happen, don't do anything
+                                }
+
+                                else {    // Ensure that it is a number and stop the keypress
+										if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+           								 event.preventDefault(); 
+											 $(this).val('');
+                     					   alert('plesae enter numeric value only');   
+        						} */
+
+										//}
+
+                });
+
+    });
+
+    function init() {
+        //loadItemBank();
+        }
+    function loadItemBank() {
+        var do_loadLists = false;
+                for( ib_id in item_bank ) { 
+            var tf = false;
+            if( ib_id == tbl.ib_id ) {
+            tf = true;
+            do_loadLists = true;
+            }
+                    document.cde.ib_id.options.add( new Option(item_bank[ib_id].ib_external_id, ib_id, false, tf) );
+                    document.cde.t_ib_id.options.add( new Option(item_bank[ib_id].ib_external_id, ib_id) );
+                }
+                
+        if( do_loadLists ) loadLists( document.cde, tbl.ib_id );
+        }
+    function loadLists(f, ib_id) {
+        tbl.ib_id = ib_id;
+
+                /* these are no longer used, not sure why
+                f.t_name.length     = 1;
+                f.t_customer.length = 1;
+                f.t_market.length   = 1;
+                f.t_level.length    = 1;
+                f.t_version.length  = 1;
+		
+
+        loadStandards(f,ib_id);
+                */
+                document.getElementById('standard_table').style.display = "table";
+                
+                var post_params = 'action=getLists' +
+                                  '&sess_id='       + f.sess_id.value +
+                                  '&instance_name=' + f.instance_name.value +
+                                  '&ib_id='         + tbl.ib_id;
+            ajaxpack.postAjaxRequest( URL, post_params, displayLists, "txt" );
+        }
+    function displayLists() {
+        ajax = ajaxpack.ajaxobj;
+                if ( ajax.readyState == 4 ) {
+                    if( ajax.status==200 ) {
+                        var results = ajax.responseText.split('<json_data>');
+                        lists = eval('(' + results[1] + ')');
+            for( name in lists ) {
+                var ary = [];
+                var row = lists[name];
+                for( e in row ) {
+                                ary.push(e);
+                }
+                if( name == 't_name' ) {
+                for( c in ary.sort() ) {
+                                    document.cde.t_name.options.add( new Option(ary[c], ary[c]) );
+                }
+                }
+                if( name == 't_customer' ) {
+                for( c in ary.sort() ) {
+                                    document.cde.t_customer.options.add( new Option(ary[c], ary[c]) );
+                }
+                }
+                if( name == 't_market' ) {
+                for( c in ary.sort() ) {
+                                    document.cde.t_market.options.add( new Option(ary[c], ary[c]) );
+                }
+                }
+                if( name == 't_level' ) {
+                for( c in ary.sort() ) {
+                                    document.cde.t_level.options.add( new Option(ary[c], ary[c]) );
+                }
+                }
+                if( name == 't_version' ) {
+                for( c in ary.sort() ) {
+                                    document.cde.t_version.options.add( new Option(ary[c], ary[c]) );
+                }
+                }
+            }
+                    }
+                    else {
+                    }
+                }
+    }
+
+    function uploadFile(f) {
+        if( f.ib_id.selectedIndex == 0 ) {
+            alert('Please Select a Program to continue!');
+            f.ib_id.focus();
+            return false;
+        }
+        if( f.items_file.value.match(/^\s*$/) ) {
+            alert('Please [Browse] & Select a file to Upload!');
+            f.items_file.focus();
+            return false;
+        }
+                document.getElementById('upload_progress').innerHTML = 'Uploading... ' + progress_bar;
+        f.submit();
+    }
+    function searchItems(f, spinner, limit_items) {
+
+
+
+        if( f.ib_id.selectedIndex == 0 ) {
+            alert('Please Select a Program to continue!');
+            f.ib_id.focus();
+            return false;
+        }
+        if( f.ib_id.selectedIndex != 0 && tbl.ib_id == 0 ) {
+            tbl.ib_id = f.ib_id.options[f.ib_id.selectedIndex].value;
+        }
+        
+                var post_params = 'action=getItems' +
+                                  '&sess_id='       + f.sess_id.value +
+                                  '&instance_name=' + f.instance_name.value +
+                                  '&subaction='     + tbl.subaction +
+                                  '&ib_id='         + tbl.ib_id;
+
+        if( limit_items != 'ALL' && limit_items != 'All' && limit_items != 'all' && limit_items != '' ) {
+            if( limit_items.match(/^\d+$/) && limit_items > 0 ) {
+                post_params += '&limit_items=' + limit_items;
+            	tbl.limit_items = limit_items;
+            }
+            else {
+                alert('Value must be number greater than 0!');
+                f.limit_items.focus();
+                return false;
+            }
+        }
+
+        switch (tbl.subaction) {
+			case 'search_statistics' :
+                post_params += checkStatisticsFields(f);
+                break;
+            case 'search_standards' :
+                post_params += checkStandardsFields(f);
+                break;
+			case 'search_metadata' :
+            	post_params += checkMetadataFields(f);
+                break;
+            default:
+            	post_params += checkMetadataFields(f);
+        }
+
+                tbl.progress_area = spinner;
+                document.getElementById('items_results').innerHTML = '';
+                document.getElementById(spinner).innerHTML = progress_bar;
+            ajaxpack.postAjaxRequest( URL, post_params, displayResults, "txt" );
+    }
+
+/* added for statistics */
+function resetValue(f,limit_items){
+f.reset();
+return false;
+}
+    function checkStatisticsFields(f){
+      var post_params = '';
+
+     if(! f.multi_admin.value.match(/^\s*$/) ) {
+       var str="",i;
+       for (i=0;i<f.multi_admin.options.length;i++) {
+        if (f.multi_admin.options[i].selected) {
+        str += f.multi_admin.options[i].value + ",";
+          }
+        }
+      if (str.charAt(str.length - 1) == ',') {
+       str = str.substr(0, str.length - 1);
+      }
+        post_params += '&multi_admin=' + str;
+       
+}
+
+       if( f.pub_status.selectedIndex > 0 ){
+		 
+       var str="",i;
+       for (i=0;i<f.pub_status.options.length;i++) {
+        if (f.pub_status.options[i].selected) {
+        str += f.pub_status.options[i].value + ",";
+          }
+        }
+      if (str.charAt(str.length - 1) == ',') {
+       str = str.substr(0, str.length - 1);
+      }
+		
+            post_params += '&pub_status=' + str;
+
+          }
+
+        if(! f.dif_mvf.checked==false ) 
+            post_params += '&dif_mvf=' + 'DIFCat_Female_v_Male';
+
+        if(! f.dif_bvw.checked==false  ) 
+            post_params += '&dif_bvw=' + 'DIFCat_Black_v_White';
+
+       
+        if(! f.dif_avw.checked==false ) 
+            post_params += '&dif_avw=' + 'DIFCat_Asian_v_White';
+
+        if(! f.dif_navw.checked==false ) 
+            post_params += '&dif_navw=' + 'DIFCat_NativeA_v_White';
+
+		if(! f.dif_iepvniep.checked==false ) 
+            post_params += '&dif_iepvniep=' + 'DIFCat_IEP_v_NonIEP';
+
+		if(! f.dif_lepvnlep.checked==false ) 
+            post_params += '&dif_lepvnlep=' + 'DIFCat_LEP_v_NonLEP';
+
+		if(! f.dif_t1vnt1.checked==false ) 
+            post_params += '&dif_t1vnt1=' + 'DIFCat_Title1_v_NonTitle1';
+
+		if(! f.statical_flag.checked==false ) 
+            post_params += '&statical_flag=' + 'Item_Statistical_Flag';
+
+
+			 if(! f.pc1.value.match(/^\s*$/) ) 
+            post_params += '&pc1=' + f.pc1.value;
+
+		 if(! f.pc2.value.match(/^\s*$/) ) 
+            post_params += '&pc2=' + f.pc2.value;
+
+		 if(! f.itc1.value.match(/^\s*$/) ) 
+            post_params += '&itc1=' + f.itc1.value;
+
+		 if(! f.itc2.value.match(/^\s*$/) ) 
+            post_params += '&itc2=' + f.itc2.value;
+
+		 if(! f.bi1.value.match(/^\s*$/) ) 
+            post_params += '&bi1=' + f.bi1.value;
+
+		 if(! f.bi2.value.match(/^\s*$/) ) 
+            post_params += '&bi2=' + f.bi2.value;
+
+		 if(! f.pbi1.value.match(/^\s*$/) ) 
+            post_params += '&pbi1=' + f.pbi1.value;
+
+		if(! f.pbi2.value.match(/^\s*$/) ) 
+            post_params += '&pbi2=' + f.pbi2.value;
+
+		if(! f.po1.value.match(/^\s*$/) ) 
+            post_params += '&po1=' + f.po1.value;
+
+		if(! f.po2.value.match(/^\s*$/) ) 
+            post_params += '&po2=' + f.po2.value;
+       
+
+        return post_params;
+
+       }
+    
+    function checkStandardsFields(f) {
+                var post_params = '';
+                
+               if(! f.i_standard_list.value == '' ) {
+                post_params += '&standard_value=' + f.i_standard_list.value;
+                }
+                return post_params;
+        }
+    function checkMetadataFields(f) {
+        var post_params = '';
+
+        if(! f.i_external_id.value.match(/^\s*$/) ) 
+            post_params += '&i_external_id=' + f.i_external_id.value;
+
+        if(! f.i_description.value.match(/^\s*$/) ) 
+            post_params += '&i_description=' + f.i_description.value;
+
+        if(! f.i_source_document.value.match(/^\s*$/) ) 
+            post_params += '&i_source_document=' + f.i_source_document.value;
+
+        if( f.i_format.selectedIndex > 0 )
+            post_params += '&i_format=' + f.i_format.options[f.i_format.selectedIndex].value;
+
+        if(! f.i_due_date_start.value.match(/^\s*$/) ) 
+            post_params += '&i_due_date_start=' + f.i_due_date_start.value;
+
+        if(! f.i_due_date_end.value.match(/^\s*$/) ) 
+            post_params += '&i_due_date_end=' + f.i_due_date_end.value;
+
+        //if( f.i_type.selectedIndex > 0 )
+            //post_params += '&i_type=' + f.i_type.options[f.i_type.selectedIndex].value;
+
+        if( f.i_dev_state.selectedIndex > 0 )
+            post_params += '&i_dev_state=' + f.i_dev_state.options[f.i_dev_state.selectedIndex].value;
+
+        if( f.i_publication_status.selectedIndex > 0 )
+            post_params += '&i_publication_status=' + f.i_publication_status.options[f.i_publication_status.selectedIndex].value;
+
+        if( f.i_author.selectedIndex > 0 )
+            post_params += '&i_author=' + f.i_author.options[f.i_author.selectedIndex].value;
+
+        if( f.i_difficulty.selectedIndex > 0 )
+            post_params += '&i_difficulty=' + f.i_difficulty.options[f.i_difficulty.selectedIndex].value;
+
+        if( f.subject_area.selectedIndex > 0 )
+            post_params += '&subject_area=' + f.subject_area.options[f.subject_area.selectedIndex].value;
+
+        if( f.grade_level.selectedIndex > 0 )
+            post_params += '&grade_level=' + f.grade_level.options[f.grade_level.selectedIndex].value;
+
+        if( f.grade_span_start.selectedIndex > 0 )
+            post_params += '&grade_span_start=' + f.grade_span_start.options[f.grade_span_start.selectedIndex].value;
+
+        if( f.grade_span_end.selectedIndex > 0 )
+            post_params += '&grade_span_end=' + f.grade_span_end.options[f.grade_span_end.selectedIndex].value;
+
+        if( f.dok.selectedIndex > 0 )
+            post_params += '&dok=' + f.dok.options[f.dok.selectedIndex].value;
+
+        if(! f.i_readability_index.value.match(/^\s*$/) )
+            post_params += '&i_readability_index=' + f.i_readability_index.value;
+
+                if( f.i_review_lock.selectedIndex > 0 )
+                    post_params += '&i_review_lock=' + f.i_review_lock.options[f.i_review_lock.selectedIndex].value;
+
+        return post_params;
+    }
+    function checkValues(from, to, title) {
+        var from_to = [false, false];
+        if(! from.value.match(/^\s*$/) ) {
+            if( isNaN(from.value) ) {
+            alert(title + ": 'FROM' must be a Numeric value!");
+                from.focus();
+                return false;
+            }
+            from_to[0] = from.value;
+        }
+        if(! to.value.match(/^\s*$/) ) {
+            if( isNaN(to.value) ) {
+            alert(title + " 'TO' must be a Numeric value!");
+                to.focus();
+                return false;
+            }
+            from_to[1] = to.value;
+        }
+        if( from_to[1] && from_to[0] > from_to[1] ) {
+            alert(title + ": 'FROM' value can not be Greater than 'TO' value!");
+            from.focus();
+            return false;
+        }   
+        if( from_to[0] ) from_to[0] = '&' + from.name + '=' + from_to[0];
+        if( from_to[1] ) from_to[1] = '&' + to.name   + '=' + from_to[1];
+        
+        return from_to;
+    }
+    function displayResults(f) {
+        ajax = ajaxpack.ajaxobj;
+                if ( ajax.readyState == 4 ) {
+                    if( ajax.status==200 ) {
+                        var results = ajax.responseText.split('<json_data>');
+                        document.getElementById('items_results').innerHTML = results[0];
+                        items = eval('(' + results[1] + ')');
+			if( tbl.browser.match(/Internet Explorer/i) ) {
+				if($.browser.version == '10.0') {
+			    	buildResultsTable(items, tbl.subaction);
+			    }
+		 	}
+			else {			    
+			    $(function() { $("#itemTable").tablesorter({
+				headers: { 0:{sorter:false} },
+				textExtraction : {
+					0: function(node) { node.childNodes[0].childNodes[0].innerHTML }					
+				    }
+			    }); });
+			}
+                        document.getElementById(tbl.progress_area).innerHTML = '';
+                    }
+                    else {
+                        document.getElementById('items_results').innerHTML = 'Error : ' + ajax.status + '!';
+                    }
+                        document.getElementById(tbl.progress_area).innerHTML = '';
+                }
+        window.location.hash='search_results';
+        window.location.href='#search_results';
+    }
+    function setTab(name) {
+        tbl.subaction = name;
+        
+        if((document.getElementById('i_standard_list').value == '' || document.getElementById('i_standard_list').value == null) && tbl.subaction == 'search_standards'){
+        tbl.subaction = 'search_metadata';
+        
+        }
+    }
+    function viewItem(f, i_id) {
+        f.itemBankId.value  = tbl.ib_id;
+        f.itemExternalId.value  = items[i_id].i_external_id;
+        f.submit();
+    }
+    function editItem(f, i_id) {
+        f.itemBankId.value = tbl.ib_id;
+        f.externalId.value = items[i_id].i_external_id;
+        f.submit();
+    }
+    function itemAccessibility(i_id) {
+        var f = document.item_accessibility_form;
+        f.action = <TMPL_VAR NAME="java_url"> + "/AccessibilityTagging.jsf?sess_id=" + f.sess_id.value + "&item=" + i_id;
+        f.submit();
+    }
+    function itemHistoryReport(i_id) {
+        var f = document.item_accessibility_form;
+        myOpen('History', <TMPL_VAR NAME="java_url"> + "/Report.jsf?name=/reports/ItemHistoryReport&sess_id=" + f.sess_id.value + "&p_ItemId=" + i_id, 700, 500);
+    }
+    function popWin(f, action) {
+        if( f.ib_id.selectedIndex == 0 ) {
+            alert('Please Select a Program to continue!');
+            f.ib_id.focus();
+            return false;
+        }
+        var url = action + '.pl?sess_id=' + f.sess_id.value +
+              '&itemBankId=' + tbl.ib_id;
+        myOpen(action, url, 600,560);
+    }
+    function loadList(f, hd_id, list_name) {
+        alert( hierarchy_defn[hd_id].sh_name );
+    }
+    function validateItemChk(f) {
+        if(! f.item_chk ) return true;
+
+        var none_checked = true;
+        item_list    = new Array();
+        if( f.item_chk.value && f.item_chk.checked ) {
+            none_checked = false;
+            item_list.push( f.item_chk.value );
+        }
+	else {
+            for(var i=0; i < f.item_chk.length; i++) {
+            	if( f.item_chk[i].checked ) {
+            	    none_checked = false;
+            	    item_list.push( f.item_chk[i].value );
+            	}
+            }
+        }
+
+        if( none_checked ) {
+            alert( 'Please Check 1 or more Items!' );
+            f.item_chk[0].focus();
+        }
+        return none_checked;
+    }
+    function moveItem(f, action, area) {
+        if( validateItemChk(f) ) return;
+
+        if( f.ib_id.selectedIndex == 0 ) {
+            alert('Please Select A Program!');
+            f.ib_id.focus();
+            return false;
+        }
+        if( f.t_ib_id.selectedIndex == 0 ) {
+            alert('Please Select A Target Program!');
+            f.t_ib_id.focus();
+            return false;
+        }
+        if( tbl.t_ib_id == tbl.ib_id ) {
+            alert('Target Program is the Same as Source!\nPlease Select A Different A Target Program!');
+            f.t_ib_id.focus();
+            return false;
+        }
+
+        if(confirm('Move ' + item_list.length + ' Item(s)?') ) {
+            statuses.progress_bar_area = area;
+                    document.getElementById(area).innerHTML = progress_bar;
+                    var post_params = 'action=' + action +
+                                      '&sess_id='       + f.sess_id.value +
+                                      '&instance_name=' + f.instance_name.value +
+                                      '&ib_id=' + tbl.ib_id +
+                                      '&t_ib_id=' + tbl.t_ib_id +
+                                      '&item_list='     + item_list.join('|');
+                ajaxpack.postAjaxRequest( URL, post_params, displayAjaxResponse, "txt" );
+        }
+    }
+    function deleteItem(f, action, area) {
+        if( validateItemChk(f) ) return;
+
+        if(confirm('Delete ' + item_list.length + ' Items?') ) {
+            statuses.progress_bar_area = area;
+                    document.getElementById(area).innerHTML = progress_bar;
+                    var post_params = 'action=' + action +
+                                      '&sess_id='       + f.sess_id.value +
+                                      '&instance_name=' + f.instance_name.value +
+                                      '&item_list='     + item_list.join('|');
+                ajaxpack.postAjaxRequest( URL, post_params, displayAjaxResponse, "txt" );
+        }
+    }
+    function displayAjaxResponse() {
+        ajax = ajaxpack.ajaxobj;
+                if ( ajax.readyState == 4 ) {
+                    if( ajax.status==200 ) {
+                        var results = ajax.responseText.split('<json_data>');
+                        document.getElementById('msg').innerHTML = results[0];
+                        if(results[1]) obj = eval('(' + results[1] + ')');
+
+                searchItems(document.cde, tbl.progress_area, tbl.limit_items);
+                    }
+                    else {
+                        document.getElementById('msg').innerHTML = 'Error : ' + ajax.status + '!';
+                    }
+                    document.getElementById(statuses.progress_bar_area).innerHTML = '';
+                }
+    }
+    function exportSelectedItems(f) {
+      if( $('#ib_id').val() == 0 ) {
+        alert('Please Select a Program to continue!');
+        $('#ib_id').focus();
+        return;
+      }
+      
+      if( validateItemChk(f) ) {
+        alert('Please Select an Item to continue!');
+        return;
+      }
+
+      if (!confirm('Export ' + item_list.length + ' Item(s) to Test Item Bank?')) return; 
+      
+      var boundary= createBoundary();
+
+      var data = "--"+boundary+"\r\n"
+        + "Content-Disposition: form-data; name=\"content\"\r\n"
+        + "\r\n"
+        + item_list.join("\r\n") + "\r\n"
+        + "--"+boundary+"--";
+
+      $.ajax({
+        type: "POST",
+        url: "https://<TMPL_VAR NAME="web_host"><TMPL_VAR NAME="java_url">service/export/testItemBank",
+        data: data,
+        contentType: "multipart/form-data; boundary="+boundary,
+        beforeSend: function() {
+          $('#msg').html('');
+          $('#msgdialog').html('');
+          $('#exportItems1_progress').html(progress_bar);
+        },
+        success: function(response) {
+          $('#exportItems1_progress').html('');
+		  $('#msg').append('Export Response: ' + response.importStatus + ' <a href="#" id="msgdetails">details</a>');
+		  $('#msgdetails').click(function() {
+                    $('#msgdialog').toggle();
+                    //$('#msgdialog').dialog("open");
+		    return false;
+		  });
+		  if (typeof(response.importFiles) != 'undefined') {
+            $.each(response.importFiles, function(index, importFile) {
+              $('#msgdialog').append(importFile.importStatus + '<br/>');
+              $.each(importFile.messages, function(item, itemMessages) {
+                $('#msgdialog').append(item + ': ');
+                $.each(itemMessages, function(index, itemMessage) {
+                  $('#msgdialog').append((index?', ':'') + itemMessage.messageCode + ':' + itemMessage.messageArgs[0]);
+                });
+                $('#msgdialog').append('<br/>');
+              });
+            });
+          }
+          if (typeof(response.exportNotes) != 'undefined') {
+            $.each(response.exportNotes, function(type, detail) {
+              $('#msgdialog').append(type + ": " + detail);
+              $('#msgdialog').append('<br/>');
+            });
+          }
+        },
+		error: function(jqXHR, textStatus, errorThrown) {
+		  $('#exportItems1_progress').html(''); 
+		  $('#msg').html('Import Status: SERVICE ERROR: ' + jqXHR.responseText);
+		}
+	      });
+	      return true;
+	    }
+	    function createBoundary() {
+	      var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+	      var boundary = "";
+	      for (var i=0; i<8; i++) {
+		 var randnum = Math.floor(Math.random() * chars.length);
+		 boundary += chars.substring(randnum,randnum+1);
+	      } 
+	      return boundary;
+	    }
+        function exportAllItems() {
+          if( $('#ib_id').val() == 0 ) {
+            alert('Please Select a Program to continue!');
+            $('#ib_id').focus();
+            return;
+          }
+          
+          if (!confirm('Export All Banked Item(s) to Test Item Bank?')) return;
+          
+          $.ajax({
+            type:"POST",
+            data:"PROGRAM_ID="+$('#ib_id').val(),
+            url: "https://<TMPL_VAR NAME="web_host"><TMPL_VAR NAME="java_url">service/export/testItemBankAll",
+            beforeSend: function() {
+                $('#msg').html('');
+                $('#msgdialog').html('');
+                $('#exportItems2_progress').html(progress_bar);
+            },
+            success: function(response) {
+                $('#exportItems2_progress').html('');
+                $('#msg').append('Export Response: ' + response.importStatus + ' <a href="#" id="msgdetails">details</a>');
+                $('#msgdetails').click(function() {
+                    $('#msgdialog').toggle();
+                    //$('#msgdialog').dialog("open");
+                    return false;
+                });
+                $.each(response.importFiles, function(index, importFile) {
+                    // consider adding service to wrap tib response.url and show user friendly status
+                    $('#msgdialog').append(importFile.pathName + ':' + importFile.importStatus + ' <a href="#" id="importStatus">current status</a>');
+                    $('#importStatus').click(function() {
+                        myOpen('Status', "<TMPL_VAR NAME="java_url">service/export/tibItemStatus?STATUS_URL=" + response.url, 700, 500);
+                    });
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $('#exportItems2_progress').html(''); 
+                $('#msg').html('Import Status: SERVICE ERROR: ' + jqXHR.responseText);
+            }
+        });
+        return true;
+    }
+    function groupProcess(f, action) {
+	if( ! f.item_chk ) return false;
+
+	var cnt = 0;
+        if( f.item_chk.value && f.item_chk.checked ) {
+            cnt = 1;
+        }
+        else {
+            for(var i=0; i < f.item_chk.length; i++) {
+                if( f.item_chk[i].checked ) cnt += 1;
+            }
+        }
+
+        if( cnt == 0 ) {
+            alert( 'Please CHECK 1 Item to process!' );
+            return false;
+        }
+
+        var rc = true;
+        switch (action) {
+           case 'renameItem' :
+	    if( cnt > 1 ) {
+		alert( 'You can only rename 1 Item at a time. Please select only 1 Item' );
+                f.item_chk[0].focus();
+                rc = false;
+	    }
+            if( f.rename_name.value.match(/^\s*$/) ) {
+                alert( 'Please enter text in Rename field' );
+                f.rename_name.focus();
+                rc = false;
+            }
+            if(! f.rename_name.value.match(/^[\w\s]{5,}$/) ) {
+                alert( 'New Name must be at least 5 characters long.\nValid characters are A-Z 0-9 _' );
+                f.rename_name.focus();
+                rc = false;
+            }
+            break;
+           case 'copyItem' :
+            if( f.copy_name.value.match(/^\s*$/) ) {
+                alert( 'Please enter text in Copy field' );
+                f.rename_name.focus();
+                rc = false;
+            }
+            break;
+           case 'assignAuthor' :
+            if( f.new_author.selectedIndex == 0 ) {
+                alert( 'Please select Author.' );
+                f.new_author.focus();
+                rc = false;
+            }
+            break;
+           case 'assignDevState' :
+            if( f.new_dev_state.selectedIndex == 0 ) {
+                alert( 'Please select Dev State.' );
+                f.new_dev_state.focus();
+                rc = false;
+            }
+            break;
+           case 'assignPubStatus' :
+            if( f.new_pub_status.selectedIndex == 0 ) {
+                alert( 'Please select Pub Status.' );
+                f.new_pub_status.focus();
+                rc = false;
+            }
+            break;
+           case 'lock_review' :
+            break;
+           case 'unlock_review' :
+            break;
+           default:
+            rc = false;
+        }   
+        if(! rc) return rc;
+
+        f.subaction.value = action;
+        f.action.value    = 'groupProcessItem';
+        f.submit();
+    }
+</script>
+</head>
+
+<body>
+<form action="items_manager.pl" method="post" enctype="multipart/form-data" name="cde" id="cde">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="action" value="" />
+<input type="hidden" name="subaction" value="" />
+<input type="hidden" name="itemstbl" value="" />
+<input type="hidden" name="i_id" value="" />
+
+<div class="title">Item Management</div>
+
+  <span class="red-text" id="msg"><TMPL_VAR NAME="msg"></span>
+  <div id="msgdialog"></div>
+  <table cellpadding="5" cellspacing="5"  border="0" class="no-style">
+    <tr>
+    <td valign="top">
+        Program :<br/>
+        <select name="ib_id" id="ib_id" style="width:180px;" onChange="loadLists(this.form, this.value)">
+        <option value="0">---</option>
+        <TMPL_LOOP NAME="programs">
+            <option value="<TMPL_VAR NAME="ib_id">"><TMPL_VAR NAME="ib_name"></option>
+        </TMPL_LOOP>
+        </select>
+    </td>
+    <td style="width:20%" valign="top">
+        Target Program :<br/>
+        <select name="t_ib_id" id="t_ib_id" style="width:180px;" onChange="tbl.t_ib_id=this.value;">
+        <option>---</option>
+        <TMPL_LOOP NAME="programs">
+            <option value="<TMPL_VAR NAME="ib_id">"><TMPL_VAR NAME="ib_name"></option>
+        </TMPL_LOOP>
+        </select>
+    </td>
+    <td style="width:15%" align="center" valign="bottom" nowrap>
+        <input type="button" class="action_button_long" name="moveItems" id="move_btn" value="Move" onClick="moveItem(this.form, this.name, 'move_progress')" /><span id="move_progress">&nbsp;</span>
+    </td>
+    <td style="width:15%" align="center" valign="bottom" nowrap>
+        <input type="button" class="action_button_long" name="deleteItems" id="delete_btn" value="Delete" onClick="deleteItem(this.form, this.name, 'delete_progress')" /><span id="delete_progress">&nbsp;</span>
+    </td>
+    <td style="width:15%" align="center" valign="bottom" nowrap>
+        <input type="button" class="action_button_long" name="itemDataUpload" id="bdu_btn" value="Batch Data Upload" onClick="popWin(this.form, this.name)" />
+    </td>
+    <td style="width:15%" align="center" valign="bottom" nowrap>
+    
+    </td>
+    <td style="width:15%" align="center" valign="bottom" nowrap>
+      
+    </td>
+    </tr>
+  </table>
+  <br/><br/>
+  <div class="tabber" id="tabMain" style="margin-top:-9px;">
+    <div class="tabbertab" title="Standards Hierarchy" style="height:255px; overflow:auto;" onClick="setTab('search_standards')">
+    <table border="0" cellspacing="3" cellpadding="3" id="standards_table" class="no-style" style="display:none;">
+    
+        </table>
+        <table border="0" cellspacing="3" cellpadding="3" id="standard_table" class="no-style" style="display:none;" >
+         <tr>
+                <td>Standard:</td>
+            <td>
+            <select id="i_standard_list" name="i_standard_list" class="chzn-select" style="width:200px;">
+                <option value=""></option>
+                <TMPL_LOOP NAME="i_standard_list">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                </TMPL_LOOP>
+            </select>
+            </td>
+              </tr>
+        </table>
+    </div>
+    <div class="tabbertab" title="Item Metadata" style="height:255px; overflow:auto;" onClick="setTab('search_metadata')">
+    <table border="0" cellspacing="3" cellpadding="3" class="no-style">
+      <tr>
+            <td style="align:left; vertical-align:top;">
+            <table border="0" cellspacing="3" cellpadding="3"  class="no-style">
+              <tr>
+                <td>Name:</td>
+            <td><input type="text" name="i_external_id" value="" class="long-value" /></td>
+              </tr>
+              <tr>
+                <td>Description:</td>
+            <td><input type="text" name="i_description" value="" class="long-value" /></td>
+              </tr>
+          <tr>
+            <td>Source Document:</td>
+            <td><input type="text" name="i_source_document" value="" class="long-value" /></td>
+          </tr> 
+          <tr>
+            <td>Readability Index:</td>
+            <td><input type="text" name="i_readability_index" value="" class="long-value" /></td>
+          </tr> 
+                  <tr>
+                    <td>Review Locking:</td>
+                    <td>
+                        <select name="i_review_lock" class="chzn-select">
+                            <option value=""></option>
+                            <option value="1">Locked</option>
+                            <option value="0">Unlocked</option>
+                        </select>
+                    </td>
+                  </tr>
+        </table>
+        </td>
+        <td style="width:8px;">&nbsp;</td>
+        <td style="align:right; vertical-align:top;">
+            <table border="0" cellspacing="3" cellpadding="3"  class="no-style">
+              <tr>
+                <td>Development State:</td>
+            <td>
+            <select name="i_dev_state" class="chzn-select" style="width:200px;">
+                <option value=""></option>
+                <TMPL_LOOP NAME="dev_states">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                </TMPL_LOOP>
+            </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Publication Status:</td>
+            <td>
+            <select name="i_publication_status" class="chzn-select" style="width:200px;">
+                <option value=""></option>
+                <TMPL_LOOP NAME="i_pub_stats">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                </TMPL_LOOP>
+            </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Editor:</td>
+            <td>
+            <select name="i_author" class="chzn-select" style="width:200px;">
+                <option value="">All</option>
+                <TMPL_LOOP NAME="authors">
+                <option value="<TMPL_VAR NAME="u_id">"><TMPL_VAR NAME="u_last_name">, <TMPL_VAR NAME="u_first_name"></option>
+                </TMPL_LOOP>
+            </select>
+            </td>
+              </tr>
+          <tr>
+            <td>Item Format:</td>
+            <td>
+            <select name="i_format" class="chzn-select" style="width:200px;">
+                <option value=""></option>
+                        <TMPL_LOOP NAME="item_formats">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+            </select>
+            </td>
+          </tr> 
+	  <tr>
+	    <td>Due Date Range:</td>
+	    <td>
+              <input type="text" name="i_due_date_start" value="" size="10" maxlength="10" /> to
+	      <input type="text" name="i_due_date_end" value="" size="10"  maxlength="10" />
+	    </td>
+          </tr>
+            </table> 
+        </td>
+        <td style="width:8px;">&nbsp;</td>
+        <td style="align:right; vertical-align:top;">
+            <table border="0" cellspacing="3" cellpadding="3"  class="no-style">
+              <tr>
+                <td>Content Area:</td>
+            <td>
+            <select name="subject_area" style="width:100px;">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="subject_areas">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Grade Level:</td>
+            <td>
+            <select name="grade_level" style="width:100px;">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="grade_levels">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Grade Span:</td>
+            <td>
+            <select name="grade_span_start" onChange="compareGradeSpan(this.form, this)">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="grade_span">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                </select>
+            -
+            <select name="grade_span_end" onChange="compareGradeSpan(this.form, this)">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="grade_span">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Difficulty:</td>
+            <td>
+            <select name="i_difficulty" class="chzn-select" style="width:100px;">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="difficulty_levels">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+            </select>
+            </td>
+              </tr>
+              <tr>
+                <td>Depth of Knowledge:</td>
+            <td>
+            <select name="dok" style="width:100px;">
+                        <option value=""></option>
+                            <TMPL_LOOP NAME="dok">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                </select>
+            </td>
+              </tr>
+            </table> 
+        </td>
+      </tr>
+    </table>
+    </div>
+
+
+
+<div class="tabbertab" title="Statistics" style="height:380px; overflow:auto;" onClick="setTab('search_statistics')">
+    <div id="admin" style="float:left;width:100;margin-left: 8px;">
+        <table border="0" cellspacing="3" cellpadding="3" class="no-style">
+            <tr>
+                <td >Administration:</td>
+                <td ><select multiple="multiple" style="width:150px;"  name="multi_admin">
+                        <TMPL_LOOP NAME="i_admin_list">
+                        <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                        </TMPL_LOOP>
+                     </select>
+               </td>
+            </tr>
+         </table>
+     </div>
+     <div id="pub" style="float:left;width:100;margin-left: 70px;">
+        <table border="0" cellspacing="3" cellpadding="3" class="no-style">
+          <tr>
+            <td>Publication Status:</td>
+            <td>
+                <select multiple="" style="width:150px;" class="chzn-select" name="pub_status">
+                  <TMPL_LOOP NAME="i_pub_stats">
+                  <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                  </TMPL_LOOP>
+                 </select>
+            </td>
+           </tr>
+        </table>
+    </div>
+    <div id="reset" style="float:left;width:30;margin-left: 66px;"> 
+        <p style="font-size:120%;"><input type="button" value="reset" onClick="resetValue(this.form,this.form.limit_items.value)" />
+        </p>
+    </div>
+
+    <div class="clear"></div>
+    <table class="main_table" border="1" cellspacing="3" cellpadding="3" id="standards_table" style="  margin-left: 16px;border:1px solid black !important;" >
+        <tr>
+            <td>
+                <table class="sub_table" border="0 " cellspacing="3" cellpadding="3" id="standards_table"  style="border:0 !important;">
+                 <tr><td><input type="checkbox" name="dif_mvf"/>DIF_MvF</td></tr>
+                  <tr><td><input type="checkbox" name="dif_bvw"/>DIF_BvW</td></tr> 
+                  <tr><td><input type="checkbox" name="dif_avw"/>DIF_AvW</td></tr> 
+                  <tr><td><input type="checkbox" name="dif_navw"/>DIF_NAvW</td></tr>  
+                  <tr><td><input type="checkbox" name="dif_iepvniep"/>DIF_IEPvNonIEP</td></tr>
+                  <tr><td><input type="checkbox" name="dif_lepvnlep"/>DIF_LEPvNonLEP</td></tr> 
+                  <tr><td><input type="checkbox" name="dif_t1vnt1"/>DIF_Title1vNonTitle1</td></tr>
+                  <tr><td><input type="checkbox" name="statical_flag"/>Statical Flag</td></tr>
+                </table>
+            </td>
+            <td>
+                <table class="sesub_table" border="0" cellspacing="3" cellpadding="3" id="standards_table"  style="margin-left: 50px;border:0 !important;">
+                     <tr>
+                        <td class="sub_td">Percent Chossing</td>
+                        <td>from&nbsp;<input class="inputtype_text" type="text" name="pc1"/></td>
+                        <td>to&nbsp;<input class="inputtype_text" type="text" name="pc2"/></td>
+                     </tr>     
+                     <tr>
+                        <td class="sub_td">Item Total Correlation</td>
+                        <td>from&nbsp;<input class="inputtype_text" type="text" name="itc1"/></td>
+                        <td>to&nbsp;<input class="inputtype_text"  type="text" name="itc2"/></td>
+                     </tr> 
+                     <tr>
+                     <td class="sub_td">Biserial</td>
+                     <td>from&nbsp;<input class="inputtype_text"  type="text" name="bi1"/></td>
+                     <td>to&nbsp;<input class="inputtype_text"  type="text" name="bi2"/></td>
+                     </tr>
+                     <tr>
+                     <td class="sub_td">Pt. Biserial</td>
+                     <td>from&nbsp;<input class="inputtype_text"  type="text" name="pbi1"/></td>
+                     <td>to&nbsp;<input class="inputtype_text"  type="text" name="pbi2"/></td>
+                     </tr>
+                     <tr>
+                     <td class="sub_td">Percent Obtaining</td>
+                     <td>from&nbsp;<input class="inputtype_text"  type="text" name="po1"/></td>
+                     <td>to&nbsp;<input class="inputtype_text"  type="text" name="po2"></td>
+                     </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+    <div class="tabbertab" id="group_process_tab" title="Group Process" style="height:260px; overflow:auto;" onClick="setTab('search_metadata')">
+        <table border="0" cellspacing="3" cellpadding="3" class="no-style">
+          <tr>
+            <td style="align:left; vertical-align:top;">
+                <table border="0" cellspacing="3" cellpadding="3" class="no-style">
+                  <tr>
+                    <td>Rename:</td>
+                    <td><input type="text" name="rename_name" value="" class="long-value" maxlength="255" /></td>
+                    <td><input type="button" class="action_button_long" name="renameItem" value="Rename Selected" onClick="groupProcess(this.form, this.name)" /></td>
+                  </tr>
+                  <tr>
+                    <td>Copy:</td>
+                    <td><input type="text" name="copy_name" value="" class="long-value" maxlength="255" /></td>
+                    <td><input type="button" class="action_button_long" name="copyItem" value="Copy Selected" onClick="groupProcess(this.form, this.name)" /></td>
+                  </tr>
+                  <tr>
+                    <td>Author:</td>
+                    <td>
+                        <select name="new_author" class="chzn-select" style="width:150px;">
+                            <option value=""></option>
+                            <TMPL_LOOP NAME="authors">
+                            <option value="<TMPL_VAR NAME="u_id">"><TMPL_VAR NAME="u_last_name">, <TMPL_VAR NAME="u_first_name"></option>
+                            </TMPL_LOOP>
+                        </select>
+                    </td>
+                    <td><input type="button" class="action_button_long" name="assignAuthor" value="Assign Author" onClick="groupProcess(this.form, this.name)" /></td>
+                  </tr>
+                  <tr>
+                    <td>Development State:</td>
+                    <td>
+                        <select name="new_dev_state" class="chzn-select" style="width:150px;">
+                            <option value=""></option>
+                <TMPL_LOOP NAME="dev_states">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                </TMPL_LOOP>
+                        </select>
+                    </td>
+                    <td><input type="button" class="action_button_long" name="assignDevState" value="Assign Dev State" onClick="groupProcess(this.form, this.name)" /></td>
+                  </tr>
+                  <tr>
+                    <td>Publication Status:</td>
+                    <td>
+                        <select name="new_pub_status" class="chzn-select" style="width:150px;">
+                            <option value=""></option>
+                	    <TMPL_LOOP NAME="i_pub_stats">
+                		<option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+                	    </TMPL_LOOP>
+                        </select>
+                    </td>
+                    <td><input type="button" class="action_button_long" name="assignPubStatus" value="Assign Pub Status" onClick="groupProcess(this.form, this.name)" /></td>
+                  </tr>
+                  <tr>
+                    <td>Review:</td>
+                    <td>
+                        <select name="review_locking" class="chzn-select" style="width:150px;">
+                            <option value="unlock_review">Unlock</option>
+                            <option value="lock_review">Lock</option>
+                        </select>
+                    </td>
+                    <td><input type="button" class="action_button_long" name="reviewLocking" value="Set Review" onClick="groupProcess(this.form, this.form.review_locking.value)" /></td>
+                  </tr>
+                </table>
+            </td>
+          </tr>
+        </table>
+    </div>
+  </div>
+<table width="600">
+  <tr>
+    <td valign="top">
+        <input type="button" class="action_button" value="Search" onClick="searchItems(this.form, 'search_spinner', this.form.limit_items.value)" />
+        Return &nbsp;
+        <input type="text" name="limit_items" class="value" size="5" maxlength="5" value="100" /> &nbsp;
+        <span id="search_spinner">&nbsp;</span> Enter numeric value or ('All' or blank for all results).
+    </td>
+  </tr>
+</table>
+
+<a name="search_results"></a>
+<div id="items_results" style="width:1200px">
+<table id="itemTable" class="tablesorter">
+</table>
+</div>
+
+
+</form>
+<form action="itemCreate.pl" method="post" enctype="multipart/form-data" name="item_edit" id="item_edit">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="myAction" value="edit" />
+<input type="hidden" name="adminMode" value="1" />
+<input type="hidden" name="itemBankId" value="" />
+<input type="hidden" name="externalId" value="" />
+</form>
+<form action="itemPrintList.pl" method="post" enctype="multipart/form-data" name="item_view" id="item_view" target="_blank">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="myAction" value="print" />
+<input type="hidden" name="viewType" value="4" />
+<input type="hidden" name="itemBankId" value="" />
+<input type="hidden" name="itemExternalId" value="" />
+<input type="hidden" name="view_itemId" value="1" />
+<input type="hidden" name="view_itemContent" value="1" />
+</form>
+<form action="items_manager.pl" method="post" enctype="multipart/form-data" name="view_report" id="view_report" target="_blank">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="action" value="displayReport" />
+<input type="hidden" name="rpt_type" value="" />
+<input type="hidden" name="i_id" value="" />
+</form>
+<form action="" method="post" enctype="multipart/form-data" name="item_accessibility_form" id="item_accessibility_form">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="externalId" value="" />
+</form>
+</body>
+
+</html>
+

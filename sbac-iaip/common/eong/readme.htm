@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta content="text/html; charset=US-ASCII" http-equiv="Content-Type"/>
+        <title>RealObjects edit-on NG 2.1.2620 readme</title>
+    </head>
+    <body>
+        <h2 align="center">edit-on NG&reg; by RealObjects</h2>
+        <h3 align="center">Version 2.1.2620, 2012-03-15</h3>
+        <h3>Important</h3>
+        <p>This software and support material is copyrighted, it may only be used with a legally acquired and fully paid
+            license and in accordance with the edit-on NG Software License Agreement. By installing and using this
+            software, you accept the terms and conditions of the RealObjects edit-on NG Software License Agreement. For
+            details, see the license.txt file.<br/>If you have not purchased a license, you are only allowed to test and
+            evaluate this software to find out how it fits your requirements during the evaluation period which is
+            determined by the "Evaluation Key". To request an "Evaluation Key", visit http://www.realobjects.com. You
+            are not allowed to use this software with an "Evaluation Key" in a production environment. After expiration
+            of the "Evaluation Period", you must permanently remove this software and its support material from your
+            computers, including the Sentry Spelling-Checker Engine and dictionaries. You are not allowed to use the
+            software at all without a license key.</p>
+        <p>To purchase an edit-on NG license, please visit our website at <a
+            href="http://www.realobjects.com">http://www.realobjects.com</a>.</p>
+        <h3>Folder Contents</h3>
+        <p><code>/documentation</code></p>
+        <p>edit-on NG documentation (PDF and HTML-Format).<br/>Please make sure to read the documentation!</p>
+        <p><code>/lib</code></p>
+        <p>Library directory, containing the files required for the integration of EONG.</p>
+        <p><code>/samples</code></p>
+        <p>Developer samples.</p>
+        <p><code>/license</code></p>
+        <p>Additional licensing and copyright information.</p>
+        <p><code>/extension</code></p>
+        <p>Extension for custom extension (such as a custom locale).</p>
+        <p><code>/tools</code></p>
+        <p>Password encryption tool that can be used to encrypt the password specified in the config.json for WebDAV
+            connections.</p>
+        <p><strong>Remark:</strong></p>
+        <p>Please be sure that you unzip the complete directory structure. If you use WinZip activate the "Use Folder
+            Names" option when unzipping.</p>
+        <h3>Installation</h3>
+        <p>Copy the edit-on NG folder (complete with all sub folders) to your web server.</p>
+        <p>Note: If IIS is used as web server it might be neccessary to:</p>
+        <ul>
+            <li>Rename the "bin" folder, as by default all "bin" folders are configured as "hiddensegment" in IIS,
+                though requests to these folders will be blocked. Please make also sure to change the base url in
+                setBaseURL() accordingly.</li>
+            <li>Register json files as mimetype in IIS</li>
+        </ul>
+        <h3>Release Notes and Known Issues</h3>
+        <ul>
+            <li>Make sure to read the documentation, which can be found in the /documentation directory.</li>
+            <li>The API of edit-on NG is not directly compatible with existing integrations of edit-on Pro 5 or
+                earlier.</li>
+            <li>When running edit-on NG using Safari for Windows, a "java.net.MalformedURLException: no protocol:"
+                exception is displayed in the Java Console when the applet has loaded or whenever a LiveConnect call is
+                performed. This does not have any effect on the functionality of edit-on NG and is an issue that is not
+                caused by the editor itself and can be replicated with Safari for Windows in combination with any other
+                Java applet.</li>
+        </ul>
+        <h3>Release History</h3>
+        <p><strong>2.1.2620: Second Maintenance Release of edit-on NG 2.0</strong></p>
+        <p>The new features include:</p>
+        <ul>
+            <li>Added new "requestFocus()" method to request the focus on the applet. Note: this is not supported on Mac
+                OS X.</li>
+            <li>Added support for QR Codes.</li>
+        </ul>
+        <p>Changes:</p>
+        <ul>
+            <li>Typing in a section with a symbol font (Symbol, WebDings, WingDings, WingDings 2 and WingDings 3) now
+                translates typed characters into the appropriate range before they are inserted.</li>
+            <li>The style "display: block" is now automatically added to the document for elements defined as container
+                elements in the containerElements configuration when importing a document via "importLegacyDocument" or
+                "importLegacyDocumentFromURL". </li>
+            <li>The "Fragment Language" drop-down menu now contains the "none" entry. Selecting this entry disables
+                spell-checking for the selected fragment.</li>
+            <li>Comparing two documents now always enables comparison mode, even if the documents are identical.</li>
+        </ul>
+        <p>Bug fixes:</p>
+        <ul>
+            <li>The JavaScript paste event (ONPASTE) now properly escapes backslashes within pasted content.</li>
+            <li>The getCurrentTableColumnCellAttributes and getCurrentTableRowCellAttributes API methods now return the
+                attributes of the correct row respectively column if an entire row / column or multiple rows / columns
+                are selected.</li>
+            <li>The current format of inline content is now always preserved when it is copied and pasted.</li>
+            <li>The editor no longer blocks if a PNG images with a relative path is dragged and dropped from an external
+                source.</li>
+            <li>Comparison styles are no longer overridden by user agent styles.</li>
+            <li>Container elements defined in the "containerElements" configuration no longer are wrapped in a paragraph
+                element when the document containing them is imported via "importLegacyDocument" or
+                "importLegacyDocumentFromURL".</li>
+            <li>It is now easier to see that editing in the in-place editing mode is disabled when a dialog is
+                open.</li>
+            <li>When trying to learn a word and no language is defined for the document or fragment, the spellchecker
+                now adds it to the default language.</li>
+            <li>Empty annotations can now be removed using the "Remove Annotation" button.</li>
+        </ul>
+        <p><strong>2.0.2142: First Maintenance Release of edit-on NG 2.0</strong></p>
+        <p>Improvements:</p>
+        <ul>
+            <li>Improved font mapping to support a larger range of characters for specific fonts.</li>
+        </ul>
+        <p><strong>2.0.2109: First Release of edit-on NG 2.0</strong></p>
+        <p>The new features include:</p>
+        <ul>
+            <li>New User Interface features.</li>
+            <ul>
+                <li>Support for tool bar icons with text.</li>
+                <li>Added a new icon size (tiny) which allows having 3 rows in a pane/subpanel.</li>
+                <li>New structural element (subpanel) in the tool bar which allows to mix different icons sizes in one
+                    pane.</li>
+                <li>Display the action's selected state in the context menu.</li>
+                <li>Action icons are now displayed in the context menu.</li>
+                <li>Added a "Page of Pages" counter for the status bar.</li>
+                <li>Document/Fragment language area in the status bar to display and change the concerning
+                    language.</li>
+                <li>Style Template Groups in Style Template Panel are now collapsible.</li>
+                <li>Possibility to configure certain elements as "container elements".</li>
+                <li>Added configuration option to influence the display of the style template panel on start of the
+                    editor.</li>
+            </ul>
+            <li>Added new API methods that support XPath:</li>
+            <ul>
+                <li>Select all elements matching the XPath expression.</li>
+                <li>Move the caret to the first element matching the XPath expression</li>
+                <li>Retrieve / modify the attributes of all elements matching the XPath expression.</li>
+            </ul>
+            <li>Automatic conversion of (local/file) image URLs to data URIs.</li>
+            <li>Added event handler to influence what is pasted into the editor.</li>
+            <li>Added a "getSelectionPlainText()" method.</li>
+            <li>Added a symbol filter mechanism to ensure the correct display of document content having a symbol
+                (Symbol, WingDings, ...) font-family style declaration.</li>
+            <li>Added two new API methods "importLegacyDocument" and "importLegacyDocumentFromURL" to import legacy
+                documents with filtering enabled.</li>
+        </ul>
+        <p>VersioTrack Support:</p>
+        <p>Added support for the VersioTrack module. VersioTrack enables you to compare documents in edit-on NG, display
+            all changes in the compared documents and accept or reject changes. To order VersioTrack, please contact <a
+            href="mailto:support@realobjects.com?subject=VersioTrack">support@realobjects.com</a>.</p>
+        <p>General Improvements:</p>
+        <ul>
+            <li>Major tool bar design facelift.</li>
+            <li>Support for empty bookmarks.</li>
+            <li>Improved the "Insert Special Character" dialog. Now supports all Unicode blocks.</li>
+        </ul>
+        <p>Changes:</p>
+        <ul>
+            <li>New uiconfig stucture for subpanels. The old uiconfig structure has been deprecated. It is still
+                possible to use this with edit-on NG 2.0, however you cannot mix new and deprecated uiconfig patterns in
+                one pane.</li>
+            <li>Deprecated method: "loadInplaceToolbarIcons". Use "loadCustomJavaIcons" instead. The new method is used
+                to load custom icons for the in-place tool bar and the context menu.</li>
+            <li>Deprecated the filter settings "officelist", "officestyledhtml" and "purehtml".</li>
+        </ul>
+        <p>Bug fixes:</p>
+        <ul>
+            <li>Removed hyperlinks that had a class are still anchors.</li>
+            <li>Attributes from elements could not be removed or set to empty.</li>
+            <li>The "src" attribute of pasted images is missing.</li>
+            <li>Opening a dialog via the context menu causes the applet to crash when using IE.</li>
+            <li>Corrected element identification of aligned images followed by an empty tag (e.g. &lt;br/&gt;).</li>
+            <li>Inserting aligned images with "setParentElementByNameContent" removes the parent element.</li>
+            <li>Copy and paste from IE does not work with certain documents (containing &lt;form&gt; elements).</li>
+            <li>Uneditable document when cleaning the source view document and switching to WYSIWYG.</li>
+            <li>UserStyleSheets were removed when editing in the source view and switching back to WYSIWYG</li>
+            <li>Creating a new paragraph is not possible inside a ro-editable: false and ro-editable-inside: true
+                context.
+                <ul>
+                    <li>Note: Please have a look at the integration manual chapter III.2.2.15 for more information.</li>
+                </ul>
+            </li>
+            <li>Style template actions are not updated correctly if "enablestyletemplatepanel" is set to false.</li>
+            <li>Documents containing regular lists are converted to illegal constructs if the the office list filter is
+                enabled.</li>
+            <li>Setting the iconRepository has no influence.</li>
+            <li>Changed resolution to 96 DPI on all systems.</li>
+        </ul>
+        <p><strong>1.5.1823: First Release of edit-on NG 1.5</strong></p>
+        <p>The new features include:</p>
+        <ul>
+            <li>Added API method to programmatically resize the editor.</li>
+            <li>Attributes can now be removed using the setElementAttributes, setParentElementByNameAttributes,
+                setBlockElementAttributes, setCurrentTableRowCellAttributes and setCurrentTableColumnCellAttributes
+                methods.</li>
+        </ul>
+        <p>General Improvements:</p>
+        <ul>
+            <li>Added support for bookmarks using "name" attributes instead of "id".</li>
+            <li>The editor now falls back to a default document when trying to load an empty document.</li>
+        </ul>
+        <p>Performance Improvements:</p>
+        <ul>
+            <li>Improved the reaction time when pressing action buttons across all browsers and specs. This should be
+                especially noticeable on lower end systems, but should generally feel more responsive on all
+                systems.</li>
+            <li>Optimized dialog performance. Dialogs should now generally be displayed faster when they are
+                opened.</li>
+            <li>Optimized the color picker. The color picker is now more responsive and handles more smoothly on lower
+                end systems, or using Internet Explorer.</li>
+            <li>Toolbar drop downs are now displayed faster.</li>
+        </ul>
+        <p>Changes:</p>
+        <ul>
+            <li>The order of the arguments taken by the "insertImage" API method has changed. The arguments for this
+                method now are "string src, string alt, string width, string height, string border" instead of "string
+                src, string width, string height, string border, string alt". All arguments except "src" and "alt" now
+                are optional and may be ignored or set to "null".</li>
+            <li>The "insert-image" action now assumes "px" as unit for image width, height, or border width if no other
+                unit is specified.</li>
+            <li>The handling of base URLs was improved. In edit-on NG 1.0.1740, the handling of base URLs did not match
+                the behavior described in the manual. The behavior was improved in general and its description was
+                updated to match the changes. For methods that may accept a document base URL:
+                <ol>
+                    <li>If no document base URL is specified, use the URL of the document as base for resources.</li>
+                    <li>If a document base URL is specified, use it instead.</li>
+                    <li>If the document base URL is explicitly set to null, use the default base URL.</li>
+                    <li>If the document base URL is disabled and no default base URL is specified, fall back to the code
+                        base.</li>
+                </ol>
+            </li>
+            <li>Deprecated the "setExtensionDirectoryURL" API method. Use
+                <ul>
+                    <li>setActionExtensionURL(string URL)</li>
+                    <li>setDialogExtensionURL(string URL)</li>
+                    <li>addLocaleExtensionURL(string localeCode, string localeURL)</li>
+                </ul>
+            </li>
+        </ul>
+        <p style="margin-left: 30pt">instead.</p>
+        <p>Bug fixes:</p>
+        <ul>
+            <li>Tooltips displayed in the context menu are now localized.</li>
+            <li>Fixed NPE when inserting a hyperlink while multiple block elements are selected.</li>
+            <li>Fixed a JavaScript error in Internet Explorer when "saveuistate" is set to false in the configuration
+                file.</li>
+            <li>Auto correction entries are now properly removed.</li>
+            <li>The "Insert Table" dialog is now correctly displayed in Internet Explorer 7.</li>
+            <li>Special characters are now properly encoded in annotations.</li>
+            <li>Auto-hyperlinking at the start of a sentence is now possible.</li>
+            <li>Fixed issue where the in-place toolbar was not hidden when clicking in the editor using Mac OS X with
+                JRE 1.6.0u20.</li>
+            <li>The "elementNames" filter in the actions configuration now no longer ignores element names other than
+                the first.</li>
+            <li>It is now possible to move the focus away from the editor in Safari 4.0.5 on Mac OS X.</li>
+            <li>Using the shortcuts CTRL+1 through CTRL+6 in order to change the current paragraph to heading 1 through
+                6 no longer also inserts a character with the corresponding number on Mac OS X.</li>
+            <li>The directory containing the edit-on NG files now can contain the string "edit-on-ng".</li>
+            <li>The "insert-pagebreak" action now inserts a "div" element with appropriate inline styles instead of a
+                "div" element with the class "pageBreak".</li>
+            <li>Fixed exception when calling getCurrentTableColumnCellAttributes or
+                getCurrentTableRowCellAttributes.</li>
+            <li>The methods setCurrentTableColumnCellAttributes and setCurrentTableRowCellAttributes now accept the
+                object returned by their getter counterparts (getCurrentTableColumnCellAttributes and
+                getCurrentTableRowCellAttributes resp.) as argument.</li>
+            <li>Unless otherwise stored in the user preferences, the first tab panel is now always displayed instead of
+                the second when the editor is loaded.</li>
+        </ul>
+        <p>Additional Notes:</p>
+        <p>Selecting a single word via double-click or an entire block through a triple-click was previously not
+            possible on Mac OS X machines due to missing events in that environment. This has been remedied by Apple in
+            Mac OS 10.6 Update 3 and 10.5 Update 8.</p>
+        <p><strong>1.0.1740: First Release of edit-on NG 1.0</strong></p>
+        <h3>Server Operating Systems Supported</h3>
+        <p>All Server Operating Systems (Windows 2000/2003/2008, Linux, Solaris, BSD etc.) which support a HTTP capable
+            server (e.g. Apache, IIS, Tomcat, Domino etc.) can be used. Files with the extension *.json and .js must be
+            passed to the client "as-is" and must not be processed on the server.</p>
+        <h3>Client Operating Systems Supported</h3>
+        <ul>
+            <li>Microsoft Windows XP</li>
+            <li>Microsoft Windows Vista</li>
+            <li>Microsoft Windows 7</li>
+            <li>Linux 2.x</li>
+            <li>Apple Mac OS X 10.6 (Safari only)</li>
+            <li>Please make sure to install the latest service packs and updates.</li>
+        </ul>
+        <h3>Browsers Supported</h3>
+        <ul>
+            <li>Microsoft Internet Explorer 7/8</li>
+            <li>Mozilla Firefox 3.6+</li>
+            <li>Google Chrome 5</li>
+            <li>Apple Safari 4+</li>
+        </ul>
+        <h3>Required Java Runtime Environment</h3>
+        <ul>
+            <li>Latest Sun JRE 1.6.0 (Latest Apple JRE 1.6.0 on Mac OS X)</li>
+        </ul>
+        <p><strong>Important:</strong> To guarantee the best user experience, it is highly recommended to enable the
+            next generation Java Plug-in (on OS X enable "Run applets: In their own process" in the Java Preferences).
+            This requires Java 1.6.0_10 or newer. For details please see java.com/en/download/help/new_plugin.xml.</p>
+        <p>If the next generation Java Plug-in is enabled, the maximum memory available for the editor is increased to
+            256m by default. You can modify this value using the JavaScript API method setMaxMemory(mem).</p>
+        <p><strong>Example:</strong> eong.setMaxMemory("512m");</p>
+        <p>To download the latest Java VMs for Windows, Linux and Solaris please visit:</p>
+        <p>Sun JRE: <a href="http://java.sun.com/javase/">http://java.sun.com/javase/</a></p>
+        <p>To download the latest Java VM for Apple Mac OS X, please use the "Software Update" feature of the operating
+            system.</p>
+        <h3>Minimum Hardware Requirements</h3>
+        <ul>
+            <li>2 GHz Single Core or 1.5 GHz Dual Core CPU</li>
+            <li>1 GB RAM</li>
+        </ul>
+        <p>In general, hardware requirements depend very much on the platform, the speed of the JVM implementation and
+            the complexity of the documents which are edited.</p>
+        <h3>Software Requirements for the Samples</h3>
+        <ul>
+            <li>Webserver (Apache, IIS or other)</li>
+        </ul>
+        <p><strong>Notes:</strong></p>
+        <ul>
+            <li>The samples will only run if the directory structure is unmodified.</li>
+            <li>Your webserver should be configured to use index.htm as the default page.</li>
+            <li>Navigate to http://yourserver/youreditondirectory/samples/index.htm to run the samples.</li>
+        </ul>
+        <h3>Support</h3>
+        <p>For information about technical support please visit <a
+            href="http://www.realobjects.com/support">http://www.realobjects.com/support</a>.</p>
+        <h3>Additional Copyrights and other Important Notes</h3>
+        <p>Please see the NOTICE.txt file in the /license subdirectory</p>
+        <p>Copyright (c) 2009-2011, RealObjects GmbH.<br/>All rights reserved.</p>
+        <p>info@realobjects.com<br/>http://www.realobjects.com</p>
+    </body>
+</html>

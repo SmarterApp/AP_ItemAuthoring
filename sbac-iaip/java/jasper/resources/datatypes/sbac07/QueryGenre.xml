@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query>
+    <folder>/datatypes/sbac07</folder>
+    <name>QueryGenre</name>
+    <version>3</version>
+    <label>QueryGenre</label>
+    <description></description>
+    <creationDate>2013-03-16T13:14:29.000-06:00</creationDate>
+    <updateDate>2012-12-17T16:20:16.000-07:00</updateDate>
+    <language>sql</language>
+    <queryString>select * from genre</queryString>
+    <dataSource>
+        <uri>/Data_Sources/cdesbacdb</uri>
+    </dataSource>
+</query>

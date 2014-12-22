@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<h:head>
+	<script type="text/javascript">
+		function myOpen(name, url, w, h) {
+			var myWin = window
+					.open(
+							url,
+							name,
+							'width='
+									+ w
+									+ ',height='
+									+ h
+									+ ',resizable=yes,scrollbars=yes,left=250,top=100,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
+
+			return false;
+		}
+
+		function clearErrors() {
+			var errorMessagesBlock = document.getElementById("errorMessages");
+			if (errorMessagesBlock) {
+				errorMessagesBlock.style.display = 'none';
+			}
+		}
+	</script>
+	<ui:remove>
+		<!--
+    <h:outputScript library="javascript" name="jquery-1.7.2.js"/>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        setInterval(function() {
+            $.get('sessionKeepAlive');
+        }, ${(session.maxInactiveInterval - 10) * 1000});
+    });
+    </script>
+    -->
+	</ui:remove>
+	<h:outputStylesheet name="css/basic.css" />
+	<h:outputStylesheet name="css/ItemAlternate.css" />
+</h:head>
+
+<h:body onclick="clearErrors();">
+	<ui:remove>
+		TODO: ensure renders correctly
+	</ui:remove>
+	<h:messages id="errorMessages" styleClass="error" />
+	<h:form id="standardDisplayForm">
+
+		<span style="font-size: 13pt; color: #000066;">Primary
+			Standard: <h:commandButton value="Add" id="addPrimaryStandard"
+				rendered="#{!itemStandard.existPrimaryStandard}"
+				onclick="myOpen('StandardEditWindow','ItemStandardEdit.jsf?item=#{itemStandard.originalItem.id}&amp;grade=#{itemStandard.originalItem.gradeLevel}&amp;subject=#{itemStandard.originalItem.subject}&amp;standardInd=P&amp;callerFlag=itemAuthoring',750,450); return false;" />
+		</span>
+		<br />
+		<br />
+		<t:dataTable id="data" styleClass="scrollerTableStandard1"
+			headerClass="standardTable_HeaderStandard"
+			rowClasses="standardTable_RowStandard"
+			columnClasses="metafilesTable_ColumnStandard,metafilesTable_ColumnStandard2"
+			var="itemOriginal" value="#{itemStandard.originalItem}"
+			rendered="#{itemStandard.existPrimaryStandard}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Standard" />
+				</f:facet>
+				<h:outputText value="#{itemOriginal.primaryStandard}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Action" />
+				</f:facet>
+				<h:commandLink
+					onclick="myOpen('StandardEditWindow','ItemStandardEdit.jsf?item=#{itemStandard.originalItem.id}&amp;standardValue=#{itemStandard.originalItem.primaryStandard}&amp;grade=#{itemStandard.originalItem.gradeLevel}&amp;subject=#{itemStandard.originalItem.subject}&amp;standardInd=P&amp;callerFlag=itemAuthoring',750,450); return false;"
+					value="Edit" style="font: bold;" />
+			</h:column>
+		</t:dataTable>
+
+		<br />
+		<br />
+		<span style="font-size: 13pt; color: #000066;">Secondary
+			Standard(s): <h:commandButton value="Add" id="addSecondaryStandard"
+				onclick="myOpen('StandardEditWindow','ItemStandardEdit.jsf?item=#{itemStandard.originalItem.id}&amp;grade=#{itemStandard.originalItem.gradeLevel}&amp;subject=#{itemStandard.originalItem.subject}&amp;standardInd=S&amp;callerFlag=itemAuthoring',750,450); return false;" />
+		</span>
+		<br />
+		<br />
+		<t:dataTable id="StandardData" styleClass="scrollerTableStandard"
+			headerClass="standardTable_HeaderStandard"
+			rowClasses="standardTable_RowStandard"
+			columnClasses="metafilesTable_ColumnStandard,metafilesTable_ColumnStandard2,metafilesTable_ColumnStandard3,metafilesTable_ColumnStandard4"
+			var="itemStandardLocal" value="#{itemStandard.itemStandardList}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Standard" />
+				</f:facet>
+				<h:outputText value="#{itemStandardLocal.standard}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Action" />
+				</f:facet>
+				<h:commandLink
+					onclick="myOpen('StandardEditWindow','ItemStandardEdit.jsf?item=#{itemStandard.originalItem.id}&amp;standardValue=#{itemStandardLocal.standard}&amp;standardId=#{itemStandardLocal.id}&amp;grade=#{itemStandard.originalItem.gradeLevel}&amp;subject=#{itemStandard.originalItem.subject}&amp;standardInd=S&amp;callerFlag=itemAuthoring',750,450); return false;"
+					value="Edit" style="font: bold;" />
+				<h:outputText value="		" />
+				<h:commandLink value="Remove" style="font: bold;"
+					actionListener="#{itemStandard.removeStandard(itemStandardLocal)}">
+				</h:commandLink>
+				<h:outputText value="		" />
+				<h:commandLink value="Make Primary" style="font: bold;"
+					action="#{itemStandard.makePrimary(itemStandardLocal)}">
+				</h:commandLink>
+			</h:column>
+		</t:dataTable>
+		<h:commandButton value="Refresh" id="refresh"
+			action="#{itemStandard.fetchItem(itemStandard.originalItem.id)}"
+			style="display:none" />
+	</h:form>
+</h:body>
+
+</html>

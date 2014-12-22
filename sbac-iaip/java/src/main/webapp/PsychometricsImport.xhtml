@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+<ui:composition>
+    <h:outputStylesheet name="css/basic.css" target="head"/>
+    <h:outputStylesheet name="css/PsychometricsImport.css" target="head" />
+    
+    <h:form id="importResultsForm" style='#{psychometricsImport.displayingResults ? "": "display: none"}' styleClass="importResultsForm">
+        <t:div styleClass="disablingDiv">
+        </t:div>
+        <t:div styleClass="importResultsPanel">
+            <h2>Import Results</h2>
+            <h:commandLink actionListener="#{psychometricsImport.hideImportResults}">
+                <img class="closeButton" src="images/close.png" title="Close"/>
+                <f:ajax render="importResultsForm"/>
+            </h:commandLink>
+            <t:div styleClass="importResultsInnerPanel">
+                <table class="importResultsGrid" >
+                    <tr>
+                       <ui:repeat value="#{psychometricsImport.importHeaders}" var="headerValue">
+                           <th >#{headerValue}</th>
+                       </ui:repeat>
+                    </tr>
+	                <ui:repeat value="#{psychometricsImport.importResults}" var="importResult">
+	                    <tr>
+	                       <ui:repeat value="#{importResult}" var="importValue">
+	                           <td style="white-space:nowrap;">#{importValue}</td>
+	                       </ui:repeat>
+	                    </tr>
+	                </ui:repeat>
+                </table>
+            </t:div>        
+        </t:div>
+    </h:form>
+
+    <h:form id="importUploadingForm" style='#{psychometricsImport.uploading ? "": "display: none"}' styleClass="importUploadingForm" enctype="multipart/form-data">
+        <t:div styleClass="disablingDiv">
+        </t:div>
+        <t:div styleClass="importUploadingPanel">
+            <h2>Upload Statistics</h2>        
+            <t:inputFileUpload id="importFile" size="50" value="#{psychometricsImport.uploadedFile}" required="true" requiredMessage="File not chosen"/>
+            <h:panelGrid style="width: 100%" columns="2">
+                <h:outputLabel for="importIdentifier" value="Identifier: "/>
+                <h:inputText style="width: 100%" id="importIdentifier" value="#{psychometricsImport.identifier}" required="true"></h:inputText>
+                <h:outputLabel for="importComment" value="Comment: "/>
+                <h:inputTextarea styleClass="importComment" style="width: 100%" cols="30" id="importComment" value="#{psychometricsImport.comment}"/>
+            </h:panelGrid>
+            <h:messages id="errorMessagesImportUpload" styleClass="error" />
+            <h:panelGroup layout="block" styleClass="importDialogButtonsPanel">
+                <h:commandButton value="Upload" action="#{psychometricsImport.upload}"/>
+                <h:commandButton value="Cancel" immediate="true" actionListener="#{psychometricsImport.cancelUpload}">
+                    <f:ajax render="importUploadingForm"/>
+                </h:commandButton>
+            </h:panelGroup>
+        </t:div>
+    </h:form>
+    
+     <h:form id="importCheckUploadingForm" style='#{psychometricsImport.showDialog ? "": "display: none"}' styleClass="importUploadingForm" enctype="multipart/form-data">
+        <t:div styleClass="disablingDiv">
+        </t:div>
+        <t:div styleClass="importUploadingPanelCheck">
+                 <h:outputText value=" Items in file already contain data for this Administration. This data will be overwritten. Do you wish to proceed?" />
+                <h:panelGroup layout="block" styleClass="importDialogButtonsPanel">
+                <h:commandButton value="Yes" actionListener="#{psychometricsImport.submitContinue}" action="#{psychometricsImport.upload}"/>
+                <h:commandButton value="No" immediate="true" actionListener="#{psychometricsImport.cancelSubmit}">
+                    <f:ajax render="importCheckUploadingForm"/>
+                </h:commandButton>
+            </h:panelGroup>
+        </t:div>
+    </h:form>
+
+    <h:form id="importTopForm">
+    
+        <h:panelGrid id="importTopPanel" columns="2" styleClass="importTopPanel" columnClasses="alignLeft,alignRight alignTop">
+            <h:panelGrid columns="2">
+                <h:panelGroup>
+                    <h:outputLabel for="itemBankMenu" value="Program: "/>
+                    <h:selectOneMenu id="itemBankMenu" value="#{psychometricsImport.selectedItemBankId}">
+                        <f:selectItems value="#{psychometricsImport.itemBankSelectItems}" />
+                        <f:ajax execute="@this" listener="#{psychometricsImport.itemBankSelected}" render="importTopForm importTableForm"/>
+                    </h:selectOneMenu>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{psychometricsImport.itemBankSelected}">
+		                <h:commandButton value="Upload New File" action="#{psychometricsImport.uploadNewFile}">
+		                    <f:ajax render="importUploadingForm"/>
+		                </h:commandButton>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGroup>
+            </h:panelGroup>
+        </h:panelGrid>
+        
+    </h:form>
+    
+    <h:form id="importTableForm" style="height: 100%; width: 100%">
+        <h:panelGroup layout="block" rendered="#{psychometricsImport.itemBankSelected}" id="importDataTablePanel" styleClass="importDataTablePanel">
+            <t:dataTable id="data"
+                    styleClass="scrollerTable"
+                    headerClass="standardTable_Header"
+                    rowClasses="standardTable_Row1,standardTable_Row2"
+                    columnClasses="width80 alignLeft, width400 alignLeft, width100 alignCenter, width100 alignCenter"
+                    var="administration"
+                    value="#{psychometricsImport.administrations}"
+                    preserveDataModel="false"
+                    first="#{psychometricsImport.firstRowIndex}"
+                    rows="15"
+               >
+               <h:column>
+                   <f:facet name="header">
+                      <h:outputText value="Identifier" />
+                   </f:facet>
+                   <h:outputText value="#{administration.identifier}"/>
+               </h:column>
+               <h:column>
+                   <f:facet name="header">
+                      <h:outputText value="Comment" />
+                   </f:facet>
+                   <h:outputText value="#{administration.comment}"/>
+               </h:column>
+               <h:column>
+                   <f:facet name="header">
+                      <h:outputText value="Date / Time" />
+                   </f:facet>
+                   <h:outputText value="#{administration.timestamp}">
+                        <f:convertDateTime dateStyle="default" type="both" />
+                   </h:outputText>
+               </h:column>
+               <h:column>
+                   <f:facet name="header">
+                      <h:outputText value="Status" />
+                   </f:facet>
+                   <h:outputText value="#{administration.status.name}"/>
+               </h:column>
+            </t:dataTable>
+            
+            <t:dataScroller id="scroll_2"
+                    for="data"
+                    rowsCountVar="rowsCount"
+                    displayedRowsCountVar="displayedRowsCountVar"
+                    firstRowIndexVar="firstRowIndex"
+                    lastRowIndexVar="lastRowIndex"
+                    pageCountVar="pageCount"
+                    immediate="true"
+                    pageIndexVar="pageIndex"
+                    >
+                <h:outputFormat value="{0} Administrations found, displaying {1} from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                    <f:param value="#{rowsCount}" />
+                    <f:param value="#{displayedRowsCountVar}" />
+                    <f:param value="#{firstRowIndex}" />
+                    <f:param value="#{lastRowIndex}" />
+                    <f:param value="#{pageIndex}" />
+                    <f:param value="#{pageCount}" />
+                </h:outputFormat>
+            </t:dataScroller>
+            
+            <t:dataScroller id="scroll_1"
+                            for="data"
+                            pageCountVar="pageCount"
+                            pageIndexVar="pageIndex"
+                            styleClass="scroller"
+                            paginator="true"
+                            paginatorMaxPages="5"
+                            paginatorTableClass="paginator"
+                            paginatorActiveColumnStyle="font-weight:bold;"
+                            immediate="true"
+                            disableFacetLinksIfFirstPage="true"
+                            disableFacetLinksIfLastPage="true"
+                    >
+                <f:ajax execute="scroll_1 data" render="scroll_1 scroll_2 data"/>
+                <f:facet name="first" >
+                    <t:graphicImage style="height: 16px; width: 16px;" url="images/first.png" alt="First"/>
+                </f:facet>
+                <f:facet name="last">
+                    <t:graphicImage style="height: 16px; width: 16px;" url="images/last.png" alt="Last"/>
+                </f:facet>
+                <f:facet name="previous">
+                    <t:graphicImage style="height: 16px; width: 16px;" url="images/back.png" alt="Previous"/>
+                </f:facet>
+                <f:facet name="next">
+                    <t:graphicImage style="height: 16px; width: 16px;" url="images/forward.png" alt="Next"/>
+                </f:facet>
+            </t:dataScroller>  
+        </h:panelGroup>
+    </h:form>
+    
+</ui:composition>
+
+</html>

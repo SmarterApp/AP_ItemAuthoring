@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+      
+<h:head>
+	<title>Content Monitor</title>
+	<h:outputStylesheet name="css/basic.css"/>
+    <script type="text/javascript" src="/common/js/jquery-1.4.2.min.js"></script>    
+    <script type="text/javascript" src="/common/js/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="resources/javascript/common.js"></script>
+    <script>
+	    function clearErrors() {
+			var errorMessagesBlock = document.getElementById("errorMessages");
+			if (errorMessagesBlock) {
+				errorMessagesBlock.style.display = 'none';
+			}
+		}	    
+	</script>
+	<script type="text/javascript">
+		$.noConflict();
+		jQuery(document).ready(function($) {
+			//console.log('inside ready function');
+	   });
+	</script>
+</h:head>
+
+<h:body onclick="clearErrors();">
+
+	<h2>Item Details</h2>
+    <h:messages id="errorMessages" class="error"/>
+    <h:form id="mainForm">
+    	<table style="width:100%; border-bottom: 2px solid lightgray; padding-bottom: 5px; margin-bottom: 5px" cellspacing="2" cellpadding="2">
+    		<tr>
+				<td style="width:110px;">
+					<h:commandButton value="Content Monitor" action="#{contentDetail.redirectToMonitor}"/>
+				</td>
+				<td cellspan="3" align="left">
+					<h:commandButton value="Export to CSV" action="#{contentDetail.exportToCSV}"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h:outputText value="Name: "/>
+				</td>
+				<td>
+					<h:inputText size="21" value="#{contentDetail.searchedItemNameText}" />
+				</td>
+				<td>
+					<h:outputText value="Status Type: "/>
+				</td>
+				<td>
+					<h:selectOneMenu value="#{contentDetail.selectedStatusType}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="Status Type"/>
+			   			<f:selectItems value="#{contentDetail.statusTypeMap}" var="statusType"
+			   			itemValue="#{statusType.key}" itemLabel="#{statusType.value}" />
+					</h:selectOneMenu>
+				</td>	
+			 	<td>	
+					<h:outputText value="Status Code: "/>
+			 	</td>
+			 	<td>			
+					<h:selectOneMenu value="#{contentDetail.selectedStatusCode}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="Status Code"/>
+				   		<f:selectItems value="#{contentDetail.detailStatusType}" var="statusType"  
+					   itemValue="#{statusType.code}" itemLabel="#{statusType.code}"/>
+					</h:selectOneMenu>
+				</td>		
+						
+				<td>
+					<h:outputText value="Detail Status: "/>
+				</td>
+				<td>
+					<h:inputText size="21" value="#{contentDetail.searchDetailStatusText}" />
+				</td>
+			</tr>	
+			<tr>
+				<td cellspan="2">
+					<h:commandButton value="Apply" action="#{contentDetail.doFilter}"/>
+				</td>
+				<td cellspan="2">
+					<h:commandButton value="Reset" action="#{contentDetail.clearFilter}"/>
+				</td>
+			</tr>
+    	</table>
+    </h:form>
+    <h:form id="tableForm" style="height: 100%">
+		<table style="width: 100%; height: 100%">
+			
+		<tr><td align="center">
+		<t:dataTable id="data"
+			        styleClass="scrollerTable"
+			        headerClass="standardTable_Header"
+			        footerClass="standardTable_Header"
+			        rowClasses="standardTable_Row1,standardTable_Row2"
+			        columnClasses="itemDetailTable_Column1,itemDetailTable_Column2,itemDetailTable_Column3,itemDetailTable_Column4"
+			        var="itemStatus"
+			        value="#{contentDetail.allItemDetailStatus}"
+			        preserveDataModel="false"
+			        first="#{contentDetail.firstRowIndex}"
+			        rows="15"
+			        sortColumn="#{contentDetail.sortColumn}"
+			        sortAscending="#{contentDetail.ascending}">
+			        <t:column>
+				       <f:facet name="header">
+				       	<t:commandSortHeader columnName="name" arrow="true">
+				          <h:outputText value="Name" />
+				        </t:commandSortHeader>  
+				       </f:facet>
+				       <h:outputText value="#{itemStatus.externalId}" />
+				   </t:column>
+
+				    <t:column>
+		                <f:facet name="header">
+			                <t:commandSortHeader columnName="type" arrow="true">
+					          <h:outputText value="Status Type"/>
+					        </t:commandSortHeader>  
+		                </f:facet>
+		                <h:outputText value="#{itemStatus.statusTypeAsString}"/>
+		            </t:column>
+		            <t:column>
+		                <f:facet name="header">
+		                	<t:commandSortHeader columnName="code" arrow="true">
+					          <h:outputText value="Status Code"/>
+					        </t:commandSortHeader>  
+		                </f:facet>
+		                <h:outputText value="#{itemStatus.statusCodeAsString}"/>
+		            </t:column>
+		            <t:column>
+		                <f:facet name="header">
+		                	<t:commandSortHeader columnName="status" arrow="true">
+			                	<h:outputText value="Detail Status" escape="false"/>
+					        </t:commandSortHeader>  
+		                </f:facet>
+		                <span  style="white-space: pre-wrap;">
+		                	<h:outputText value="#{itemStatus.statusDetail}"/>
+		                </span>
+		            </t:column>
+		</t:dataTable>	        
+			   
+		</td></tr>
+		<tr><td valign="bottom" align="center" style="padding-top: 7px">
+
+                <t:dataScroller id="scroll_2"
+                        for="data"
+                        rowsCountVar="rowsCount"
+                        displayedRowsCountVar="displayedRowsCountVar"
+                        firstRowIndexVar="firstRowIndex"
+                        lastRowIndexVar="lastRowIndex"
+                        pageCountVar="pageCount"
+                        immediate="true"
+                        pageIndexVar="pageIndex"
+                        >
+                    <h:outputFormat value="{0} Item Detail found, displaying {1} from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                        <f:param value="#{rowsCount}" />
+                        <f:param value="#{displayedRowsCountVar}" />
+                        <f:param value="#{firstRowIndex}" />
+                        <f:param value="#{lastRowIndex}" />
+                        <f:param value="#{pageIndex}" />
+                        <f:param value="#{pageCount}" />
+                    </h:outputFormat>
+                </t:dataScroller>
+		
+		        <t:dataScroller id="scroll_1"
+		                for="data"
+		                fastStep="5"
+		                pageCountVar="pageCount"
+		                pageIndexVar="pageIndex"
+		                styleClass="scroller"
+		                paginator="true"
+		                paginatorMaxPages="5"
+		                paginatorTableClass="paginator"
+		                paginatorActiveColumnStyle="font-weight:bold;"
+		                immediate="true"
+		                
+		                disableFacetLinksIfFirstPage="true"
+		                disableFacetLinksIfLastPage="true"
+		                actionListener="#{contentDetail.scrollerAction}"
+		                >
+		            <f:facet name="first" >
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/first.png"/>
+		            </f:facet>
+		            <f:facet name="last">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/last.png"/>
+		            </f:facet>
+		            <f:facet name="previous">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/back.png"/>
+		            </f:facet>
+		            <f:facet name="next">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/forward.png"/>
+		            </f:facet>
+		        </t:dataScroller>
+		    </td></tr>
+		
+		</table>
+		
+	</h:form>
+			
+    
+
+</h:body>
+</html>      

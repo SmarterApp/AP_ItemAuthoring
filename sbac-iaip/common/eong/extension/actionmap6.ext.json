@@ -1,0 +1,175 @@
+{
+    "insert-image": {
+        "type": "js",
+        "functionName": "openGraphicWindow",
+        "actionPath": "",
+        "title": "Insert Image",
+        "iconURL": "/common/eong/lib/icons/insert-image-dialog.png"
+    },
+
+    "insert-negative": {
+        "type": "js",
+        "functionName": "insertNegative",
+        "actionPath": "",
+        "title": "negative",
+        "iconURL": "/common/eong/lib/icons/custom/negative.gif"
+    },
+
+    "insert-my-nbsp": {
+        "type": "js",
+        "functionName": "insertNonBreakingSpace",
+        "actionPath": "",
+        "title": "non-breaking space",
+        "iconURL": "/common/eong/lib/icons/custom/nbsp.gif"
+    },
+
+    "insert-indent": {
+        "type": "js",
+        "functionName": "insertIndent",
+        "actionPath": "",
+        "title": "indent",
+        "iconURL": "/common/eong/lib/icons/custom/indent.gif"
+    },
+
+    "insert-rs-quote": {
+        "type": "js",
+        "functionName": "insertRightSingleQuote",
+        "actionPath": "",
+        "title": "right single quote",
+        "iconURL": "/common/eong/lib/icons/custom/rsquote.gif"
+    },
+
+    "insert-ld-quote": {
+        "type": "js",
+        "functionName": "insertLeftDoubleQuote",
+        "actionPath": "",
+        "title": "left double quote",
+        "iconURL": "/common/eong/lib/icons/custom/ldquote.gif"
+    },
+
+    "insert-rd-quote": {
+        "type": "js",
+        "functionName": "insertRightDoubleQuote",
+        "actionPath": "",
+        "title": "right double quote",
+        "iconURL": "/common/eong/lib/icons/custom/rdquote.gif"
+    },
+
+    "insert-times": {
+        "type": "js",
+        "functionName": "insertTimes",
+        "actionPath": "",
+        "title": "times",
+        "iconURL": "/common/eong/lib/icons/custom/times.gif"
+    },
+
+    "insert-divide": {
+        "type": "js",
+        "functionName": "insertDivide",
+        "actionPath": "",
+        "title": "divide",
+        "iconURL": "/common/eong/lib/icons/custom/divide.gif"
+    },
+
+    "insert-degree": {
+        "type": "js",
+        "functionName": "insertDegree",
+        "actionPath": "",
+        "title": "degree",
+        "iconURL": "/common/eong/lib/icons/custom/degree.gif"
+    },
+
+    "insert-endash": {
+        "type": "js",
+        "functionName": "insertEnDash",
+        "actionPath": "",
+        "title": "n dash",
+        "iconURL": "/common/eong/lib/icons/custom/endash.gif"
+    },
+
+    "insert-nbsp-22": {
+        "type": "js",
+        "functionName": "insert22Spaces",
+        "actionPath": "",
+        "title": "22 spaces",
+        "iconURL": "/common/eong/lib/icons/custom/nbsp22.gif"
+    },
+
+    "insert-ellipsis": {
+        "type": "js",
+        "functionName": "insertEllipsis",
+        "actionPath": "",
+        "title": "ellipsis",
+        "iconURL": "/common/eong/lib/icons/custom/ellipsis.gif"
+    },
+
+    "insert-pi": {
+        "type": "js",
+        "functionName": "insertPi",
+        "actionPath": "",
+        "title": "pi",
+        "iconURL": "/common/eong/lib/icons/custom/pi.gif"
+    },
+
+    "insert-le": {
+        "type": "js",
+        "functionName": "insertLessThanEqual",
+        "actionPath": "",
+        "title": "less than or equal",
+        "iconURL": "/common/eong/lib/icons/custom/lessthanequal.gif"
+    },
+
+    "insert-ge": {
+        "type": "js",
+        "functionName": "insertGreaterThanEqual",
+        "actionPath": "",
+        "title": "greater than or equal",
+        "iconURL": "/common/eong/lib/icons/custom/greaterthanequal.gif"
+    },
+
+    "insert-pm": {
+        "type": "js",
+        "functionName": "insertPlusMinus",
+        "actionPath": "",
+        "title": "plus or minus",
+        "iconURL": "/common/eong/lib/icons/custom/plusminus.gif"
+    },
+
+    "set-format-small": {
+        "type": "js",
+        "functionName": "setSmallCaps",
+        "actionPath": "",
+        "title": "small caps",
+        "iconURL": "/common/eong/lib/icons/custom/smallcaps.gif"
+    },
+
+    "set-format-big": {
+        "type": "js",
+        "functionName": "setBig",
+        "actionPath": "",
+        "title": "bigger",
+        "iconURL": "/common/eong/lib/icons/custom/big.gif"
+    },
+
+    "nowrap": {
+        "type": "java",
+        "title": "no wrap",
+        "iconURL": "/common/eong/lib/icons/custom/nowrap.gif"
+    },
+
+    "do-resize": {
+        "type": "js",
+        "functionName": "doResize",
+        "actionPath": "",
+        "title": "no wrap",
+        "iconURL": "/common/eong/lib/icons/custom/resize.gif"
+    },
+
+    "insert-line-break": {
+      "type": "java",
+      "title": "L_INSERT_LINE_BREAK",
+      "shortcut": "ENTER",
+      "iconText": "L_INSERT_LINE_BREAK_TEXT"
+    }
+
+}

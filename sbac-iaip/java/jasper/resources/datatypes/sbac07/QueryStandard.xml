@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query>
+    <folder>/datatypes/sbac07</folder>
+    <name>QueryStandard</name>
+    <version>3</version>
+    <label>QueryStandard</label>
+    <description></description>
+    <creationDate>2014-09-15T13:15:12.000-06:00</creationDate>
+    <updateDate>2014-09-15T14:13:01.000-07:00</updateDate>
+    <language>sql</language>
+    <queryString>SELECT DISTINCT standard FROM (SELECT i_primary_standard standard, i_id FROM item WHERE i_primary_standard IS NOT NULL UNION SELECT isd_standard standard, i_id FROM item_standard) ist WHERE ($P{ContentAreaId} IS NULL OR (EXISTS (SELECT 1 FROM item_characterization itc WHERE itc.i_id = ist.i_id AND itc.ic_type = 2 AND itc.ic_value = $P{ContentAreaId}))) AND  ($P{GradeLevelId} IS NULL OR (EXISTS (SELECT 1 FROM item_characterization itc WHERE itc.i_id = ist.i_id AND itc.ic_type = 3 AND itc.ic_value = $P{GradeLevelId}))) ORDER BY standard</queryString>
+    <dataSource>
+        <uri>/Data_Sources/cdesbacdb</uri>
+    </dataSource>
+</query>

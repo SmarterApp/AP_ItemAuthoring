@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl>
+    <folder>/datatypes/sbac07</folder>
+    <name>ContentAreaId</name>
+    <version>2</version>
+    <label>Select Content Area:</label>
+    <description></description>
+    <creationDate>2013-03-16T13:11:17.000-06:00</creationDate>
+    <updateDate>2012-11-12T14:41:06.000-07:00</updateDate>
+    <type>4</type>
+    <mandatory>false</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/datatypes/sbac07/QueryContentArea</uri>
+    </query>
+    <queryVisibleColumn>ca_name</queryVisibleColumn>
+    <queryValueColumn>ca_id</queryValueColumn>
+</inputControl>

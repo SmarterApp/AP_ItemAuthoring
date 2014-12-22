@@ -1,0 +1,197 @@
+<html>
+<head>
+<style type="text/css">
+*{
+   font-family: "Trebuchet MS", Verdana, Arial, Helvetica, Courier;
+	font-size: 10pt;
+	color: #404040;
+}
+#page {
+    width: 512px;
+}
+.sidebar {
+   width: 200px;
+	border-top: 2px solid #cccccc;
+	border-bottom: 2px solid #cccccc;
+	margin: 8px;
+
+}
+</style>
+</head>
+<body>
+<div id="page">
+<h1>The Guide : A manual for customizing PXN8 to suit your website identity.</h1>
+
+<h2>&copy; 2006 Sxoop Technologies Ltd.</h2>
+
+<h3>Author: <a href="mailto:walterh@rocketmail.com">Walter
+Higgins</a></h3>
+<h3>Date: 31st January 2006</h3>
+
+  
+  
+<h2>Introduction</h2>
+
+<p>	
+	PXN8 is a customizable web-based photo editor. 
+
+	While you are more than welcome to use any of the supplied themes as-is
+	they are provided as starting points for your own customizations.
+</p>
+<p>
+	This guide covers two types of customizations...
+	
+	<ol>
+	<li><h3>Basic: Appearance customizations</h3>
+<p>
+	Appearance customizations include the following...
+</p>
+   <ul>
+	<li>Replacing the PXN8 logo with your own organization's logo.</li>
+	<li>Changing the structure of the page (changes to the HTML).</li>
+	<li>Changing the appearance of the page (changes to HTML & CSS)</li>
+   </ul>
+</li>
+
+<li><h3>Advanced: Behaviour customizations</h3>
+
+<p>
+	Behaviour customizations include the following...
+</p>
+   <ul>
+	<li>Changing the user interaction by implementing your own PXN8
+	javascript callbacks.</li>
+	
+	<li>Modifying the tool configuration UI (changes to
+	pxn8_tools_ui.js)</li>
+
+	<li>Writing your own tool UI (calling the PXN8.tool.* functions
+	directly from your own code).</li>
+   </ul>
+</li>
+</ol>
+
+	The PXN8 editor page can be written using JSP, PHP or any
+	web templating language. 
+	
+	Here is a description of each of the supplied sample
+	customizations...
+	<ol>
+	<li><b>slick</b> - This is the theme currently used on the pxn8.com website. While
+	by no means using all of the features of PXN8, it should be a good
+	place to start getting ideas about your own themed editor.</li>
+	
+	<li><b>default</b> - This was the default theme used on pxn8.com for a
+	long time until superceded by slick. In appearance, both 'slick'
+	and 'default' look very similar, but they differ in two aspects..
+	<ol>
+	<li>tool configuration behaviour.</li>
+	<li>layout and positioning of the canvas.</li>
+	</ol>
+	<p>
+	The 'default' theme is 'modeless' in that users can click any of the
+	tool buttons while an existing tool configuration dialog is
+	visible. The 'slick' theme doesn't allow this. You cannot click a
+	tool button until the current tool is 'applied' or 'cancelled' -
+	the 'slick' theme is 'modal'.
+	</p>
+	<p>
+	Also, the positioning of the canvas in the 'slick' theme differs to
+	the 'default' theme. In the 'slick' theme, other page elements (the
+	google adsense area) appear beneath the canvas. This is simply to
+	demonstrate that the canvas can be positioned either relatively or
+	absolutely within any element on the page. 
+	</p></li>
+
+	
+	<li><b>Memphis</b> - This theme illustrates a number of PXN8 concepts not
+	addressed by the 'slick' and 'default' themes. 
+	<ol>
+	<li>Scrolling - The canvas appears within a scrollable panel.</li>
+	<li>Enabling and disabling of buttons based on user interactions.
+	      'memphis' makes use of the PXN8.onImageUpdated,
+	      PXN8.onSelectArea and PXN8.onSelectNone callback functions to
+	be notified when certain events internal to PXN8 have taken place.</li>
+	
+	<li>Calling PXN8.tools.* functions directly. 'Memphis' doesn't
+	make much use of the standard tool config UI from the
+	pxn8_tools_ui.js module. Instead, most image operations are invoked
+	from a single button click.</li>
+	</ol>
+	<p>
+	If you want to dive right into customizing the default editor
+	behaviour, then close study of the 'memphis' theme is as good a
+	place as any to start.
+	</p>
+	</li>
+</ol>
+
+<h2>Skill Prerequisites.</h2>
+
+	In order to customize PXN8 to suit your own website, you must be
+	comfortable working with (at a bare minimum) HTML and CSS.
+	
+	If you would rather have editor customizations completed by Sxoop
+	Technologies then send an email to customizations@sxoop.com with a
+	screenshot or mockup of the desired layout and
+	behaviour. Alternatively call +353 86-8511600 or skype walterh.rm
+	to discuss requirements in detail.
+
+
+<h1>Part 1: Basic Customization (Appearance).</h1>
+
+	Let's start by looking at the simplest possible editor you could
+	write using PXN8. 
+
+** required elements
+
+*** The canvas
+<div class="sidebar" style="float: left; ">
+<h3>A note on Safari</h3>Safari's Javascript does not support computed
+style sheets - that is - the style for an element cannot be read
+unless the style is declared inline.
+</div>
+PXN8 requires that the 'pxn8_canvas' element must be positioned
+either relatively or absolutely using the CSS position property (the
+default position property for DIVs is 'static' - this causes problems
+for PXN8 in that it cannot correctly determine the canvas bounds.
+PXN8 will position the canvas relatively if a position property is not
+present in either the inline or computed style. 
+However because Safari's javascript implementation cannot see computed
+stylesheet properties - only those properties which are declared
+inline, it is recommended doing one of two things...
+<ol>
+<li>Enclose the canvas in a relatively or absolutely positioned element
+or...</li>
+<li>Specify the 'position' property inline for the canvas</li>
+</ol>
+
+**** Positioning the canvas
+**** Some assumptions 
+**** Scrolling the canvas
+
+**** Canvas Selection
+**** Styling the selection area (and surroundings)
+
+** optional elements
+
+
+
+** The organization of PXN8 Javascript
+
+*** Required javascript
+**** pxn8_core.js
+***** PXN8 Callback functions
+
+**** pxn8_tools.js
+**** pxn8_strings.js
+
+*** Optional javascript
+**** pxn8_tools_ui.js
+**** colors.js
+**** tooltips.js
+**** slider.js
+</div>
+</body>
+</html>
+	
