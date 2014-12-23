@@ -60,7 +60,6 @@
     <module>iaip-sslcert-pacificmetrics-com-rpm</module>
    
     <!-- utility -->
-    <module>iaip-jenkins-rpm</module>
     <module>iaip-icinga-rpm</module>    
     
   </modules>
