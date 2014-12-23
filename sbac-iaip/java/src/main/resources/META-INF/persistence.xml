@@ -1,0 +1,52 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	version="2.0">
+
+	<persistence-unit name="cde-unit">
+		<jta-data-source>CDESBAC_DataSource</jta-data-source>
+		<non-jta-data-source>CDESBAC_DataSource_Unmanaged
+		</non-jta-data-source>
+		<properties>
+			<property name="openjpa.jdbc.DBDictionary" value="mysql" />
+			<!-- Entities that supposed to be cached must be explicitly listed in 
+				the tag below. If entity class is not listed, it will not be cached -->
+			<!-- I couldn't make it work properly though to cache all Language entity. -->
+			<property name="openjpa.DataCache"
+				value="true(Types=com.pacificmetrics.orca.entities.Language)" />
+			<!-- Query cached disabled. I wasn't able to make it work properly. It 
+				caches even those entities that are not supposed to be cached -->
+			<!-- property name="openjpa.QueryCache" value="true" / -->
+			<!-- property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"/ -->
+
+			<!-- <property name="openjpa.Log" value="File=/temp/openjpa.log, DefaultLevel=WARN, -->
+			<!-- Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
+
+			<!-- <property name="openjpa.Log" value="DefaultLevel=WARN, -->
+			<!-- Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
+
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="cde-unit-unicode">
+		<jta-data-source>CDESBAC_DataSource_Unicode</jta-data-source>
+		<properties>
+			<property name="openjpa.jdbc.DBDictionary" value="mysql" />
+			<!-- Entities that supposed to be cached must be explicitly listed in 
+				the tag below. If entity class is not listed, it will not be cached -->
+			<!-- I couldn't make it work properly though to cache all Language entity. -->
+			<property name="openjpa.DataCache"
+				value="true(Types=com.pacificmetrics.orca.entities.Language)" />
+			<!-- Query cached disabled. I wasn't able to make it work properly. It 
+				caches even those entities that are not supposed to be cached -->
+			<!-- property name="openjpa.QueryCache" value="true" / -->
+			<!-- property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"/ -->
+
+			<!-- <property name="openjpa.Log" value="File=/temp/openjpa.log, DefaultLevel=WARN, -->
+			<!-- Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
+
+			<!-- <property name="openjpa.Log" value="DefaultLevel=WARN, -->
+			<!-- Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
+		</properties>
+	</persistence-unit>
+
+
+</persistence>

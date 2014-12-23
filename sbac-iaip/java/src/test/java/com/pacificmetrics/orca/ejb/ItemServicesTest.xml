@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <item i_id="1" ib_id="14" i_external_id="ITEM-1"/>
+    <item i_id="2" ib_id="14" i_external_id="ITEM-2"/>
+    <item i_id="3" ib_id="14" i_external_id="ITEM-3"/>
+    <item i_id="4" ib_id="15" i_external_id="ITEM-3"/>
+    
+    <item_interaction ii_id="1" i_id="1" ii_type="1"/>
+    <item_interaction ii_id="2" i_id="2" ii_type="1"/>
+    <item_interaction ii_id="3" i_id="2" ii_type="2"/>
+    
+    <item_fragment if_id="1" i_id="1" ii_id="0" if_type="1" if_text="&lt;p id=&quot;content2&quot;&gt;Answer the following question.&lt;/p&gt;&lt;div class=&quot;orca:interaction&quot; id=&quot;interaction_1&quot; style=&quot;font-weight:bold;text-decoration:underline;&quot;&gt;Choice&lt;/div&gt;&lt;br/&gt;"/>
+    <item_fragment if_id="2" i_id="1" ii_id="1" if_type="6" if_seq="1" if_text="This is Prompt"/>
+    <item_fragment if_id="3" i_id="1" ii_id="1" if_type="2" if_seq="2" if_text="This is Choice 2"/>
+    <item_fragment if_id="4" i_id="1" ii_id="1" if_type="2" if_seq="1" if_text="This is Choice 1"/>
+    
+    <item_fragment if_id="5" i_id="2" ii_id="0" if_type="1" if_text="Question 1:&lt;br/&gt;&lt;div class=&quot;orca:interaction&quot; id=&quot;interaction_2&quot; style=&quot;font-weight:bold;text-decoration:underline;&quot;&gt;Interaction 2&lt;/div&gt;Question 2:&lt;br/&gt;&lt;div class=&quot;orca:interaction&quot; id=&quot;interaction_3&quot; style=&quot;font-weight:bold;text-decoration:underline;&quot;&gt;Interaction 3&lt;/div&gt;&lt;br/&gt;"/>
+    <item_fragment if_id="6" i_id="2" ii_id="2" if_type="6" if_seq="1" if_text="This is Prompt"/>
+    <item_fragment if_id="7" i_id="2" ii_id="2" if_type="2" if_seq="2" if_text="This is Choice 2"/>
+    <item_fragment if_id="8" i_id="2" ii_id="2" if_type="2" if_seq="1" if_text="This is Choice 1"/>
+    <item_fragment if_id="9" i_id="2" ii_id="3" if_type="6" if_seq="1" if_text="Enter text:"/>
+</dataset>

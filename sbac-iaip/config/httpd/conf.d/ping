@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="x-ua-compatible" content="IE=9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>SBAC CDE Build 18</title>
+    <link rel="stylesheet" href="/login.css" />
+  </head>
+  <body style="background-color:#999999;">
+    <div id="main">
+      <div id="login_panel">
+        <p style="font-size:14pt;text-align:left;color:#666666;font-weight:bold;">SBAC CDE Login</p>
+        <form name="loginForm" action="/login.php" method="POST">
+          <p><label for="username">Username:</label>
+             <input type="text" size="30" name="httpd_username" id="username" maxLength="30" /></p>
+          <p><label for="password">Password:</label>
+             <input type="password" size="30" name="httpd_password" id="password" maxLength="30" /></p>
+          <p><input type="submit" name="login" value="Login" class="default" title="Login"/>
+	<input id="reset" type="button" value="Reset Password" style="width:125px;" onclick="window.location='/devcdesbac/cgi-bin/passwdResetRequest.pl'"/></p>
+        </form>
+<span class="enable">This site requires JavaScript and cookies to be enabled in the browser.</span>
+     </div>
+   </div>
+ </body>
+</html>

@@ -1,0 +1,2 @@
+<h3>Hello <TMPL_VAR NAME="u_first_name"> <TMPL_VAR NAME="u_last_name"></h3>
+<h4>Welcome to the SBAC IAIP</h4>

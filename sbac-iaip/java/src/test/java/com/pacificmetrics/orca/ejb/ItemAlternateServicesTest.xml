@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<item_alternate ia_id="1" i_id="1" ia_alternate_i_id="2" ia_alternate_label="Simplified"/>
+	<item_alternate ia_id="2" i_id="1" ia_alternate_i_id="3" ia_alternate_label="Simplified"/>
+	<item_alternate ia_id="3" i_id="1" ia_alternate_i_id="4" ia_alternate_label="Simplified"/>
+	<item_alternate ia_id="4" i_id="2" ia_alternate_i_id="5" ia_alternate_label="Simplified"/>
+</dataset>

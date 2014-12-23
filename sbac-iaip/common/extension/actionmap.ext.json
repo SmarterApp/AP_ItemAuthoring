@@ -1,0 +1,336 @@
+{
+    "insert-image": {
+        "type": "js",
+        "functionName": "openGraphicWindow",
+        "actionPath": "",
+        "title": "Insert Image...",
+        "iconURL": "/common/eong/lib/icons/insert-image-dialog.png"
+    },
+
+    "insert-negative": {
+        "type": "js",
+        "functionName": "insertNegative",
+        "actionPath": "",
+        "title": "Subtraction/Negative Sign",
+        "iconURL": "/common/eong/lib/icons/custom/negative.gif"
+    },
+
+    "insert-my-nbsp": {
+        "type": "js",
+        "functionName": "insertNonBreakingSpace",
+        "actionPath": "",
+        "title": "Non-Breaking Space",
+        "iconURL": "/common/eong/lib/icons/custom/nbsp.gif"
+    },
+
+    "insert-indent": {
+        "type": "js",
+        "functionName": "insertIndent",
+        "actionPath": "",
+        "title": "5 Spaces",
+        "iconURL": "/common/eong/lib/icons/custom/indent.gif"
+    },
+
+    "insert-rs-quote": {
+        "type": "js",
+        "functionName": "insertRightSingleQuote",
+        "actionPath": "",
+        "title": "Apostrophe",
+        "iconURL": "/common/eong/lib/icons/custom/rsquote.gif"
+    },
+
+    "insert-ld-quote": {
+        "type": "js",
+        "functionName": "insertLeftDoubleQuote",
+        "actionPath": "",
+        "title": "Left Double Quote",
+        "iconURL": "/common/eong/lib/icons/custom/ldquote.gif"
+    },
+
+    "insert-rd-quote": {
+        "type": "js",
+        "functionName": "insertRightDoubleQuote",
+        "actionPath": "",
+        "title": "Right Double Quote",
+        "iconURL": "/common/eong/lib/icons/custom/rdquote.gif"
+    },
+
+    "insert-times": {
+        "type": "js",
+        "functionName": "insertTimes",
+        "actionPath": "",
+        "title": "Multiplication Sign",
+        "iconURL": "/common/eong/lib/icons/custom/times.gif"
+    },
+
+    "insert-divide": {
+        "type": "js",
+        "functionName": "insertDivide",
+        "actionPath": "",
+        "title": "Division Sign",
+        "iconURL": "/common/eong/lib/icons/custom/divide.gif"
+    },
+
+    "insert-degree": {
+        "type": "js",
+        "functionName": "insertDegree",
+        "actionPath": "",
+        "title": "Degree Sign",
+        "iconURL": "/common/eong/lib/icons/custom/degree.gif"
+    },
+
+    "insert-endash": {
+        "type": "js",
+        "functionName": "insertEnDash",
+        "actionPath": "",
+        "title": "En dash",
+        "iconURL": "/common/eong/lib/icons/custom/endash.gif"
+    },
+
+    "insert-nbsp-22": {
+        "type": "js",
+        "functionName": "insert22Spaces",
+        "actionPath": "",
+        "title": "22 Spaces",
+        "iconURL": "/common/eong/lib/icons/custom/nbsp22.gif"
+    },
+
+    "insert-ellipsis": {
+        "type": "js",
+        "functionName": "insertEllipsis",
+        "actionPath": "",
+        "title": "Ellipsis",
+        "iconURL": "/common/eong/lib/icons/custom/ellipsis.gif"
+    },
+
+    "insert-pi": {
+        "type": "js",
+        "functionName": "insertPi",
+        "actionPath": "",
+        "title": "Pi Sign",
+        "iconURL": "/common/eong/lib/icons/custom/pi.gif"
+    },
+
+    "insert-le": {
+        "type": "js",
+        "functionName": "insertLessThanEqual",
+        "actionPath": "",
+        "title": "Less Than Or Equal To Sign",
+        "iconURL": "/common/eong/lib/icons/custom/lessthanequal.gif"
+    },
+
+    "insert-ge": {
+        "type": "js",
+        "functionName": "insertGreaterThanEqual",
+        "actionPath": "",
+        "title": "Greater Than Or Equal To Sign",
+        "iconURL": "/common/eong/lib/icons/custom/greaterthanequal.gif"
+    },
+
+    "insert-pm": {
+        "type": "js",
+        "functionName": "insertPlusMinus",
+        "actionPath": "",
+        "title": "Plus-Minus Sign",
+        "iconURL": "/common/eong/lib/icons/custom/plusminus.gif"
+    },
+
+    "set-format-small": {
+        "type": "js",
+        "functionName": "setSmallCaps",
+        "actionPath": "",
+        "title": "small caps",
+        "iconURL": "/common/eong/lib/icons/custom/smallcaps.gif"
+    },
+
+    "set-format-big": {
+        "type": "js",
+        "functionName": "setBig",
+        "actionPath": "",
+        "title": "bigger",
+        "iconURL": "/common/eong/lib/icons/custom/big.gif"
+    },
+
+    "set-no-wrap": {
+        "type": "java",
+        "title": "No Wrap",
+        "iconURL": "/common/eong/lib/icons/custom/nowrap.gif"
+    },
+
+    "do-resize": {
+        "type": "js",
+        "functionName": "doResize",
+        "actionPath": "",
+        "title": "no wrap",
+        "iconURL": "/common/eong/lib/icons/custom/resize.gif"
+    },
+
+    "compare-documents": {
+        "type": "js",
+        "functionName": "compareDocuments",
+        "actionPath": "",
+        "title": "Begin Comparison Mode",
+        "iconURL": "/common/eong/lib/icons/compare-documents.png"
+    },
+    
+    "qti-underline": {
+        "type":"java",
+        "title":"L_UNDERLINE",
+        "shortcut":"msck U",
+        "iconText":"L_UNDERLINE_TEXT",
+        "iconURL": "/common/eong3/lib/icons/underline.png"
+    },
+    
+    "qti-strikethrough": {
+        "type":"java",
+        "title":"L_STRIKETHROUGH",
+        "iconText":"L_STRIKETHROUGH_TEXT",
+        "iconURL": "/common/eong3/lib/icons/strikethrough.png"
+    },
+    
+    "qti-align-left": {
+        "type":"java",
+        "title":"L_ALIGN_LEFT",
+        "iconText":"L_ALIGN_LEFT_TEXT",
+        "iconURL": "/common/eong3/lib/icons/align-left.png"
+    },
+    
+    "qti-align-center" : {
+        "type":"java",
+        "title":"L_ALIGN_CENTER",
+        "iconText":"L_ALIGN_CENTER_TEXT",
+        "iconURL": "/common/eong3/lib/icons/align-center.png"
+    },
+    
+    "qti-align-right": {
+        "type":"java",
+        "title":"L_ALIGN_RIGHT",
+        "iconText":"L_ALIGN_RIGHT_TEXT",
+        "iconURL": "/common/eong3/lib/icons/align-right.png"
+    },
+    
+    "qti-align-justify": {
+        "type":"java",
+        "title":"L_ALIGN_JUSTIFY",
+        "iconText":"L_ALIGN_JUSTIFY_TEXT",
+        "iconURL": "/common/eong3/lib/icons/align-justify.png"
+    },
+    
+    "qti-decrease-indent": {
+        "type":"java",
+        "title":"L_INCREASE_INDENT",
+        "iconText":"L_INCREASE_INDENT_TEXT",
+        "iconURL": "/common/eong3/lib/icons/decrease-indent.png"
+    },
+    
+    "qti-increase-indent": {
+        "type":"java",
+        "title":"L_DECREASE_INDENT",
+        "iconText":"L_DECREASE_INDENT_TEXT",
+        "iconURL": "/common/eong3/lib/icons/increase-indent.png"
+    },
+
+    "qti-font-family-default": {
+        "type": "js",
+        "functionName": "removeFontFamily",
+        "actionPath": "",
+        "title": "[Default]"
+    },
+
+    "qti-font-family-arial": {
+        "type":"java",
+        "title":"Arial"
+    },
+
+    "qti-font-family-times": {
+        "type":"java",
+        "title":"Times"
+    },
+
+    "qti-font-family-courier": {
+        "type":"java",
+        "title":"Courier"
+    },
+    
+    "qti-font-size-default": {
+        "type": "js",
+        "functionName": "removeFontSize",
+        "actionPath": "",
+        "title": "[Default]"
+    },
+    
+    "qti-font-size-8": {
+        "type":"java",
+        "title":"8pt"
+    },
+    
+    "qti-font-size-9": {
+        "type":"java",
+        "title":"9pt"
+    },
+    
+    "qti-font-size-10": {
+        "type":"java",
+        "title":"10pt"
+    },
+    
+    "qti-font-size-11": {
+        "type":"java",
+        "title":"11pt"
+    },
+    
+    "qti-font-size-12": {
+        "type":"java",
+        "title":"12pt"
+    },
+    
+    "qti-font-size-14": {
+        "type":"java",
+        "title":"14pt"
+    },
+    
+    "qti-font-size-16": {
+        "type":"java",
+        "title":"16pt"
+    },
+    
+    "qti-font-size-18": {
+        "type":"java",
+        "title":"18pt"
+    },
+    
+    "qti-font-size-20": {
+        "type":"java",
+        "title":"20pt"
+    },
+    
+    "qti-font-size-22": {
+        "type":"java",
+        "title":"22pt"
+    },
+    
+    "qti-font-size-24": {
+        "type":"java",
+        "title":"24pt"
+    },
+    
+    "qti-font-size-28": {
+        "type":"java",
+        "title":"28pt"
+    },
+    
+    "qti-font-size-36": {
+        "type":"java",
+        "title":"36pt"
+    },
+    
+    "qti-font-size-48": {
+        "type":"java",
+        "title":"48pt"
+    },
+    
+    "qti-font-size-72": {
+        "type":"java",
+        "title":"72pt"
+    },
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <item i_id="1" i_external_id="SBAC-System1-1"/>
+    <item i_id="2" i_external_id="SBAC-System1-2"/>
+    <item i_id="3" i_external_id="SBAC-System1-3"/>
+    <item i_id="4" i_external_id="SBAC-System1-4"/>
+    <item i_id="5" i_external_id="SBAC-System1-5"/>
+    <item i_id="6" i_external_id="SBAC-System1-6"/>
+    <item i_id="7" i_external_id="SBAC-System1-7"/>
+    <item i_id="8" i_external_id="SBAC-System1-8"/>
+    <item i_id="9" i_external_id="SBAC-System1-9"/>
+    <item i_id="10" i_external_id="SBAC-System1-10"/>
+    <item_alternate ia_id="1" i_id="1" ia_alternate_i_id="2" ia_alternate_label="Mandarin"/>
+    <item_alternate ia_id="2" i_id="1" ia_alternate_i_id="3" ia_alternate_label="Spanish"/>
+    <item_alternate ia_id="3" i_id="1" ia_alternate_i_id="4" ia_alternate_label="English"/>
+    <item_alternate ia_id="4" i_id="1" ia_alternate_i_id="5" ia_alternate_label="Hindi"/>
+    <item_alternate ia_id="5" i_id="1" ia_alternate_i_id="6" ia_alternate_label="Arabic"/>
+    <item_alternate ia_id="6" i_id="1" ia_alternate_i_id="7" ia_alternate_label="Portuguese"/>
+    <item_alternate ia_id="7" i_id="1" ia_alternate_i_id="8" ia_alternate_label="Bengali"/>
+    <item_alternate ia_id="8" i_id="1" ia_alternate_i_id="9" ia_alternate_label="Russian"/>
+    <item_alternate ia_id="9" i_id="1" ia_alternate_i_id="10" ia_alternate_label="Japanese"/>
+</dataset>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ************************************************************************************************** -->
+<!--                                                                                                    -->
+<!-- Authors:       Tom Hoffmann    (Measured Progress, USA)                                            -->
+<!--                Zach Pierce     (Measured progress, USA)                                            -->
+<!--                Colin Smythe    (IMS Global, UK)                                                    -->
+<!-- Version:       1.0                                                                                 -->
+<!-- Date:          30th September, 2012                                                                -->
+<!--                                                                                                    -->
+<!-- Description:   Test File (Valid) for the APIPv1.0 Entry Level Profile                              -->
+<!--                This is the single APIP Item with a Choice Interaction to create a T/F question     -->
+<!--                with embedded response processing. Spoken (Text & Graphics) accessibility content   -->
+<!--                is provided.                                                                        -->
+<!--                All compliant systems should import this APIP Item XML.                             -->
+<!--                                                                                                    -->
+<!-- History:       First formal release.                                                               -->
+<!--                                                                                                    -->
+<!-- Copyright:     2012 (c) IMS Global Learning Consortium Inc.  All Rights Reserved.                  -->
+<!--                                                                                                    -->
+<!--                Recipients of this document are requested to submit, with their comments,           -->
+<!--                notification of any relevant patent claims or other intellectual property rights of -->
+<!--                which they may be aware that might be infringed by any implementation of the        -->
+<!--                specification set forth in this document, and to provide supporting documentation.  -->
+<!--                IMS Global takes no position regarding the validity or scope of any intellectual    -->
+<!--                property or other rights that might be claimed to pertain to the implementation or  -->
+<!--                use of the technology described in this document or the extent to which any license -->
+<!--                under such rights might or might not be available; neither does it represent that   -->
+<!--                it has made any effort to identify any such rights. Information on IMS Global's     -->
+<!--                procedures with respect to rights in IMS Global specifications can be found at the  -->
+<!--                IMS Global Intellectual Property Rights web page:                                   -->
+<!--                http://www.imsglobal.org/ipr/imsipr_policyFinal.pdf.                                -->
+<!--                                                                                                    -->
+<!--                If you wish to distribute this document or use this document to implement a product -->
+<!--                or service, you must complete a valid license registration with IMS GLC and receive -->
+<!--                an email from IMS Global granting the license. To register, follow the instructions -->
+<!--                on the IMS Globl website: http://www.imsglobal.org/specificationdownload.cfm.       -->
+<!--                                                                                                    -->
+<!--                This document may be copied and furnished to others by Licensee organizations       -->
+<!--                registered on the IMS Global web site provided that the above copyright notice and  -->
+<!--                this paragraph are included on all such copies. However, this document itself may   -->
+<!--                not be modified in any way, such as by removing the copyright notice or references  -->
+<!--                to IMS Global, except as needed for the purpose of developing IMS Global            -->
+<!--                specifications, under the auspices of a chartered IMS Global Project Group.         -->
+<!--                                                                                                    -->
+<!--                Use of this specification to develop products or services is governed by the license-->
+<!--                with IMS Global found on the IMS Global website: http://www.imsglobal.org.          -->
+<!--                                                                                                    -->
+<!--                The limited permissions granted above are perpetual and will not be revoked by IMS  -->
+<!--                Global or its successors or assigns.                                                -->
+<!--                                                                                                    -->
+<!--                THIS DOCUMENT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR,  -->
+<!--                ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS DOCUMENT   -->
+<!--                SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE CONSORTIUM,   -->
+<!--                NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY    -->
+<!--                IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR    -->
+<!--                OR INDIRECTLY, ARISING FROM THE USE OF THIS DOCUMENT.                               -->
+<!--                                                                                                    -->
+<!--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$-->
+
+<assessmentItem identifier="VE-IP-01" title="APIPv1.0 Entry Profile Single T/F Item Test Instance"
+    adaptive="false" timeDependent="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1"
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd
+                        http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
+    <responseDeclaration identifier="RESPONSE" baseType="identifier" cardinality="single">
+        <correctResponse>
+            <value>true</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="integer" normalMaximum="1" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <itemBody id="content5">
+        <p id="content2">Answer the following question.</p>
+        <choiceInteraction maxChoices="1" minChoices="0" id="content1" shuffle="false"
+            responseIdentifier="RESPONSE">
+            <prompt id="content6">Sigmund Freud and Carl Jung both belong to the psychoanalytic school of psychology.</prompt>
+            <simpleChoice id="content8" fixed="true" showHide="show" identifier="true">
+                <p id="content7">True</p>
+            </simpleChoice>
+            <simpleChoice id="content4" fixed="true" showHide="show" identifier="false">
+                <p id="content3">False</p>
+            </simpleChoice>
+        </choiceInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <match>
+                    <variable identifier="RESPONSE"/>
+                    <correct identifier="RESPONSE"/>
+                </match>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="integer">1</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+        </responseCondition>
+    </responseProcessing>
+    <apipAccessibility xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0">
+        <inclusionOrder>
+            <textGraphicsDefaultOrder>
+                <elementOrder identifierRef="accessElement1">
+                    <order>1</order>
+                </elementOrder>
+                <elementOrder identifierRef="accessElement2">
+                    <order>2</order>
+                </elementOrder>
+                <elementOrder identifierRef="accessElement3">
+                    <order>3</order>
+                </elementOrder>
+                <elementOrder identifierRef="accessElement4">
+                    <order>4</order>
+                </elementOrder>
+            </textGraphicsDefaultOrder>
+        </inclusionOrder>
+        <accessibilityInfo>
+            <accessElement identifier="accessElement1">
+                <contentLinkInfo qtiLinkIdentifierRef="content2">
+                    <textLink>
+                        <fullString/>
+                    </textLink>
+                </contentLinkInfo>
+                <relatedElementInfo>
+                    <spoken>
+                        <spokenText contentLinkIdentifier="spokenAudioText1">Answer the following question.</spokenText>
+                        <textToSpeechPronunciation contentLinkIdentifier="spokenTextToSpeech1" >Answer the following question.</textToSpeechPronunciation>
+                    </spoken>
+                </relatedElementInfo>
+            </accessElement>
+            <accessElement identifier="accessElement2">
+                <contentLinkInfo qtiLinkIdentifierRef="content6">
+                    <textLink>
+                        <fullString/>
+                    </textLink>
+                </contentLinkInfo>
+                <relatedElementInfo>
+                    <spoken>
+                        <spokenText contentLinkIdentifier="spokenAudioText2">Sigmund Freud and Carl Jung both belong to the psychoanalytic school of psychology.</spokenText>
+                        <textToSpeechPronunciation contentLinkIdentifier="spokenTextToSpeech2">Sigmund Froyd and Carl Young both belong to the psycho-analytic school of psychology.</textToSpeechPronunciation>
+                    </spoken>
+                </relatedElementInfo>
+            </accessElement>
+            <accessElement identifier="accessElement3">
+                <contentLinkInfo qtiLinkIdentifierRef="content7">
+                    <textLink>
+                        <fullString/>
+                    </textLink>
+                </contentLinkInfo>
+                <relatedElementInfo>
+                    <spoken>
+                        <spokenText contentLinkIdentifier="spokenAudioText3">True</spokenText>
+                        <textToSpeechPronunciation contentLinkIdentifier="spokenTextToSpeech3">True</textToSpeechPronunciation>
+                    </spoken>
+                </relatedElementInfo>
+            </accessElement>
+            <accessElement identifier="accessElement4">
+                <contentLinkInfo qtiLinkIdentifierRef="content3">
+                    <textLink>
+                        <fullString/>
+                    </textLink>
+                </contentLinkInfo>
+                <relatedElementInfo>
+                    <spoken>
+                        <spokenText contentLinkIdentifier="spokenAudioText4">False</spokenText>
+                        <textToSpeechPronunciation contentLinkIdentifier="spokenTextToSpeech4">False</textToSpeechPronunciation>
+                    </spoken>
+                </relatedElementInfo>
+            </accessElement>
+        </accessibilityInfo>
+    </apipAccessibility>
+</assessmentItem>

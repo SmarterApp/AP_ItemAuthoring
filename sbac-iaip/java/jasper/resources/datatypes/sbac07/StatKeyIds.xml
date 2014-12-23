@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inputControl>
+    <folder>/datatypes/sbac07</folder>
+    <name>StatKeyIds</name>
+    <version>2</version>
+    <label>Select Statistics:</label>
+    <creationDate>2013-03-16T13:13:01.000-06:00</creationDate>
+    <updateDate>2012-11-12T17:28:07.000-07:00</updateDate>
+    <type>7</type>
+    <mandatory>false</mandatory>
+    <readOnly>false</readOnly>
+    <visible>true</visible>
+    <query>
+        <uri>/datatypes/sbac07/QueryStatKeyForItem</uri>
+    </query>
+    <queryVisibleColumn>sk_name</queryVisibleColumn>
+    <queryValueColumn>sk_id</queryValueColumn>
+</inputControl>

@@ -1,0 +1,49 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	version="2.0">
+
+    <persistence-unit name="test-cde-unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl
+        </provider>
+        <class>com.pacificmetrics.orca.entities.Item</class>
+        <class>com.pacificmetrics.orca.entities.ItemCharacterization</class>
+        <class>com.pacificmetrics.orca.entities.ItemAlternate</class>
+        <class>com.pacificmetrics.orca.entities.ItemBank</class>
+        <class>com.pacificmetrics.orca.entities.ItemInteraction</class>
+        <class>com.pacificmetrics.orca.entities.ItemFragment</class>
+        <class>com.pacificmetrics.orca.entities.AccessibilityElement</class>
+        <class>com.pacificmetrics.orca.entities.AccessibilityFeature</class>
+        <class>com.pacificmetrics.orca.entities.InclusionOrder</class>
+        <class>com.pacificmetrics.orca.entities.InclusionOrderElement</class>
+        <class>com.pacificmetrics.orca.entities.StatAdministration</class>
+        <class>com.pacificmetrics.orca.entities.StatAdministrationStatus</class>
+        <class>com.pacificmetrics.orca.entities.StatKey</class>
+        <class>com.pacificmetrics.orca.entities.StatItemValue</class>
+        <class>com.pacificmetrics.orca.entities.DevState</class>
+        <class>com.pacificmetrics.orca.entities.MetadataMapping</class>
+        <class>com.pacificmetrics.orca.entities.User</class>
+        <class>com.pacificmetrics.orca.entities.UserPermission</class>
+        
+         <class>com.pacificmetrics.orca.entities.ItemMoveMonitor</class>
+        <class>com.pacificmetrics.orca.entities.ItemMoveDetails</class>
+        <class>com.pacificmetrics.orca.entities.ItemDetailStatus</class>
+        <class>com.pacificmetrics.orca.entities.ItemMoveType</class>
+        <class>com.pacificmetrics.orca.entities.ItemMoveStatus</class>
+        <class>com.pacificmetrics.orca.entities.Passage</class>
+        <class>com.pacificmetrics.orca.entities.Rubric</class>
+        
+        
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="openjpa.ConnectionURL" value="jdbc:hsqldb:mem:test-cde-unit;sql.syntax_mys=true" />
+            <property name="openjpa.ConnectionDriverName" value="org.hsqldb.jdbcDriver" />
+            <property name="openjpa.ConnectionUserName" value="sa" />
+            <property name="openjpa.ConnectionPassword" value="" />
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+            <property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
+        </properties>
+    </persistence-unit>
+	
+
+</persistence>

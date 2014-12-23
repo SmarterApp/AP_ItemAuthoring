@@ -1,0 +1,125 @@
+* The Guide : A guide to customizing PXN8 to suit your website
+  identity.
+
+  (c) 2006 Sxoop Technologies Ltd.
+
+  Author: Walter Higgins (walterh@rocketmail.com)
+  
+** Introduction
+	
+	PXN8 is a customizable web-based photo editor.
+
+	This guide covers two types of customizations...
+	
+	*** Basic: Appearance customizations
+
+	Appearance customizations include the following...
+
+	[1] Replacing the PXN8 logo with your own organization's logo.
+	[2] Changing the structure of the page (changes to the HTML).
+	[3] Changing the appearance of the page (changes to HTML & CSS)
+
+	*** Advanced: Behaviour customizations
+
+	Behaviour customizations include the following...
+
+	[1] Changing the user interaction by implementing your own PXN8
+	javascript callbacks.
+	
+	[2] Modifying the tool configuration UI (changes to
+	pxn8_tools_ui.js)
+
+	[3] Writing your own tool UI (calling the PXN8.tool.* functions
+	directly from your own code).
+
+
+	The PXN8 editor page can be written using JSP, PHP or any
+	web templating language. 
+	
+	Here is a description of each of the supplied sample
+	customizations...
+
+	[1] slick - This is the theme currently used on the pxn8.com website. While
+	by no means using all of the features of PXN8, it should be a good
+	place to start getting ideas about your own themed editor.
+	
+	[2] default - This was the default theme used on pxn8.com for a
+	long time until superceded by slick. In appearance, both 'slick'
+	and 'default' look very similar, but they differ in two aspects..
+	
+	[2.1] tool configuration behaviour.
+	[2.2] layout and positioning of the canvas.
+
+	The 'default' theme is 'modeless' in that users can click any of the
+	tool buttons while an existing tool configuration dialog is
+	visible. The 'slick' theme doesn't allow this. You cannot click a
+	tool button until the current tool is 'applied' or 'cancelled' -
+	the 'slick' theme is 'modal'.
+
+	Also, the positioning of the canvas in the 'slick' theme differs to
+	the 'default' theme. In the 'slick' theme, other page elements (the
+	google adsense area) appear beneath the canvas. This is simply to
+	demonstrate that the canvas can be positioned either relatively or
+	absolutely within any element on the page. 
+
+	
+	[3] Memphis - This theme illustrates a number of PXN8 concepts not
+	addressed by the 'slick' and 'default' themes. 
+
+	[3.1] Scrolling - The canvas appears within a scrollable panel.
+	[3.2] Enabling and disabling of buttons based on user interactions.
+	      'memphis' makes use of the PXN8.onImageUpdated,
+	      PXN8.onSelectArea and PXN8.onSelectNone callback functions to
+	be notified when certain events internal to PXN8 have taken place.
+	
+	[3.3] Calling PXN8.tools.* functions directly. 'Memphis' doesn't
+	make much use of the standard tool config UI from the
+	pxn8_tools_ui.js module. Instead, most image operations are invoked
+	from a single button click.
+
+	If you want to dive right into customizing the default editor
+	behaviour, then close study of the 'memphis' theme is as good a
+	place as any to start.
+
+** Skill Prerequisites.
+
+	In order to customize PXN8 to suit your own website, you must be
+	comfortable working with (at a bare minimum) HTML and CSS.
+	
+	If you would rather have editor customizations completed by Sxoop
+	Technologies then send an email to customizations@sxoop.com with a
+	screenshot or mockup of the desired layout and
+	behaviour. Alternatively call +353 86-8511600 or skype walterh.rm
+	to discuss requirements in detail.
+
+** required elements
+
+*** The canvas
+
+**** Positioning the canvas
+**** Some assumptions 
+**** Scrolling the canvas
+
+**** Canvas Selection
+**** Styling the selection area (and surroundings)
+
+** optional elements
+
+
+
+** The organization of PXN8 Javascript
+
+*** Required javascript
+**** pxn8_core.js
+***** PXN8 Callback functions
+
+**** pxn8_tools.js
+**** pxn8_strings.js
+
+*** Optional javascript
+**** pxn8_tools_ui.js
+**** colors.js
+**** tooltips.js
+**** slider.js
+
+	
