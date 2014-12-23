@@ -1,4 +1,0 @@
-#  echo "rpm preuninstall $1"
-
-# Start jenkinstomcat service
-/sbin/service jenkinstomcat stop
