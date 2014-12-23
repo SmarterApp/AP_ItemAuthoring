@@ -1,7 +1,0 @@
-
-span.nowrap {
-  -ro-style-template: "No Wrap" inline;
-  -ro-style-template-group: "Inline";
-  -ro-style-template-toggle-id: "nowrap";
-  -ro-style-template-context: "documentContext";
-}
