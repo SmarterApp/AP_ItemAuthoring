@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <stat_administration sa_id="1" ib_id="15" sa_identifier="ADM-1"/>
-    <stat_administration sa_id="2" ib_id="15" sa_identifier="ADM-2"/>
-    <stat_administration sa_id="3" ib_id="16" sa_identifier="ADM-3"/>
-    <stat_key sk_id="1" sk_name="key1"/>
-    <stat_key sk_id="2" sk_name="key2"/>
-    <stat_key sk_id="3" sk_name="key3"/>
-</dataset>

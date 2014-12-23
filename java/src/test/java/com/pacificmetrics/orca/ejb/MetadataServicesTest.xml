@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <metadata_mapping mm_id="1" mm_object_type="4" mm_xpath="/general/descriptions/strings/@value" mm_field_name="i_description"/>
-    <metadata_mapping mm_id="2" mm_object_type="7" mm_xpath="/some/path" mm_field_name="some_field_name"/>
-</dataset>

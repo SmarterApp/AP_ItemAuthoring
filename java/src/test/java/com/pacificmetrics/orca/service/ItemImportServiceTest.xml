@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <item i_id="1001"/>
-    <dev_state ds_id="8" ds_name="Final"/>
-    <metadata_mapping mm_id="1" mm_object_type="4" mm_xpath="/lom/general/description/string/@value" mm_field_name="i_description"/>
-    <metadata_mapping mm_id="2" mm_object_type="4" mm_xpath="/lom/lifeCycle/status/@value" mm_characteristic="101" mm_lookup_table_name="dev_state" mm_lookup_by_field="ds_name" mm_lookup_value_field="ds_id"/>
-</dataset>
