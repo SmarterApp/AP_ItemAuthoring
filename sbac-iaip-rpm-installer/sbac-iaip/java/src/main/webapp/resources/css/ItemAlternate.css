@@ -1,0 +1,50 @@
+.sectionHeader {
+	position: fixed;
+	background-color: white;
+	width: 100%;
+    top: 0px;
+}
+
+/* using posion:fixed in .sectionHeader effectively removes from layout flow.
+   needed to add spacer so that columns will layout appropriately with 
+   float:clear */
+.sectionHeaderSpacer {
+	height: 16px;
+}
+
+.closeImage {
+	height: 16px;
+	width: 16px;
+	float:right;
+}
+
+.columnHeader {
+	text-align:left;
+}
+
+.leftColumn, .rightColumn {
+	padding: 2px;
+	width:49%; 
+}
+
+.leftColumn {
+	float:left; 
+	clear:both;
+}
+
+.rightColumn {
+	float:right;
+}
+
+.standardTable {
+	width: 100%;
+}
+
+.standardTable_Header {
+	height: 20px;
+}
+
+.iframe {
+	width:100%; 
+	height:500px
+}

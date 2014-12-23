@@ -1,0 +1,219 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>rpm-sbac-iaip</artifactId>
+		<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<packaging>jar</packaging>
+	<artifactId>iaip-perlcpan-rpm</artifactId>
+	<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+	<version>1.0</version>
+	<name>SBAC IAIP Perl CPAN Dependencies RPM</name>
+	<description />
+
+	<developers>
+		<developer>
+			<id>mark.langbehn</id>
+			<name>Mark Langbehn</name>
+			<email>mlangbehn@pacificmetrics.com</email>
+			<organization>Pacific Metrics</organization>
+			<roles>
+				<role>Creator</role>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Pacific Metrics</name>
+		<url>http://www.pacificmetrics.com/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>codehaus</id>
+			<name>Codehaus Central repo</name>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+<!--				<version>2.1-alpha-3</version>  -->
+				<version>2.0.1</version>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<name>iaip-perlcpan</name>
+					<version>1.0</version>
+					<release>0</release>
+					<copyright></copyright>
+					<distribution>Pacific Metrics</distribution>
+					<group>Application/System</group>
+					<prefix>/</prefix>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0
+						</defineStatement>
+					</defineStatements>
+					<provides>
+						<provide>iaip-perlcpan</provide>
+					</provides>
+					<needarch>noarch</needarch>
+					
+					<mappings>					
+				    </mappings>
+
+					<postinstallScriptlet>
+						<scriptFile>src/main/scripts/postinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+
+<!--					
+					<preinstallScriptlet>
+						<scriptFile>src/main/scripts/preinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>src/main/scripts/postuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+					<preremoveScriptlet>
+						<scriptFile>src/main/scripts/preuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+-->
+					<requires>
+
+<!-- 					<require>gcc &gt; 4.4</require>       -->
+                        <!-- ##REVISIT do we need 'make' still? -->
+<!-- 					    <require>make &gt; 3.0</require> -->
+					    
+					    <require>perl &gt; 5.0</require>
+					    <require>perl-CPAN &gt;= 1.9800</require>
+					    
+					    <require>ImageMagick</require>
+					    <require>ImageMagick-perl</require>
+					    <require>html2ps</require>
+					    <require>texlive-latex</require>
+					    <require>netpbm</require>
+					    <require>netpbm-progs</require>
+					    <require>yasm</require>
+					    
+					    <require>perl-Test-Class</require> 
+					    <require>perl-XML-LibXML</require>
+					    <require>perl-Net-SSLeay</require>
+					    <require>perl-IO-Socket-SSL</require>
+<!-- 				    <require>perl-Task-Plack</require> -->
+					    <require>perl-CHI</require>					    
+					    <require>perl-Cache-FastMmap</require>
+					    <require>perl-DBIx-Connector</require>
+					    <require>perl-Math-Pari</require>
+					    <require>perl-Crypt-Random</require>
+					    <require>perl-Crypt-PasswdMD5</require>
+					    <require>perl-Crypt-GeneratePassword</require>
+					    <require>perl-MIME-Lite</require>
+					    <require>perl-HTML-Template</require>
+					    <require>perl-HTML-Template-Expr</require>
+					    <require>perl-Image-ExifTool</require>
+<!-- 					<require>perl-HTML-Restrict</require>    -->
+					    <require>perl-XML-XPath</require>
+<!-- 					<require>perl-XML-Compile = 1.28</require> -->
+					    <require>perl-XML-Compile = 1.30</require>
+					    <require>perl-REST-Client</require>
+					    <require>perl-Config-General</require>
+					    <require>perl-CGI-Session</require>
+					    <require>perl-Spreadsheet-ParseExcel-Simple</require>
+					    <require>perl-Text-CSV-Simple</require>
+					    <require>perl-Params-Validate</require>
+					    <require>perl-File-chdir</require>	
+					    				    
+					    <require>perl-JSON = 2.50</require>
+					    <require>perl-JSON-XS</require>	
+					    
+					    <require>perl-Types-Serialiser</require>
+					    <require>perl-common-sense</require>					    
+					    <require>perl-Archive-Zip</require>
+					    <require>perl-XML-Tidy-Tiny</require>
+					    
+					    <require>perl-Hash-MoreUtils</require>
+<!-- 					<require>perl-Log-Report = 0.25</require> -->
+					    <require>perl-Log-Report = 1.01</require>
+					    
+					    <require>perl-Moo = 1.003001</require>
+					    
+					    <require>perl-Test-Pod</require>
+					    <require>perl-Server-Starter</require>					    
+					    
+					    <require>perl-Any-Moose = 0.13</require>
+					    <require>perl-AnyEvent = 5.27</require>
+					    
+					    <require>perl-CGI-Compile</require>
+					    <require>perl-CGI-Emulate-PSGI</require>
+					    <require>perl-CGI-PSGI</require>
+					    
+					    <require>perl-FCGI</require>
+					    <require>perl-FCGI-ProcManager</require>
+					    <require>perl-HTTP-Server-Simple-PSGI</require>
+					    <require>perl-IO-Handle-Util</require>
+					    <require>perl-Net-FastCGI</require>
+<!-- 					<require>perl-Plack</require> -->
+					    <require>perl-Plack-Middleware-ReverseProxy</require>
+					    <require>perl-Plack-Middleware-Session</require>
+
+					    <require>perl-PSGI</require>
+					    <require>perl-Starlet</require>
+					    <require>perl-Starman</require>
+					    <require>perl-Twiggy</require>
+
+					    <require>perl-Email-Date-Format</require>
+					    
+					</requires>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+	</dependencies>
+</project>

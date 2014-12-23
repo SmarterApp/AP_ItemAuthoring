@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+<h:head>
+	<title>Metafile History</title>
+	<h:outputStylesheet name="css/basic.css"/>
+
+	<style>
+        .historyTable {
+			font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+			font-size: 12px;
+			color: #000000;
+    		width: 100%;
+        }
+		.column1 {
+    		padding: 3px;
+    		width: 20%;
+    		text-align: left;
+		}
+		.column2 {
+    		padding: 3px;
+    		width: 47%;
+    		text-align: left;
+		}
+		.column3 {
+    		padding: 3px;
+    		width: 13%;
+    		text-align: center;
+		}
+		.column4 {
+    		padding: 3px;
+    		width: 13%;
+    		text-align: center;
+		}
+		.column5 {
+    		padding: 3px;
+    		width: 7%;
+    		text-align: right;
+		}
+		.header {
+			background-color: #FFFFE0;
+			font-weight: bold;
+		}
+    </style>
+	
+</h:head>
+
+
+      
+<h:body>
+
+    <h2>Metafile History</h2>
+	<h:form id="tableForm" style="height: 100%">
+		<table style="width: 100%; height: 100%">
+			
+			<tr><td align="center">
+			<t:dataTable id="data"
+			        styleClass="historyTable"
+			        headerClass="standardTable_Header"
+			        footerClass="standardTable_Header"
+			        rowClasses="standardTable_Row1,standardTable_Row2"
+			        columnClasses="column1,column2,column3,column4,column5"
+			        var="metafile"
+			        value="#{metafileHistory.metafiles}"
+			        preserveDataModel="false"
+			        first="0"
+			        rows="10"
+			   >
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="File Name" />
+			       </f:facet>
+			       <h:outputLink target="_blank" value="#{metafileHistory.getURL(metafile)}"><h:outputText value="#{metafile.originalFileName}" /></h:outputLink>
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="Comment" />
+			       </f:facet>
+			       <h:outputText value="#{metafile.comment}" />
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="Type" />
+			       </f:facet>
+			       <h:outputText value="#{metafile.typeAsString}" />
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="Added on" />
+			       </f:facet>
+			       <h:outputText value="#{metafile.timestampAsString}" />
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="Version" />
+			       </f:facet>
+			       <h:outputText value="#{metafile.version}" />
+			   </h:column>
+			   
+			</t:dataTable>
+		</td></tr>
+		<tr><td valign="bottom" align="center" style="padding-top: 7px">
+
+                <t:dataScroller id="scroll_2"
+                        for="data"
+                        rowsCountVar="rowsCount"
+                        displayedRowsCountVar="displayedRowsCountVar"
+                        firstRowIndexVar="firstRowIndex"
+                        lastRowIndexVar="lastRowIndex"
+                        pageCountVar="pageCount"
+                        immediate="true"
+                        pageIndexVar="pageIndex"
+                        >
+                    <h:outputFormat value="{0} History entries found, displaying {1} from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                        <f:param value="#{rowsCount}" />
+                        <f:param value="#{displayedRowsCountVar}" />
+                        <f:param value="#{firstRowIndex}" />
+                        <f:param value="#{lastRowIndex}" />
+                        <f:param value="#{pageIndex}" />
+                        <f:param value="#{pageCount}" />
+                    </h:outputFormat>
+                </t:dataScroller>
+		
+		        <t:dataScroller id="scroll_1"
+		                for="data"
+		                fastStep="5"
+		                pageCountVar="pageCount"
+		                pageIndexVar="pageIndex"
+		                styleClass="scroller"
+		                paginator="true"
+		                paginatorMaxPages="5"
+		                paginatorTableClass="paginator"
+		                paginatorActiveColumnStyle="font-weight:bold;"
+		                immediate="true"
+		                
+		                disableFacetLinksIfFirstPage="true"
+		                disableFacetLinksIfLastPage="true"
+		                >
+		            <f:facet name="first" >
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/first.png"/>
+		            </f:facet>
+		            <f:facet name="last">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/last.png"/>
+		            </f:facet>
+		            <f:facet name="previous">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/back.png"/>
+		            </f:facet>
+		            <f:facet name="next">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/forward.png"/>
+		            </f:facet>
+		        </t:dataScroller>
+		    </td></tr>
+		
+		</table>
+		
+	</h:form>
+
+</h:body>
+</html>

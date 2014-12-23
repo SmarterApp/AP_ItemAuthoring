@@ -1,0 +1,22 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+echo "Perl CPAN Dependencies"
+
+
+# Set CPAN to accept the [yes] defaults
+#### export PERL_MM_USE_DEFAULT=1
+
+# Install YAML first, then other dependencies
+
+#### export DESTFILE="/usr/local/orcadata/CPAN-INSTALL-LOG.txt"
+
+#### echo "Perl CPAN YAML Library"
+#### cpan YAML  >  $DESTFILE
+
+#### echo "Perl CPAN Libraries..."
+#### cpan  Config::Tiny  Text::CSV::Simple  Crypt::Random  Spreadsheet::ParseExcel::Simple  HTML::Template::Expr  XML::Tidy::Tiny  Image::ExifTool  Crypt::GeneratePassword  HTML::Restrict  XML::Compile  JSON::XS  HTML::Template  >>  $DESTFILE

@@ -1,0 +1,167 @@
+<style type="text/css">
+<!-- 
+.blue_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: blue;
+    color: white;
+}
+.green_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: green;
+    color: white;
+}
+.red_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: red;
+    color: white;
+}
+.gray_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: gray;
+    color: white;
+}
+.white_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: white;
+    color: black;
+}
+.cyan_button {
+    font-family: Comic Sans MS;
+    font-size: 7pt;
+    font-style: italic;
+    background-color: #0071DC;
+    color: white;
+    font-weight: bold;
+    border-style: dashed;
+}
+.field_labels {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #0071DC;
+    TEXT-DECORATION: none;
+}
+.large_checkbox {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    zoom: 150%;
+    background-color: #FFFFFF;
+    TEXT-DECORATION: none;
+}
+.form_fields {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    background-color: lightblue;
+    TEXT-DECORATION: none;
+}
+.small_fields {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7pt;
+    background-color: lightblue;
+    TEXT-DECORATION: none;
+}
+
+.red_alert {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 6pt;
+    font-weight: bold;
+    color: red;
+}
+
+body, form {
+        font-size:10pt;
+        font-family:arial,helvetica;
+}
+
+td {
+        font-size:10pt;
+        font-family:arial,helvetica;
+}
+
+h3 {
+        font-size:25pt;
+        font-family:arial,helvetica;
+}
+
+SELECT, option, textarea, input {
+        FONT-FAMILY:arial,helevtica;
+        color:#000000;
+        FONT-SIZE:12px;
+        background-color:#FFFFFF;
+}
+
+a:link, a:visited, a:active {
+        /*text-decoration:none;*/
+        color:#0B0895;
+        font-weight:plain;
+        font-size:12px;
+        font-family:arial,helvetica;
+}
+
+a:hover {
+        /*text-decoration:none;*/
+        color:#000000;
+        font-weight:plain;
+        font-family:arial,helvetica;
+}
+
+#title {/* This is the top title on every page */
+        font-size:14px;
+        font-weight:bold;
+        font-family:arial,helvetica;
+        color:#066DAE;
+}
+
+#title2 {/* This is the top of every page in the heading */
+        font-size:14px;
+        font-weight:bold;
+        font-family:arial,helvetica;
+        color:#FFFFFF;
+}
+
+#subtitle {/* This is the sub title on every page */
+        font-size:12px;
+        font-family:arial,helvetica;
+        color:#555555;
+}
+
+        color:#555555;
+}
+
+#righttitle {/* This is the sub title on every page on the right */
+        font-size:12px;
+        font-style:italic;
+        font-family:arial,helvetica;
+        color:#555555;
+}
+
+#submenu {/* This is the category href menu */
+        font-size:12px;
+        font-family:tahoma;
+}
+
+#header {/* This is the header in the site mamanger*/
+        font-size:18px;
+        font-family:arail,helvetica;
+        font-color:#000000;
+        font-weight:bold;
+}
+-->
+
+<!-- 
+.style3 {
+        font-weight: bold;
+        font-size: 14px;
+        font-family: "Courier New", Courier, monospace;
+        color: #0000FF;
+}
+.reqd {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #FF0000 }
+.style6 {font-family: "Courier New", Courier, monospace; font-size: 12px; }
+.style8 {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #666666; }
+-->
+</style>

@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ************************************************************************************************** -->
+<!--                                                                                                    -->
+<!-- Authors:       Tom Hoffmann    (Measured Progress, USA)                                            -->
+<!--                Zach Pierce     (Measured progress, USA)                                            -->
+<!--                Colin Smythe    (IMS Global, UK)                                                    -->
+<!-- Version:       1.0                                                                                 -->
+<!-- Date:          30th September, 2012                                                                -->
+<!--                                                                                                    -->
+<!-- Description:   Test File (Valid) for the APIPv1.0 Entry Level Profile                              -->
+<!--                This is the single APIP Item with a Choice Interaction to create a MC/SR question   -->
+<!--                with embedded response processing. Spoken (Text & Graphics) accessibility content   -->
+<!--                is provided.                                                                        -->
+<!--                All compliant systems should import this APIP Item XML.                             -->
+<!--                                                                                                    -->
+<!-- History:       First formal release.                                                               -->
+<!--                                                                                                    -->
+<!-- Copyright:     2012 (c) IMS Global Learning Consortium Inc.  All Rights Reserved.                  -->
+<!--                                                                                                    -->
+<!--                Recipients of this document are requested to submit, with their comments,           -->
+<!--                notification of any relevant patent claims or other intellectual property rights of -->
+<!--                which they may be aware that might be infringed by any implementation of the        -->
+<!--                specification set forth in this document, and to provide supporting documentation.  -->
+<!--                IMS Global takes no position regarding the validity or scope of any intellectual    -->
+<!--                property or other rights that might be claimed to pertain to the implementation or  -->
+<!--                use of the technology described in this document or the extent to which any license -->
+<!--                under such rights might or might not be available; neither does it represent that   -->
+<!--                it has made any effort to identify any such rights. Information on IMS Global's     -->
+<!--                procedures with respect to rights in IMS Global specifications can be found at the  -->
+<!--                IMS Global Intellectual Property Rights web page:                                   -->
+<!--                http://www.imsglobal.org/ipr/imsipr_policyFinal.pdf.                                -->
+<!--                                                                                                    -->
+<!--                If you wish to distribute this document or use this document to implement a product -->
+<!--                or service, you must complete a valid license registration with IMS GLC and receive -->
+<!--                an email from IMS Global granting the license. To register, follow the instructions -->
+<!--                on the IMS Globl website: http://www.imsglobal.org/specificationdownload.cfm.       -->
+<!--                                                                                                    -->
+<!--                This document may be copied and furnished to others by Licensee organizations       -->
+<!--                registered on the IMS Global web site provided that the above copyright notice and  -->
+<!--                this paragraph are included on all such copies. However, this document itself may   -->
+<!--                not be modified in any way, such as by removing the copyright notice or references  -->
+<!--                to IMS Global, except as needed for the purpose of developing IMS Global            -->
+<!--                specifications, under the auspices of a chartered IMS Global Project Group.         -->
+<!--                                                                                                    -->
+<!--                Use of this specification to develop products or services is governed by the license-->
+<!--                with IMS Global found on the IMS Global website: http://www.imsglobal.org.          -->
+<!--                                                                                                    -->
+<!--                The limited permissions granted above are perpetual and will not be revoked by IMS  -->
+<!--                Global or its successors or assigns.                                                -->
+<!--                                                                                                    -->
+<!--                THIS DOCUMENT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR,  -->
+<!--                ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS DOCUMENT   -->
+<!--                SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE CONSORTIUM,   -->
+<!--                NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY    -->
+<!--                IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR    -->
+<!--                OR INDIRECTLY, ARISING FROM THE USE OF THIS DOCUMENT.                               -->
+<!--                                                                                                    -->
+<!--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$-->
+
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd
+                        http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd
+                        http://www.w3.org/1998/Math/MathML http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"
+    identifier="identifier=VE-IP-02" title="APIPv1.0 Entry Profile Single MC/SR Item Test Instance" adaptive="false"
+    timeDependent="false">
+    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
+        <correctResponse>
+            <value>D</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="integer" normalMaximum="1" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <stylesheet href="apip_VE_IP_02.css" type="text/css"/>
+    <itemBody>
+        <div id="div1">
+            <img id="figure1" height="165" width="250"
+                src="apip_VE_IP_02.svg"
+                alt="Figure showing Rectangle ABCD divided into 12 equal boxes. 4 of the boxes are shaded."/>
+            <span id="labelA">A</span>
+            <span id="labelB">B</span>
+            <span id="labelC">C</span>
+            <span id="labelD">D</span>
+        </div>
+        <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1"
+            id="choicereduction">
+            <prompt id="prompt">In the figure above, what fraction of the rectangle <em>ABCD</em> is
+                shaded?</prompt>
+            <simpleChoice identifier="A" fixed="true">
+                <p id="p2">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" id="r1">
+                        <mfrac>
+                            <mn>1</mn>
+                            <mn>3</mn>
+                        </mfrac>
+                    </math></p>
+            </simpleChoice>
+            <simpleChoice identifier="B" fixed="true">
+                <p id="p3">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" id="r2">
+                        <mfrac>
+                            <mn>1</mn>
+                            <mn>5</mn>
+                        </mfrac>
+                    </math>
+                </p>
+            </simpleChoice>
+            <simpleChoice identifier="C" fixed="true">
+                <p id="p4">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" id="r3">
+                        <mfrac>
+                            <mn>1</mn>
+                            <mn>4</mn>
+                        </mfrac>
+                    </math>
+                </p>
+            </simpleChoice>
+            <simpleChoice identifier="D" fixed="true">
+                <p id="p5">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" id="r4">
+                        <mfrac>
+                            <mn>1</mn>
+                            <mn>3</mn>
+                        </mfrac>
+                    </math>
+                </p>
+            </simpleChoice>
+            <simpleChoice identifier="E" fixed="true">
+                <p id="p6">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" id="r5">
+                        <mfrac>
+                            <mn>1</mn>
+                            <mn>2</mn>
+                        </mfrac>
+                    </math>
+                </p>
+            </simpleChoice>
+        </choiceInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <match>
+                    <variable identifier="RESPONSE"/>
+                    <correct identifier="RESPONSE"/>
+                </match>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="integer">1</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+        </responseCondition>
+    </responseProcessing>
+    <apip:apipAccessibility>
+        <apip:companionMaterialsInfo>
+            <apip:calculator>
+                <apip:calculatorType>Basic</apip:calculatorType>
+                <apip:description>Four function calculator.</apip:description>
+            </apip:calculator>
+        </apip:companionMaterialsInfo>
+        <apip:inclusionOrder>
+            <apip:textGraphicsDefaultOrder>
+                <apip:elementOrder identifierRef="ae000">
+                    <apip:order>1</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae001">
+                    <apip:order>2</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae002">
+                    <apip:order>3</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae003">
+                    <apip:order>4</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae004">
+                    <apip:order>5</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae005">
+                    <apip:order>6</apip:order>
+                </apip:elementOrder>
+                <apip:elementOrder identifierRef="ae006">
+                    <apip:order>7</apip:order>
+                </apip:elementOrder>
+            </apip:textGraphicsDefaultOrder>
+        </apip:inclusionOrder>
+        <apip:accessibilityInfo>
+            <apip:accessElement identifier="ae000">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="image1">
+                    <apip:objectLink/>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="brailletextnv000">Figure of rectangle ABCD. The rectangle is divided into 12 equally sized squares. 4 of the squares are shaded.</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext000">Figure of rectangle A-B-C-D. The rectangle is divided into twelve equally sized squares. Four of the squares are shaded.</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp000">Figure of rect-tangle A-B-C-D. The rect-tangle is divided into twelve equally sized squares. Four of the squares are shaded.</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae001">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="prompt">
+                    <apip:textLink>
+                        <apip:fullString/>
+                    </apip:textLink>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="braille001">In the figure, what fraction of the rectangle ABCD is shaded?</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext001">In the figure above, what fraction of the rectangle A-B-C-D is shaded?</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp001">In the figure above, what fraction of the rectangle A-B-C-D is shaded?</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video1"
+                                mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:00</apip:startCue>
+                                <apip:endCue>00:00:19</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae002">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="r1">
+                    <apip:objectLink/>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="braille002">1/6</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext_two">one sixth</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp002">one sixth</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video2"
+                                mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:19</apip:startCue>
+                                <apip:endCue>00:00:24</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae003">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="r2">
+                    <apip:objectLink/>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="braille003">1/5</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext003">one fifth</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp003">one fifth</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video3"
+                                mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:24</apip:startCue>
+                                <apip:endCue>00:00:27</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae004">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="r3">
+                    <apip:objectLink/>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="brailleText004">1/4</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext004">one fourth</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp004">one fourth</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video4" mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:27</apip:startCue>
+                                <apip:endCue>00:00:31</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae005">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="r4">
+                    <apip:objectLink/>
+                </apip:contentLinkInfo>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="brailletext005">1/3</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext005">one third</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp005">one third</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video5" mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:31</apip:startCue>
+                                <apip:endCue>00:00:34</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+            <apip:accessElement identifier="ae006">
+                <apip:contentLinkInfo qtiLinkIdentifierRef="r5"/>
+                <apip:relatedElementInfo>
+                    <apip:brailleText>
+                        <apip:brailleTextString contentLinkIdentifier="braille006">1/2</apip:brailleTextString>
+                    </apip:brailleText>
+                    <apip:spoken>
+                        <apip:spokenText contentLinkIdentifier="verbaltext006">one half</apip:spokenText>
+                        <apip:textToSpeechPronunciation contentLinkIdentifier="ttsp006">one half</apip:textToSpeechPronunciation>
+                    </apip:spoken>
+                    <apip:signing>
+                        <apip:signFileASL>
+                            <apip:videoFileInfo contentLinkIdentifier="video6" mimeType="video/x-flv">
+                                <apip:fileHref>apip_VE_IP_02.flv</apip:fileHref>
+                                <apip:startCue>00:00:34</apip:startCue>
+                                <apip:endCue>00:00:37</apip:endCue>
+                            </apip:videoFileInfo>
+                        </apip:signFileASL>
+                    </apip:signing>
+                </apip:relatedElementInfo>
+            </apip:accessElement>
+        </apip:accessibilityInfo>
+    </apip:apipAccessibility>
+</assessmentItem>

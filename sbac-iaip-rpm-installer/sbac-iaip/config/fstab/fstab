@@ -1,0 +1,12 @@
+/dev/vg_system/lv_root  /                       ext3    defaults        1 1
+/dev/vg_system/lv_usrlocal /usr/local              ext3    defaults        1 2
+/dev/vg_system/lv_var   /var                    ext3    defaults        1 2
+/dev/vg_system/lv_home  /home                   ext3    defaults        1 2
+/dev/vg_system/lv_tmp   /tmp                    ext3    defaults        1 2
+/dev/VG_WWW/LV_WWW  /www            ext3    defaults    1 2
+LABEL=/boot             /boot                   ext3    defaults        1 2
+tmpfs                   /dev/shm                tmpfs   defaults        0 0
+devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
+sysfs                   /sys                    sysfs   defaults        0 0
+proc                    /proc                   proc    defaults        0 0
+sbacqadb.pacificmetrics.com:/srv/sbac/resources /www/cde_resources nfs defaults 0 0

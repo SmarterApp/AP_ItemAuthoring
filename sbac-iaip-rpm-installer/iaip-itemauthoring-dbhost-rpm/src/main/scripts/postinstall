@@ -1,0 +1,14 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+# Set ownership
+##/bin/chown -R tomcat:tomcat /opt/tomcat
+
+
+# Start tomcat7 service
+##/sbin/service tomcat7 start || fail "failed to start tomcat7 service"

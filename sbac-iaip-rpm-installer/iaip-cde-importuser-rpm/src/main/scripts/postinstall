@@ -1,0 +1,194 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="sbacqa.pacificmetrics.com"
+TMPLDOMAINNAME="pacificmetrics.com"
+TMPLSELFHOSTNAME="sbacqa.pacificmetrics.com"
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+## To derive the database hostname naming convention is flip the "CDE" substring to "DB"
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAME/cde/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/CDE/DB}
+
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/app/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/APP/DB}
+
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAMEALTEREDFORDB}.${THISDOMAINNAME}"
+
+## HACK force all-in-one stack for now
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAME}.${THISDOMAINNAME}"
+
+
+## Create the directory: /home/orcacde
+if [[ ! -e /home/orcacde ]]; then
+    echo "Creating CDE folder:              /home/orcacde"
+    mkdir -p /home/orcacde
+    chmod 711 /home/orcacde
+fi
+
+
+## Add CRON job to run monitorItemImport.pl
+PREEXISTING_GROUP=`grep orcacde /etc/group`
+
+if [[ "$PREEXISTING_GROUP" == "" ]]; then
+    echo "Adding orcacde group:             /etc/crontab"
+    groupadd orcacde
+else
+    echo "Existing orcacde group"
+fi
+
+
+## Create the directory: /www/cde_log/cdesbac
+if [[ ! -e /www/cde_log/cdesbac ]]; then
+    echo "Creating CDE folder:              /www/cde_log/cdesbac"
+    mkdir -p /www/cde_log/cdesbac
+    chown -R pacific:pacific /www/cde_log    
+else
+    echo "Existing CDE folder found:        /www/cde_log/cdesbac"
+fi
+
+
+## Create the directory: /www/cde_tmp/cdesbac
+if [[ ! -e /www/cde_tmp/cdesbac ]]; then
+    echo "Creating CDE folder:              /www/cde_tmp/cdesbac"
+    mkdir -p /www/cde_tmp/cdesbac
+    chown -R pacific:pacific /www/cde_tmp    
+else
+    echo "Existing CDE folder found:        /www/cde_tmp/cdesbac"
+fi
+
+
+
+## Add CRON job to run monitorItemImport.pl
+PREEXISTING_CRONJOB=`grep monitorItemImport /etc/crontab`
+
+if [[ "$PREEXISTING_CRONJOB" == "" ]]; then
+    echo "Adding monitorItemImport.pl job:  /etc/crontab"
+    /bin/cp /usr/local/orcadata/etc-crontab/crontab /etc/
+else
+    echo "Existing monitorItemImport job:   /etc/crontab"
+fi
+
+
+
+
+## Enable Secure FTP for ORCACDE
+PREEXISTING_SFTP=`grep orcacde /etc/ssh/sshd_config`
+
+if [[ "$PREEXISTING_SFTP" == "" ]]; then
+    echo "Replacing SSHd config file:       /etc/ssh/sshd_config"
+    /bin/cp /usr/local/orcadata/etc-ssh-sshdconfig/sshd_config /etc/ssh/
+
+    echo "Restarting sshd service"
+    /sbin/service sshd restart
+else
+    echo "Existing orcacde in sshd config:  /etc/ssh/sshd_config"
+fi
+
+
+
+## Create Import User
+MYSQL="mysql"
+ROOTUSER="pacific"
+ROOTPSWD="itemong3r"
+MyDB="cdesbac"
+
+usernamelist=`($MYSQL --user=$ROOTUSER --password=$ROOTPSWD --database=$MyDB -Bse "select u_username from user join item_bank on ib_importer_u_id=u_id") 2>&1`
+
+#Print the list with echo
+echo -e "usernamelist: \n$usernamelist"
+if [[ "$usernamelist" != '' ]]
+then
+	#Set the field separator to new line
+	IFS=$'\n'
+
+	#Try to iterate over each line
+	for mysqlresult in $usernamelist
+	do
+			echo "Query for importuser: $mysqlresult"
+			
+			if [[ "$mysqlresult" != '' ]]
+			then
+
+			PREEXISTINGUSERNAME=`grep ${mysqlresult} /etc/passwd`
+			##echo "PREEXISTINGUSERNAME: $PREEXISTINGUSERNAME"
+
+			if [[ "$PREEXISTINGUSERNAME" == "" ]]; then
+			echo "Creating CDE importuser: ${mysqlresult}"
+
+			mkdir -p /home/orcacde/${mysqlresult}
+			useradd -g orcacde -d /home/orcacde/${mysqlresult} -M -s /sbin/nologin ${mysqlresult}
+
+			chmod 755 /home/orcacde/${mysqlresult}
+
+			echo "Creating subfolder:      logs"
+			echo "Creating subfolder:      uploads"
+
+			mkdir /home/orcacde/${mysqlresult}/logs
+			mkdir /home/orcacde/${mysqlresult}/uploads
+
+			chmod a+rw /home/orcacde/${mysqlresult}/logs
+
+			chown ${mysqlresult}:orcacde /home/orcacde/${mysqlresult}/logs
+			chown ${mysqlresult}:orcacde /home/orcacde/${mysqlresult}/uploads
+
+			itembankid=`(mysql --user=pacific --password=itemong3r --database=cdesbac -Bse "select ib_id from item_bank join user on ib_importer_u_id=u_id where u_username='$mysqlresult'")`
+			echo "Creating symlink:        /www/cdesbac/item-import/lib${itembankid}"
+			ln -s /home/orcacde/${mysqlresult} /www/cdesbac/item-import/lib${itembankid}
+
+			else
+			  echo "Already has username: ${mysqlresult}"
+			fi
+
+			## Create the directory: /home/orcacde/${mysqlresult}/uploads/SBAIF
+			if [[ ! -e /home/orcacde/${mysqlresult}/uploads/SBAIF ]]; then
+				echo "Creating SBAIF upload folder inside uploads.."
+				mkdir /home/orcacde/${mysqlresult}/uploads/SBAIF
+				chown ${mysqlresult}:orcacde /home/orcacde/${mysqlresult}/uploads/SBAIF
+				chmod 777 /home/orcacde/${mysqlresult}/uploads/SBAIF
+			else
+				echo "Existing SBAIF folder found inside uploads.."
+			fi
+
+			## Create the directory: /home/orcacde/${mysqlresult}/uploads/IMS
+			if [[ ! -e /home/orcacde/${mysqlresult}/uploads/IMS ]]; then
+				echo "Creating IMS upload folder inside uploads.."
+				mkdir /home/orcacde/${mysqlresult}/uploads/IMS
+				chown ${mysqlresult}:orcacde /home/orcacde/${mysqlresult}/uploads/IMS
+				chmod 777 /home/orcacde/${mysqlresult}/uploads/IMS
+			else
+				echo "Existing IMS folder found inside uploads.."
+			fi
+
+			fi
+
+
+
+
+
+			## Add aliases helpful for CDE admin tasks to .bashrc
+
+			PREEXISTINGTAILCDEALIAS=`grep cdcdelogs /root/.bashrc`
+
+			if [[ "$PREEXISTINGTAILCDEALIAS" == "" ]]; then
+
+			  echo "Adding shell aliases:  cdcdelogs, cdcdeuploads"
+			  echo ""     >> /root/.bashrc
+
+			  echo "alias cdcdelogs='cd /home/orcacde/${mysqlresult}/logs'"           >> /root/.bashrc
+			  echo "alias cdcdeuploads='cd /home/orcacde/${mysqlresult}/uploads'"     >> /root/.bashrc
+			else
+			  echo "Already has shell alias 'cdcdelogs' in: /root/.bashrc"
+			fi
+	done
+fi	

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+THISHOSTNAME="$(hostname)"
+
+echo "Configuring postfix email for Amazon AWS"
+
+inputfile="/etc/postfix/main.cf"
+
+## ensure we don't re-edit this file
+alreadyeditted=`grep "amazonaws.com" "$inputfile"`
+
+if [[ "$alreadyeditted" == "" ]]; then
+  echo "Replacing email config file: $inputfile"
+  
+  ## rename the original
+  /bin/mv "$inputfile" "$inputfile-ORIG"
+  
+  ## copy our own config and password files
+  /bin/cp "/usr/local/orcadata/etc-postfix/main.cf"        "$inputfile"
+  /bin/cp "/usr/local/orcadata/etc-postfix/sasl_passwd"    "/etc/postfix/"
+  /bin/cp "/usr/local/orcadata/etc-postfix/sasl_passwd.db" "/etc/postfix/"
+
+  echo "Restarting postfix email agent"
+  service postfix restart
+else
+  echo "Already configured for AWS Email: $inputfile"
+fi
+
+
+## Add aliases helpful for email admin tasks to .bashrc
+
+PREEXISTING_TAILMAIL_ALIAS=`grep tailmail /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILMAIL_ALIAS" == "" ]]; then
+  echo "Adding shell aliases: tailmail, editpostfixconf"  
+  echo ""     >> /root/.bashrc
+
+  echo "alias tailmail='tail -f /var/log/maillog'"                                                 >> /root/.bashrc  
+  echo "alias editpostfixconf='vi /etc/postfix/main.cf'"                                                               >> /root/.bashrc
+else
+  echo "Already has shell alias 'tailmail' in: /root/.bashrc"
+fi

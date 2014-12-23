@@ -1,0 +1,30 @@
+.color_table {
+    border: none;
+}
+
+table.color_table a 
+{
+    text-decoration: none;
+    width: 9px;
+    height: 10px;
+    display: block;
+    border: 1px solid white;
+}
+table.color_table a:hover
+{
+    border: 1px dotted black;
+}
+table.color_table td 
+{
+    font-family: Arial;
+    font-size: 11px;
+	padding: 0px !important;
+}
+/**
+ * IE only
+ */
+
+* html body table.color_table a 
+{
+    width: 11px;
+}

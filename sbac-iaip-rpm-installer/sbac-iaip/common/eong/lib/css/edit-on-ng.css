@@ -1,0 +1,92 @@
+/*********************************
+ * Imports necessary jQuery CSS  *
+ ********************************/
+@import url("jquery-ui/jquery.ui.css");
+@import url("jquery-ui/jquery.extra.css");
+@import url("jquery-ui/jquery.layout.css");
+@import url("jquery-ui/jquery.treeview.css");
+
+/*********************************
+ * jQuery override CSS           *
+ ********************************/
+@import url("jquery-ui/jquery.override.css");
+
+/*********************************
+ * Toolbar CSS
+ ********************************/
+@import url("toolbar.css");
+
+/*********************************
+ * Dialog CSS
+ ********************************/
+@import url("dialog.css");
+
+/*********************************
+ * Statusbar CSS
+ ********************************/
+@import url("statusbar.css");
+
+/*********************************
+ * Dropdown CSS
+ ********************************/
+@import url("dropdown.css");
+
+/*********************************
+ * Styletemplate panel CSS
+ ********************************/
+@import url("styletemplatepanel.css");
+
+/*********************************
+ * Virtual Caret CSS             *
+ ********************************/
+.virtualCaret {
+    position: absolute;
+    width: 2px;
+    height: 18px;
+    z-index: 1999;
+    visibility: hidden;
+}
+
+/*********************************
+ * General CSS                   *
+ ********************************/
+button.disabled {
+     /*background-position:right center;*/
+    background-position:left center;
+    background-repeat:no-repeat;
+    background-color: #ebeaea !important;
+}
+
+button.enabled {
+    background-position:left center;
+    background-repeat:no-repeat;
+    cursor:pointer;
+}
+
+td.eongbutton {
+    padding: 0 !important;
+}
+
+tr td.eongbutton div {
+    border: 1px solid transparent;
+}
+
+tr td.eongbutton div.disabled {
+    background-position:left top !important;
+    opacity: 0.3;
+    zoom:1; 
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);
+}
+
+tr td.eongbutton div.enabled {
+    opacity: 1.0;
+    zoom:1;
+    filter: none;
+}
+
+button.focusButton {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+}

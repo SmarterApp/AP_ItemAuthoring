@@ -1,0 +1,47 @@
+##############################################################
+# jasperserver jdbc datasource creation script for Websphere #
+#############################################################
+
+global AdminConfig
+
+set cell "${wsCellName}"
+set node "${wsNodeName}"
+if { [llength $cell] == 0 } {
+    set cell [$AdminControl getCell]
+}
+if { [llength $node] == 0 } {
+    set node [$AdminControl getNode]
+}
+
+proc getProvider {} {
+    global AdminConfig
+    set providers [$AdminConfig list JDBCProvider]
+    set existingProvider ""
+    foreach provider ${providers} {
+        set providerName [$AdminConfig showAttribute $provider name]
+	    set match [string match $providerName ${wsJdbcProviderName}]
+	    if { ${match} == 1 } {
+	        set existingProvider $provider
+	    }
+    }
+
+    return $existingProvider
+}
+
+set provider [getProvider]
+if { [llength $provider] == 0 } {
+    set jdbcDriverPath 	"${appServerJdbcDir}/${wsJdbcDriverFileName}"
+
+    set nodeObject [$AdminConfig  getid /Cell:$cell/Node:$node/Server:${wsServerName}/]
+    set providerName [list name ${wsJdbcProviderName}]
+    set isXa [list xa false]
+    set implClassName [list implementationClassName ${jdbcDataSourceClass}]
+    set clspth [list classpath $jdbcDriverPath]
+    set jdbcAttrs [list  $providerName  $implClassName $isXa $clspth]
+
+    $AdminConfig create JDBCProvider $nodeObject $jdbcAttrs
+
+    $AdminConfig save
+} else {
+    puts "${wsJdbcProviderName} already exists. It will not be recreated"
+}

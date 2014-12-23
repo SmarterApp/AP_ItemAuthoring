@@ -1,0 +1,161 @@
+#!/bin/bash
+
+echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="sbacqa.pacificmetrics.com"
+TMPLDOMAINNAME="pacificmetrics.com"
+TMPLCLIENTNAME="SBAC DEV"
+
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+THISCLIENTNAME="SBAC DEV"
+if grep -q dev <<<$THISHOSTNAME; then
+    THISCLIENTNAME="SBAC IAIP DEV"
+elif grep -q qa <<<$THISHOSTNAME; then
+    THISCLIENTNAME="SBAC IAIP QA"
+elif grep -q uat <<<$THISHOSTNAME; then
+    THISCLIENTNAME="SBAC IAIP UAT"	
+fi
+
+ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+## To derive the database hostname naming convention is flip the "CDE" substring to "DB"
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAME/cde/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/CDE/DB}
+
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/app/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/APP/DB}
+
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAMEALTEREDFORDB}.${THISDOMAINNAME}"
+
+## THISHOSTNAMEALTEREDFORDB="starctmdb2.hostedresources.root.local"
+
+
+## HACK force all-in-one stack for now
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAME}.${THISDOMAINNAME}"
+
+
+echo "Apache post-install configuration"
+echo "Domain:      $THISDOMAINNAME"
+echo "Hostname:    $THISHOSTNAME"
+echo "Tmpl Host:   $TMPLHOSTNAME"
+echo "Tmpl Domain: $TMPLDOMAINNAME"
+
+# Stop httpd service
+## /sbin/service httpd stop || fail "failed to stop httpd service"
+/sbin/service httpd stop
+
+
+## Swap in the new /etc/httpd/conf files, edit hostname in template file
+if [[ -e /etc/httpd/conf/httpd.conf ]]; then
+    /bin/rm -f /etc/httpd/conf/httpd.conf-RPMSAVE
+    /bin/mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf-RPMSAVE
+fi
+
+
+echo "Updating configuration files in: cde.conf"
+echo "                   CDE hostname: $THISHOSTNAME"
+echo "             Altered for DBHost: $THISHOSTNAMEALTEREDFORDB"
+##/usr/bin/replace "$TMPLHOSTNAME" "$THISHOSTNAMEALTEREDFORDB" -- /usr/local/orcadata/etc-httpd-conf.d/cde.conf
+sed -i "s/$TMPLHOSTNAME/$THISHOSTNAMEALTEREDFORDB/g"  /usr/local/orcadata/etc-httpd-conf.d/cde.conf
+
+
+
+## Hide obsolete Apache 2.2 only file if it exists: /etc/httpd/conf.d/mod_dnssd.conf
+if [[ -e /etc/httpd/conf.d/mod_dnssd.conf ]]; then
+    echo "         Renaming obsolete file: /etc/httpd/conf.d/mod_dnssd.conf"    
+    /bin/mv /etc/httpd/conf.d/mod_dnssd.conf /etc/httpd/conf.d/mod_dnssd.conf-OBSOLETE
+fi
+
+
+chmod a+rw /usr/local/orcadata/etc-httpd-conf/httpd.conf
+
+## /usr/bin/replace "$TMPLHOSTNAME" "$THISHOSTNAME" -- /usr/local/orcadata/etc-httpd-conf/httpd.conf
+
+## Config file update 
+##/usr/bin/replace "$TMPLHOSTNAME" "$THISHOSTNAME" -- /usr/local/orcadata/etc-httpd-conf/cde_clients.conf
+sed -i "s/$TMPLHOSTNAME/$THISHOSTNAME/g"  /usr/local/orcadata/etc-httpd-conf/cde_clients.conf
+
+##/usr/bin/replace "$TMPLCLIENTNAME" "$THISCLIENTNAME" -- /usr/local/orcadata/etc-httpd-conf/cde_clients.conf
+sed -i "s/$TMPLCLIENTNAME/$THISCLIENTNAME/g"  /usr/local/orcadata/etc-httpd-conf/cde_clients.conf
+
+
+echo "Copying Apache configuration files into: /etc/httpd/conf/"
+/bin/cp -rf /usr/local/orcadata/etc-httpd-conf/* /etc/httpd/conf/
+
+echo "Copying Apache configuration files into: /etc/httpd/conf.d/"
+/bin/cp -rf /usr/local/orcadata/etc-httpd-conf.d/* /etc/httpd/conf.d/
+
+
+## Hide the ssl.conf file in /etc/httpd/conf.d/
+if [[ -e /etc/httpd/conf.d/ssl.conf ]]; then
+    echo "Removing unneeded file: /etc/httpd/conf.d/ssl.conf"
+    /bin/rm -f /etc/httpd/conf.d/ssl.conf-RPMSAVE
+    /bin/mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf-RPMSAVE
+else
+    echo "No pre-existing file:   /etc/httpd/conf.d/ssl.conf"
+fi
+
+## create the directory: /www
+if [[ ! -e /www ]]; then
+    mkdir -p /www
+fi
+
+chown -R apache:apache /www
+
+
+
+## create a placekeeper file: index.html 
+if [[ ! -e /www/index.html ]]; then
+    echo "$THISHOSTNAME" > /www/index.html
+    chown apache:apache /www/index.html
+fi
+
+
+## Copy the favicon
+if
+ [[ -e /www/favicon.ico ]]; then
+    /bin/rm -f /www/favicon.ico-RPMSAVE
+    /bin/mv /www/favicon.ico /www/favicon.ico-RPMSAVE
+fi
+cp /usr/local/orcadata/www-favicon/$THISDOMAINNAME/favicon.ico /www/
+
+
+## Add aliases helpful for Apache admin tasks to .bashrc
+
+PREEXISTING_TAILHTTPERR_ALIAS=`grep tailhttperr /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILHTTPERR_ALIAS" == "" ]]; then
+  echo ""     >> /root/.bashrc
+  echo "## Aliases added by RPM"     >> /root/.bashrc
+  echo ""     >> /root/.bashrc
+  
+  echo "Adding shell aliases: tailhttperr, tailhttpaccess"
+  
+  echo "alias tailhttperr='tail -f -n200 /var/log/httpd/error_log'"           >> /root/.bashrc
+  echo "alias tailhttpaccess='tail -f -n200 /var/log/httpd/access_log'"       >> /root/.bashrc
+
+  echo "Adding shell aliases: editapacheconf, editapachevhostconf"
+
+  echo "alias editapacheconf='vi /etc/httpd/conf/httpd.conf'"                 >> /root/.bashrc
+#  echo "alias editapachevhostconf='vi /etc/httpd/conf.d/$THISHOSTNAME.conf'"  >> /root/.bashrc
+else
+  echo "Already has shell alias 'tailhttperr' in: /root/.bashrc"
+fi
+
+
+
+# Enable httpd service at boot-time
+/sbin/chkconfig httpd --level 345 on || fail "chkconfig failed to enable httpd service"
+
+# Assume iaip-wwwcde-rpm will do httpd start for us
+
+### # Start httpd service
+### /sbin/service httpd start || fail "failed to restart httpd service"

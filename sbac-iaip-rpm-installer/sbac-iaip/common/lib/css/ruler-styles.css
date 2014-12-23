@@ -1,0 +1,133 @@
+/*******************
+    Ruler Styles
+ *******************/
+.rulerContainer_div {
+    height:16px;
+    width: 100%;
+}
+
+.rulerContainer {
+    height: 16px;
+    background-color: #ccc;
+    position: relative;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+}
+
+.blockContent {
+    position: absolute;
+    top: 0;
+    height: 16px;
+    z-index: 102;
+    background-color: #fdfefe;
+}
+
+.rulerPageMargin {
+    background-color: skyblue;
+    z-index: 103;
+    height: 16px;
+    position: absolute;
+    top: 0;
+}
+
+.pageMarginRight {
+    right: 0px;
+}
+
+.pageMarginLeft {
+    left: 0px;
+}
+
+
+/*******************
+   Handle Styles
+ *******************/
+
+.blockMargin {
+    width: 0; 
+    height: 0; 
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    
+    border-bottom: 8px solid #555;
+    
+    z-index: 110;
+    position: absolute;
+    bottom: 0;
+    
+    margin-left: -8px;
+}
+
+.pageMarginRightHandle, .pageMarginLeftHandle {
+    background-color: transparent;
+    z-index: 109;
+    width: 12px;
+    position: absolute;
+    height: 100%;
+}
+
+.pageMarginRightHandle {
+    margin-right: -6px;
+    cursor: e-resize;
+}
+
+.pageMarginLeftHandle {
+    margin-left: -6px;
+    cursor: w-resize;
+}
+
+.handleDisabled {
+    cursor: default !important;
+}
+
+
+/*******************
+    Scale Styles
+ *******************/
+
+.rulerDashes {
+    position: absolute;
+    height: 16px;
+    width: 100%;
+    overflow: hidden;
+    top:0;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+}
+
+.rulerDashes > .rulerCount {
+    position: absolute;
+    top: 0mm;
+    width: 4mm;
+    margin-left: -2mm;
+    z-index: 108;
+    text-align: center;
+    font-size: 10px;
+    color: #646668;
+    cursor: default;
+    line-height: normal;
+}
+
+.rulerDashSmall {
+    position: absolute;
+    top: 1.5mm;
+    width: 0.1cm;
+    height: 1mm;
+    z-index: 108;
+    border-left: 1px solid gray;
+}
+
+.rulerDashMedium {
+    position: absolute;
+    top: 1mm;
+    width: 0.1cm;
+    height: 2mm;
+    z-index: 108;
+    border-left: 1px solid gray;
+}

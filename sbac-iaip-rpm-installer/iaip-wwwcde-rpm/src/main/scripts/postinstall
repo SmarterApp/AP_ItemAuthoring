@@ -1,0 +1,191 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="sbacqa.pacificmetrics.com"
+TMPLDOMAINNAME="pacificmetrics.com"
+TMPLSELFHOSTNAME="sbacqa.pacificmetrics.com"
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+## To derive the database hostname naming convention is flip the "CDE" substring to "DB"
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAME/cde/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/CDE/DB}
+
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/app/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/APP/DB}
+
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAMEALTEREDFORDB}.${THISDOMAINNAME}"
+
+## HACK force all-in-one stack for now
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAME}.${THISDOMAINNAME}"
+
+
+echo "Configure /etc/httpd/conf/cde_clients.conf"
+echo "Hostname:           $THISHOSTNAME"
+echo "Tmpl Host:          $TMPLHOSTNAME"
+echo "Altered for DBHost: $THISHOSTNAMEALTEREDFORDB"
+
+
+## Check if hostname is already configured
+PREEXISTINGHOSTNAME=`grep "$THISHOSTNAMEALTEREDFORDB" /etc/httpd/conf/cde_clients.conf`
+
+## echo "PREEXISTINGHOSTNAME: $PREEXISTINGHOSTNAME"
+
+if [[ "$PREEXISTINGHOSTNAME" == "" ]]; then
+
+  ## Edit DB hostname in cde_clients.conf
+  echo "Updating db_host name"
+  ##/usr/bin/replace "$TMPLHOSTNAME" "$THISHOSTNAMEALTEREDFORDB" -- /etc/httpd/conf/cde_clients.conf
+  sed -i "s/$TMPLHOSTNAME/$THISHOSTNAMEALTEREDFORDB/g"  /etc/httpd/conf/cde_clients.conf
+  
+
+  ## Edit CDE hostname in cde_clients.conf
+  echo "Updating web_host name"
+  ##/usr/bin/replace "$TMPLSELFHOSTNAME" "$THISHOSTNAME" -- /etc/httpd/conf/cde_clients.conf
+  sed -i "s/$TMPLSELFHOSTNAME/$THISHOSTNAME/g"  /etc/httpd/conf/cde_clients.conf
+  
+else
+  echo "File unchanged"
+fi
+
+
+## Mathjax
+
+if [[ -e /www/common/mathjax.tgz ]]; then
+  ## Unzip the content inside /www/common/mathjax.tgz
+  echo "Unzipping: /www/common/mathjax.tgz"
+  cd "/www/common"
+  /bin/tar -zxf "/www/common/mathjax.tgz"
+  /bin/rm -f "/www/common/mathjax.tgz"
+else
+    echo "Unchanged: /www/common/mathjax"
+fi
+
+
+echo "Creating NFS symlinks under:          /www/cdesbac"
+
+cd /www/cdesbac
+/bin/ln -s /www/cde_resources/cdesbac/images images
+/bin/ln -s /www/cde_resources/cdesbac/itembank-metafiles itembank-metafiles
+/bin/ln -s /www/cde_resources/cdesbac/item-import item-import
+/bin/ln -s /www/cde_resources/cdesbac/item-metafiles item-metafiles
+/bin/ln -s /www/cde_resources/cdesbac/item-pdf item-pdf
+/bin/ln -s /www/cde_resources/cdesbac/passage-pdf passage-pdf
+/bin/ln -s /www/cde_resources/cdesbac/passages passages
+/bin/ln -s /www/cde_resources/cdesbac/passage-metafiles passages-metafiles
+/bin/ln -s /www/cde_resources/cdesbac/project project
+/bin/ln -s /www/cde_resources/cdesbac/rubrics rubrics
+/bin/ln -s /www/cde_resources/cdesbac/workflow workflow
+/bin/ln -s /www/cde_resources/cdesbac/attachments attachments
+/bin/ln -s /www/cde_resources/cdesbac/tutorials tutorials
+/bin/ln -s /www/cde_resources/cdesbac/wordlists wordlists
+
+
+echo "Copying Perl 'start_server' files to: /usr/local/bin/"
+/bin/cp -rf /usr/local/orcadata/usr-local-bin/* /usr/local/bin/
+
+
+## Create the directory: /usr/share/texmf/tex/latex/tensor
+if [[ ! -e /usr/share/texmf/tex/latex/tensor ]]; then
+    echo "Creating LaTeX data under:        /usr/share/texmf/tex/latex/tensor"
+    mkdir -p /usr/share/texmf/tex/latex/tensor
+    touch /usr/share/texmf/tex/latex/tensor/tensor.sty
+    /usr/bin/texhash
+    echo "                 filename:        /usr/share/texmf/tex/latex/tensor/tensor.sty"
+else
+    echo "Existing LaTeX data found under:  /usr/share/texmf/tex/latex/tensor"
+fi
+
+
+
+## Create the directory: /www/cde_log/cdesbac
+if [[ ! -e /www/cde_log/cdesbac ]]; then
+    echo "Creating CDE folder:              /www/cde_log/cdesbac"
+    mkdir -p /www/cde_log/cdesbac
+    chown -R pacific:pacific /www/cde_log    
+else
+    echo "Existing CDE folder found:        /www/cde_log/cdesbac"
+fi
+
+
+## Create the directory: /www/cde_tmp/cdesbac
+if [[ ! -e /www/cde_tmp/cdesbac ]]; then
+    echo "Creating CDE folder:              /www/cde_tmp/cdesbac"
+    mkdir -p /www/cde_tmp/cdesbac
+    chown -R pacific:pacific /www/cde_tmp    
+else
+    echo "Existing CDE folder found:        /www/cde_tmp/cdesbac"
+fi
+chmod -R 777 /www/cde_resources/cdesbac
+chmod -R 777 /www/cde_tmp
+
+
+
+## Copy the Edit-ON license key
+if [[ ! -e /cde/licensekey.xml ]]; then
+    echo "Storing edit-on NG license file:  /home/pacific/licensekey.xml"
+    echo "            licensed for domain:  $THISDOMAINNAME"
+    /bin/cp /usr/local/orcadata/cde-licensekeys/$THISDOMAINNAME/licensekey.xml /home/pacific/
+    /bin/cp /usr/local/orcadata/cde-licensekeys/$THISDOMAINNAME/licensekey.xml /home/pacific/    
+else
+    echo "Existing edit-on NG license file: /cde/licensekey.xml"
+fi
+
+
+## Create symlink to Edit-ON license key
+if [[ ! -e /www/common/eong3/lib/bin/licensekey.xml ]]; then
+    echo "Creating symlink to license file: /www/common/eong3/lib/bin/licensekey.xml"
+    
+    cd /www/common/eong3/lib/bin/    
+    /bin/ln -s /cde/licensekey.xml licensekey.xml    
+else
+    echo "Existing edit-on NG license file: /www/common/eong3/lib/bin/licensekey.xml"
+fi
+
+
+## Add aliases helpful for CDE admin tasks to .bashrc
+
+PREEXISTINGTAILCDEALIAS=`grep tailcdeerr /root/.bashrc`
+
+if [[ "$PREEXISTINGTAILCDEALIAS" == "" ]]; then
+
+  echo "Adding shell aliases:  tailcdeerr, tailcdeaccess, editcdeclientconf, editcdeserverconf"
+  echo ""     >> /root/.bashrc
+
+  echo "alias tailcdeerr='tail -f -n200 /home/pacific/cdesbac-error.txt'"         >> /root/.bashrc
+  echo "alias tailcdeaccess='tail -f -n200 /home/pacific/cdesbac-access.txt'"     >> /root/.bashrc
+  echo "alias editcdeclientconf='vi /etc/httpd/conf/cde_clients.conf'"            >> /root/.bashrc
+  echo "alias editcdeserverconf='vi /etc/httpd/conf.d/cde.conf'"                  >> /root/.bashrc
+
+else
+  echo "Already has shell alias 'tailcdeerr' in: /root/.bashrc"
+fi
+
+# replace curr_year of footer.html file with latest year
+sed -i "s/curr_year/$(date +%Y)/g" /www/cdesbac/footer.html
+
+# replace curr_date of login.html file with latest year
+sed -i "s/curr_date/$(date +%Y-%m-%d)/g" /www/cdesbac/login/login.html
+
+# Register Plack service
+/sbin/chkconfig --add plackservice || fail "chkconfig failed to register plackservice"
+
+# Enable Plack service at boot-time
+/sbin/chkconfig plackservice --level 345 on || fail "chkconfig failed to enable plackservice service"
+
+
+# Start plackservice service
+/sbin/service plackservice start || fail "failed to start plackservice service"
+
+
+# Start httpd service
+/sbin/service httpd start || fail "failed to start httpd service"

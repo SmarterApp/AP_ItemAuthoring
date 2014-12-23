@@ -1,0 +1,17 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+##execute dbmaintain script to update database
+cd /opt/dbmaintain
+echo "Inside directory:		$PWD"
+
+echo "Execute dbmaintain update"
+./dbmaintain.sh updateDatabase iaip-dbmaintain-archive-rpm-1.0.jar || fail "dbmaintain update failed"
+echo "dbmaintain update completed."
+
+

@@ -1,0 +1,15 @@
+<TMPL_LOOP NAME="cde_instances">
+short_name = <TMPL_VAR NAME="short_name">
+<<TMPL_VAR NAME="short_name">>
+    client_name = <TMPL_VAR NAME="client_name">
+    db_dsn      = DBI:mysql:database=<TMPL_VAR NAME="db_name">;<TMPL_VAR NAME="db_host">:3306
+    db_host     = <TMPL_VAR NAME="db_host">
+    db_name     = <TMPL_VAR NAME="db_name">
+    db_user     = <TMPL_VAR NAME="db_user">
+    db_pass     = <TMPL_VAR NAME="db_pass">
+    web_path    = <TMPL_VAR NAME="web_path">
+    orca_url    = <TMPL_VAR NAME="orca_url">
+    common_url  = <TMPL_VAR NAME="common_url">
+</<TMPL_VAR NAME="instance_name">>
+
+</TMPL_LOOP>

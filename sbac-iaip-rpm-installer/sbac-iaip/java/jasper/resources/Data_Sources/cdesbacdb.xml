@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbcDataSource>
+    <folder>/Data_Sources</folder>
+    <name>cdesbacdb</name>
+    <version>2</version>
+    <label>CDE SBAC Database</label>
+    <description></description>
+    <creationDate>2013-03-16T13:10:37.000-06:00</creationDate>
+    <updateDate>2012-10-12T17:43:20.000-06:00</updateDate>
+    <driver>com.mysql.jdbc.Driver</driver>
+    <connectionUrl>jdbc:mysql://sbacqadb.pacificmetrics.com/qacdesbac</connectionUrl>
+    <connectionUser>pacific</connectionUser>
+    <connectionPassword>itemmog3r</connectionPassword>
+    <timezone></timezone>
+</jdbcDataSource>

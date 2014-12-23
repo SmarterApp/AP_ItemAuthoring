@@ -1,0 +1,18 @@
+# This file should be renamed to ~/.rpmmacros
+
+%packager               Mark Langbehn <mlangbehn@pacificmetrics.com>
+%distribution           Apache
+%vendor                 Pacific Metrics
+
+%_signature             gpg
+%_gpg_name              Mark Langbehn <mlangbehn@pacificmetrics.com>
+%_topdir                /usr/local/work-griffin/rpm-dev-eagle/eagle-tomcat-rpm/build
+%_tmppath               /usr/local/work-griffin/rpm-dev-eagle/eagle-tomcat-rpm/rpmtmp
+
+%_builddir              %{_tmppath}/BUILD
+%_rpmtopdir             %{_topdir}/rpm/%{name}
+%_rpmdir                %{_topdir}/RPMS
+%_sourcedir             %{_rpmtopdir}
+%_specdir               %{_rpmtopdir}
+%_srcrpmdir             %{_rpmtopdir}
+

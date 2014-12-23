@@ -1,0 +1,118 @@
+<table width="490" border="0" bordercolor="#0099CC">
+  <tr>
+    <td>
+	<div id="msg_content">&nbsp;</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span class="style3">Select A Client : </span>
+      <select name="client_list" onChange="selectClient(this.value, this.form)">
+	<option value="">--- Current Clients ---</option>
+	<TMPL_LOOP NAME="clients">
+		<option value="<TMPL_VAR NAME="short_name">"><TMPL_VAR NAME="client_name"></option>
+	</TMPL_LOOP>
+	<option value="anc">Add New Client</option>
+      </select> 
+    </td>
+  </tr>
+</table>
+<table width="500" border="0" cellpadding="5" cellspacing="10">
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" border="1" bordercolor="#0099CC">
+      	  <tr>
+            <td><span class="style3">Client Info</span>
+		<table width="450" border="0">
+          	  <tr>
+            	    <td width="150" class="style6"><span class="reqd">* </span><span class="style8">Client Name : </span></td>
+            	    <td width="250"><input name="client_name" type="text" id="client_name" size="40" maxlength="40" /></td>
+          	  </tr>
+          	  <tr>
+            	    <td class="style6"><span class="reqd">* </span><span class="style8">Client Short Name : </span></td>
+            	    <td><input name="short_name" type="text" id="short_name" size="40" maxlength="40" /></td>
+          	  </tr>
+        	</table>
+	    </td>
+      	  </tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" border="1" bordercolor="#0099CC">
+      	  <tr>
+            <td><span class="style3">Web setup</span>
+		<table width="450" border="0">
+          	  <tr>
+            	    <td width="150" class="style8"><span class="reqd">* </span>Web Path : </td>
+              	    <td width="250"><input name="web_path" type="text" id="web_path" size="40" maxlength="40" /></td>
+          	  </tr>
+          	  <tr>
+            	    <td class="style8"><span class="reqd">* </span>ORCA Url : </td>
+            	    <td><input name="orca_url" type="text" id="orca_url" size="40" maxlength="40" /></td>
+          	  </tr>
+          	  <tr>
+            	    <td class="style8"><span class="reqd">* </span>Common Path : </td>
+            	    <td><input name="common_url" type="text" id="common_url" size="40" maxlength="40" /></td>
+          	  </tr>
+        	</table>
+	    </td>
+      	  </tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" border="1" bordercolor="#0099CC">
+      	  <tr>
+            <td align="left" valign="top"><span class="style3">Database Configuration</span>
+          	<table width="450" border="0">
+            	  <tr>
+              	    <td width="150" class="style8"><span class="reqd">* </span>Database Name : </td>
+              	    <td width="250"><input name="db_name" type="text" id="db_name" size="40" maxlength="40" /></td>
+            	  </tr>
+            	  <tr>
+              	    <td class="style8"><span class="reqd">* </span>Hostname : </td>
+              	    <td><input name="db_host" type="text" id="db_host" size="40" maxlength="40" /></td>
+            	  </tr>
+            	  <tr>
+              	    <td class="style8"><span class="reqd">* </span>Username : </td>
+              	    <td><input name="db_user" type="text" id="db_user" size="40" maxlength="40" /></td>
+            	  </tr>
+            	  <tr>
+              	    <td class="style8"><span class="reqd">* </span>Password : </td>
+              	    <td><input name="db_pass" type="text" id="db_pass" size="40" maxlength="40" /></td>
+            	  </tr>
+            	  <tr>
+              	    <td class="style8" colspan="2">
+			<div id="anc_ckb" style="display:none">
+			Create Database <input type="checkbox" name="create_db" value="y" checked /> 
+			</div>
+            	    </td>
+            	  </tr>
+          	</table>
+	    </td>
+      	  </tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" height="150" border="0">
+  	  <tr>
+    	    <td align="left" valign="top">
+          	<table width="450" border="0">
+            	  <tr>
+            	    <td>
+    	    		<input id="anc_btn" type="button" name="anc_btn" value="Add New Client" style="display:none; color:#0000FF" onClick="createClient(document.admin)" />
+    	    		<input id="mc_btn" type="button" name="mc_btn" value="Modify Client" style="display:none; color:#0000FF" onClick="modifyClient(document.admin)" />
+            	    </td>
+            	  </tr>
+          	</table>
+    	    </td>
+  	  <tr>
+	</table>
+    </td>
+  </tr>
+</table>

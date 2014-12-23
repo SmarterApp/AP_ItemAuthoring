@@ -1,0 +1,109 @@
+<project name="wl-build">
+
+    <property name="confName" value="default"/>
+    <property name="buildBase" value="${basedir}"/>
+    <property name="currentConf" value="${buildBase}/../build_conf/${confName}"/>
+    <property name="confSourceDir" value="${buildBase}/../conf_source"/>
+    
+    <property file="${currentConf}/app.srv.properties"/>
+    <property file="${currentConf}/db.template.properties"/>
+    <property file="${currentConf}/db.properties"/>
+    <property file="${currentConf}/default.properties"/>
+    <property file="${currentConf}/master.properties"/>
+
+    <property name="templateDir" value="${confSourceDir}/templates"/>
+    <property name="externalDeploymentDir" value="../../deploy"/>
+    <property name="warTargetDir" value="${externalDeploymentDir}/${webAppName}.war"/>
+    <property name="wlCreateDsScript" value="wl-create-ds.py"/>
+    <property name="wlDeleteDsScript" value="wl-delete-ds.py"/>
+    
+    <taskdef name="wlst" classname="weblogic.ant.taskdefs.management.WLSTTask">
+        <classpath>
+            <pathelement location="${appServerDir}/server/lib/weblogic.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+        <classpath>
+            <pathelement location="${appServerDir}/server/lib/weblogic.jar"/>
+        </classpath>
+    </taskdef>
+    
+    <macrodef name="filterCopy">
+        <attribute name="file"/>
+        <attribute name="toFile"/>
+        <sequential>
+            <copy file="@{file}" toFile="@{toFile}" overwrite="true">
+                <filterchain>
+                    <expandproperties/>
+                </filterchain>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="createWeblogicDs">
+        <sequential>
+            <filterCopy file="${templateDir}/${wlCreateDsScript}" toFile="${currentConf}/${wlCreateDsScript}"/>
+            <wlst debug="false" failOnError="true" executeScriptBeforeFile="true" fileName="${currentConf}/${wlCreateDsScript}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="deleteWeblogicDs">
+        <sequential>
+            <filterCopy file="${templateDir}/${wlDeleteDsScript}" toFile="${currentConf}/${wlDeleteDsScript}"/>
+            <wlst debug="false" failOnError="true" executeScriptBeforeFile="true" fileName="${currentConf}/${wlDeleteDsScript}"/>
+        </sequential>
+    </macrodef>
+
+    <target name="wl-deploy">
+        <wldeploy action="deploy" verbose="true" debug="true"
+                  name="${webAppName}" source="${warTargetDir}"
+                  user="${wlAdminLogin}" password="${wlAdminPassword}"
+                  adminurl="${wlAdminUrl}" targets="${wlServerName}"/>
+    </target>
+
+    <target name="wl-undeploy">
+        <wldeploy action="undeploy" verbose="true" debug="false"
+                  name="${webAppName}" user="${wlAdminLogin}" password="${wlAdminPassword}"
+                  adminurl="${wlAdminUrl}" failonerror="false"/>
+    </target>
+
+    <target name="create-js-ds-wl">
+        <property name="dsJndiName" value="${wlJasperServerJndiName}"/>
+        <property name="dsUser" value="${js.dbUsername}"/>
+        <property name="dsPassword" value="${js.dbPassword}"/>
+        <property name="dsUrl" value="${js.jdbcUrl}"/>
+        <createWeblogicDs/>
+    </target>
+
+    <target name="delete-js-ds-wl">
+        <property name="dsJndiName" value="${wlJasperServerJndiName}"/>
+        <deleteWeblogicDs/>
+    </target>
+
+    <target name="create-foodmart-ds-wl">
+        <property name="dsJndiName" value="${wlFoodmartJndiName}"/>
+        <property name="dsUser" value="${foodmart.dbUsername}"/>
+        <property name="dsPassword" value="${foodmart.dbPassword}"/>
+        <property name="dsUrl" value="${foodmart.jdbcUrl}"/>
+        <createWeblogicDs/>
+    </target>
+
+    <target name="delete-foodmart-ds-wl">
+        <property name="dsJndiName" value="${wlFoodmartJndiName}"/>
+        <deleteWeblogicDs/>
+    </target>
+
+    <target name="create-sugarcrm-ds-wl">
+        <property name="dsJndiName" value="${wlSugarcrmJndiName}"/>
+        <property name="dsUser" value="${sugarcrm.dbUsername}"/>
+        <property name="dsPassword" value="${sugarcrm.dbPassword}"/>
+        <property name="dsUrl" value="${sugarcrm.jdbcUrl}"/>
+        <createWeblogicDs/>
+    </target>
+
+    <target name="delete-sugarcrm-ds-wl">
+        <property name="dsJndiName" value="${wlSugarcrmJndiName}"/>
+        <deleteWeblogicDs/>
+    </target>
+</project>

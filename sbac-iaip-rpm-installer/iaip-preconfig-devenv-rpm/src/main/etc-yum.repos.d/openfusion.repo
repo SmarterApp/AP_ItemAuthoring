@@ -1,0 +1,9 @@
+# Open Fusion RPM Repository
+[of]
+name = CentOS 6 - Open Fusion Mirror
+baseurl=http://192.168.1.50/yum/openfusion/
+## baseurl=http://10.4.1.116/yum/openfusion/
+## baseurl=http://sbacuser:smart2@sbacartifact1.pacificmetrics.com/yum/openfusion/
+enabled = 1
+##gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-openfusion
+gpgcheck = 0

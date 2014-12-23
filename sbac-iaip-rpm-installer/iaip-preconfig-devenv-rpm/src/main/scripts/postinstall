@@ -1,0 +1,132 @@
+#!/bin/bash
+
+echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+THISHOSTNAME="$(hostname)"
+## THISDOMAINNAME="$(hostname -d)"
+
+echo "SBAC IAIP pre-configuration"
+## echo "Domain:         $THISDOMAINNAME"
+echo "Hostname:       $THISHOSTNAME"
+
+
+## Update the /etc/hosts file with the current hostname
+
+## IPADDRESS=`ifconfig eth0 | grep "inet addr" | cut -f2 -d: | cut -f1 -d' '`
+## IPADDRESS=`hostname  -I | cut -f1 -d' '`
+
+IPADDRESS=$(ip route get 8.8.8.8 | awk '/8.8.8.8/ {print $NF}')
+FULLHOSTNAME=`hostname`
+
+## echo $FULLHOSTNAME  |  cut -d. -f 1 
+
+echo "IPADDRESS:      $IPADDRESS"
+echo "FULLHOSTNAME:   $FULLHOSTNAME"
+
+ONLYHOSTNAME=`echo $FULLHOSTNAME  |  cut -d. -f 1`
+echo "ONLYHOSTNAME:   $ONLYHOSTNAME"
+
+HOSTSLINE="$IPADDRESS $FULLHOSTNAME $ONLYHOSTNAME"
+echo "HOSTSLINE:      $HOSTSLINE"
+
+PREEXISTINGHOSTNAME=`grep "$ONLYHOSTNAME" /etc/hosts`
+
+## echo "PREEXISTINGHOSTNAME: $PREEXISTINGHOSTNAME"
+
+if [[ "$PREEXISTINGHOSTNAME" == "" ]]; then
+  echo "Updating file:  /etc/hosts"
+  echo "Adding line:    $HOSTSLINE"
+  echo $HOSTSLINE >> /etc/hosts
+else
+  echo "Already has hostname in: /etc/hosts"
+fi
+
+
+
+echo "Creating username and groupname: pacific"
+
+groupadd pacific
+adduser pacific -g pacific
+
+
+echo "Creating username and groupname: nfsnobody"
+
+groupadd nfsnobody
+adduser nfsnobody -g nfsnobody
+
+
+echo "Creating groupname: orcacde"
+
+groupadd orcacde
+mkdir /home/orcacde
+chmod 711 /home/orcacde
+
+
+
+## Configure the YUM repository config file for SBAC IAIP
+## if [[ -e /etc/yum.repos.d/sbac-iaip.repo ]]; then
+##     /bin/rm -f /etc/yum.repos.d/sbac-iaip.repo-RPMSAVE
+##     /bin/mv /etc/yum.repos.d/sbac-iaip.repo /etc/yum.repos.d/sbac-iaip.repo-RPMSAVE
+## fi
+
+echo "Adding YUM repositories"
+
+echo "apache24:   /etc/yum.repos.d/apache24.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/apache24.repo /etc/yum.repos.d
+
+echo "atrpms:     /etc/yum.repos.d/atrpms-subset.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/atrpms-subset.repo /etc/yum.repos.d
+
+echo "atomic:     /etc/yum.repos.d/atomic.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/atomic.repo /etc/yum.repos.d
+
+echo "epel:       /etc/yum.repos.d/epel.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/epel.repo /etc/yum.repos.d
+
+echo "openfusion: /etc/yum.repos.d/openfusion.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/openfusion.repo /etc/yum.repos.d
+
+echo "perlcpan:   /etc/yum.repos.d/perlcpan.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/perlcpan.repo /etc/yum.repos.d
+
+echo "sbac-iaip:  /etc/yum.repos.d/sbac-iaip.repo"
+/bin/cp -f /usr/local/orcadata/etc-yum.repos.d/sbac-iaip.repo /etc/yum.repos.d
+
+echo ""
+
+
+# Stop ntpd service
+/sbin/service ntpd stop
+
+# Sync clocks
+echo "Syncing clocks with NTP"
+ntpdate pool.ntp.org
+
+# Enable ntpd service at boot-time
+echo "Enable ntpd service"
+/sbin/chkconfig ntpd --level 345 on || fail "chkconfig failed to enable ntpd service"
+
+# Start ntpd service
+/sbin/service ntpd start || fail "failed to start ntpd service"
+
+
+# Stop iptables service
+## /sbin/service iptables stop || fail "failed to stop iptables service"
+/sbin/service iptables stop
+
+
+## Swap in the iptables config file
+## if [[ -e /etc/sysconfig/iptables ]]; then
+##     /bin/rm -f /etc/sysconfig/iptables-RPMSAVE
+##     /bin/mv /etc/sysconfig/iptables /etc/sysconfig/iptables-RPMSAVE
+## fi
+
+echo "Replacing firewall rules:   /etc/sysconfig/iptables"
+/bin/cp -f /usr/local/orcadata/etc-sysconfig/iptables /etc/sysconfig
+
+echo ""

@@ -1,0 +1,8 @@
+## /usr/sbin/groupadd -f -r jboss 2> /dev/null || :
+## /usr/sbin/useradd -r -m -c "JBoss user" jboss 2> /dev/null || :
+## /usr/sbin/usermod -G jboss jboss 2> /dev/null || :
+
+#if [ ! -f /etc/my.cnf ]; then
+# mkdir /var/run/jboss
+# chown jboss:jboss /var/run/jboss
+#fi

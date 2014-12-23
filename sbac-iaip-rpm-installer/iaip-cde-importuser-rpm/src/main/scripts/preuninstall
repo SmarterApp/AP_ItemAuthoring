@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "rpm preuninstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+# Stop plackservice service
+/sbin/service plackservice stop || fail "failed to stop plackservice service"
+
+
+# Stop httpd service
+/sbin/service httpd stop || fail "failed to stop httpd service"
+
+
+## May need to remove the previously unzipped folder
+# if [[ -d /www/common/mathjax ]]; then
+#   echo "Preuninstall: removing previously unzipped folder: /www/common/mathjax"
+#   /bin/rm -rf "/www/common/mathjax"
+# fi
+
+
+## May need to remove the previously created symbolic links
+# if [[ -h /www/rlicde/images ]]; then
+#   echo "Preuninstall: removing previously created symbolic links under: /www/rlicde"
+#   /bin/unlink /www/rlicde/images
+#   /bin/unlink /www/rlicde/itembank-metafiles
+#   /bin/unlink /www/rlicde/item-import
+#   /bin/unlink /www/rlicde/item-metafiles
+#   /bin/unlink /www/rlicde/item-pdf
+#   /bin/unlink /www/rlicde/passage-pdf
+#   /bin/unlink /www/rlicde/passages
+#   /bin/unlink /www/rlicde/passages-metafiles
+#   /bin/unlink /www/rlicde/project
+#   /bin/unlink /www/rlicde/rubrics
+#   /bin/unlink /www/rlicde/workflow
+# fi

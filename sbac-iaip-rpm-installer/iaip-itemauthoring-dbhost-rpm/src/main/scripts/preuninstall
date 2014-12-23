@@ -1,0 +1,4 @@
+#  echo "rpm preuninstall $1"
+
+# Stop tomcat6 service
+/sbin/service tomcat7 stop || fail "failed to stop tomcat7 service"

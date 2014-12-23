@@ -1,0 +1,97 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="localhost"
+TMPLDOMAINNAME="pacificmetrics.com"
+TMPLSELFHOSTNAME="sbacqa.pacificmetrics.com"
+TMPLDBHOSTNAME="sbacqa.pacificmetrics.com"
+
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+## To derive the database hostname naming convention is flip the "CDE" substring to "DB"
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAME/cde/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/CDE/DB}
+
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/app/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/APP/DB}
+
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAMEALTEREDFORDB}.${THISDOMAINNAME}"
+
+echo "SBAC IAIP webapp postinstall configuration"
+##echo "Domain:          $THISDOMAINNAME"
+echo "Hostname:         $THISHOSTNAME"
+echo "Tmpl Hostname:    $TMPLHOSTNAME"
+echo "Tmpl DB Hostname: $TMPLDBHOSTNAME"
+##echo "Derived DB Host:  $THISHOSTNAMEALTEREDFORDB"
+##echo "Tmpl Domain: $TMPLDOMAINNAME"
+
+
+
+# Set ownership
+echo "Set ownership to 'tomcat' under: /opt/tomee"
+
+/bin/chown -R tomcat:tomcat /opt/tomee
+
+
+# Clear out old exploded webapp folders
+echo "Clear obsoleted folders under:   /opt/tomee/webapps"
+
+/bin/rm -rf "/opt/tomee/webapps/orca-sbac/"
+
+
+##  OBSOLETE
+## ## create symlinks under: /www/rlicde 
+## if [[ ! -e /www/rli_resources/rlicde/images ]]; then
+##   echo "Creating NFS symlinks under: /www/rli_resources/rlicde/"
+##   mkdir -p /www/rlicde
+##   cd /www/rlicde
+##   /bin/ln -s /www/rli_resources/rlicde/images images
+##   /bin/ln -s /www/rli_resources/rlicde/itembank-metafiles itembank-metafiles
+##   /bin/ln -s /www/rli_resources/rlicde/item-import item-import
+##   /bin/ln -s /www/rli_resources/rlicde/item-metafiles item-metafiles
+##   /bin/ln -s /www/rli_resources/rlicde/item-pdf item-pdf
+##   /bin/ln -s /www/rli_resources/rlicde/passage-pdf passage-pdf
+##   /bin/ln -s /www/rli_resources/rlicde/passages passages
+##   /bin/ln -s /www/rli_resources/rlicde/passage-metafiles passages-metafiles
+##   /bin/ln -s /www/rli_resources/rlicde/project project
+##   /bin/ln -s /www/rli_resources/rlicde/rubrics rubrics
+##   /bin/ln -s /www/rli_resources/rlicde/workflow workflow
+## else    
+##   echo "Not creating symlinks. Already existing file: /www/rli_resources/rlicde/images"
+## fi
+
+
+## SSO needs policy files
+## todo -- make this flexible, look for default jre folder first
+
+if [[ -e /usr/java/default/jre/lib/security ]]; then
+  echo "Copying SSO policy files under:  /usr/java/default/jre/lib/security"
+  /bin/cp /usr/local/orcadata/usr-java-default-jre-lib-security/*.jar /usr/java/default/jre/lib/security
+fi
+
+
+## start TomEE service
+/sbin/service tomee start
+
+
+
+#### Add alias helpful for Tomcat webapp admin tasks to .bashrc
+##
+##PREEXISTING_EDITEAGLECONTEXT_ALIAS=`grep editstarcustomjsonconf /root/.bashrc`
+##
+##if [[ "$PREEXISTING_EDITEAGLECONTEXT_ALIAS" == "" ]]; then
+##  echo "Adding shell aliases:  editstarcustomjsonconf"  
+##  echo ""     >> /root/.bashrc
+##  echo "alias editstarcustomjsonconf='vi /opt/tomcat/conf/Catalina/localhost/star-custom.json'"      >> /root/.bashrc
+##else
+##  echo "Already has shell alias 'editstarcustomjsonconf' in: /root/.bashrc"
+##fi

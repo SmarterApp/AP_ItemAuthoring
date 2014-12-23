@@ -1,0 +1,30 @@
+#!/bin/bash
+
+echo "rpm preinstall $1"
+
+echo "Configuring SELinux: setenforce 0"
+
+## disable for this login session
+setenforce 0
+
+# disable permanently
+
+if [ -f /etc/selinux/config ]; then
+  echo "Configuring /etc/selinux/config: SELINUX=disabled"
+  /bin/sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
+fi
+
+
+if [ -f /etc/sysconfig/selinux ]; then
+  echo "Configuring /etc/sysconfig/selinux: SELINUX=disabled"
+  /bin/sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/sysconfig/selinux
+fi
+
+
+if [ ! -d /usr/local/orcadata ]; then
+  echo "Creating directory:  /usr/local/orcadata"
+  mkdir /usr/local/orcadata
+##   chmod -R 700 /usr/local/orcadata
+fi
+
+

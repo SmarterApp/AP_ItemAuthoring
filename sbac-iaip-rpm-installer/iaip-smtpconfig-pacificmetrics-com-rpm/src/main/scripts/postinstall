@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+THISHOSTNAME="$(hostname)"
+
+echo "Configuring postfix email agent"
+
+##inputfile="/usr/local/work-griffin/rpm-starcustom/rli-smtpconfig-pacificmetrics-com-rpm/src/main/etc-postfix/main.cf"
+inputfile="/etc/postfix/main.cf"
+
+## ensure we don't re-edit this file
+alreadyeditted=`grep "EDITED BY RPM" "$inputfile"`
+## echo "alreadyeditted: ${alreadyeditted}"
+
+if [[ "$alreadyeditted" == "" ]]; then
+
+  echo "Updating file: $inputfile"
+  
+  ## preserve a copy
+  /bin/cp -fp "$inputfile" "$inputfile-ORIG"
+
+  outputfile="$inputfile-COPY"
+
+  ## clear out the outputfile
+  echo "" > "$outputfile"
+
+  ## preserve leading spaces in lines by setting "internal field separator" to a newline character
+  IFS=$(echo -e '\n')
+
+  while read -r line
+  do
+    singleline=$line
+    ## echo "Text read from file - $singleline"
+
+    echo "$singleline" >> "$outputfile"
+
+    if [[ "$singleline" == '#mydomain = domain.tld' ]]; then
+      echo "mydomain = pacificmetrics.com" >> "$outputfile"
+      echo "setting mydomain:    pacificmetrics.com"
+    fi
+
+    if [[ "$singleline" == '#myhostname = virtual.domain.tld' ]]; then
+      echo "myhostname = $THISHOSTNAME" >> "$outputfile"
+      echo "setting myhostname:  $THISHOSTNAME"
+    fi
+
+    if [[ "$singleline" == '#myorigin = $mydomain' ]]; then
+      echo "myorigin = pm-sav-mail1.pm.local" >> "$outputfile"
+      echo "setting myorigin:    pm-sav-mail1.pm.local"
+    fi
+
+    if [[ "$singleline" == '#relayhost = [an.ip.add.ress]' ]]; then
+      echo "relayhost = pm-sav-mail1.pm.local" >> "$outputfile"
+      echo "setting relayhost:   pm-sav-mail1.pm.local"
+    fi
+
+  done < "$inputfile"
+
+  ## Add our edited-flag at the bottom of the file   
+  echo "" >> "$outputfile"
+  echo "## EDITED BY RPM" >> "$outputfile"
+  
+  /bin/rm -f "$inputfile"
+  /bin/mv "$outputfile" "$inputfile"
+
+  echo "Restarting postfix email agent"
+  service postfix restart
+else
+  echo "Already edited by RPM: $inputfile"
+fi
+
+
+## Add aliases helpful for email admin tasks to .bashrc
+
+PREEXISTING_TAILMAIL_ALIAS=`grep tailmail /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILMAIL_ALIAS" == "" ]]; then
+  echo "Adding shell aliases: tailmail, editpostfixconf"  
+  echo ""     >> /root/.bashrc
+
+  echo "alias tailmail='tail -f /var/log/maillog'"                                                 >> /root/.bashrc  
+  echo "alias editpostfixconf='vi /etc/postfix/main.cf'"                                                               >> /root/.bashrc
+else
+  echo "Already has shell alias 'tailmail' in: /root/.bashrc"
+fi

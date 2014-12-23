@@ -1,0 +1,203 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>rpm-sbac-iaip</artifactId>
+		<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<packaging>jar</packaging>
+	<artifactId>iaip-orcasbac-webapp-rpm</artifactId>
+	<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+	<version>1.0</version>
+	<name>SBAC IAIP orca-sbac.war Webapp RPM</name>
+	<description />
+
+	<developers>
+		<developer>
+			<id>mark.langbehn</id>
+			<name>Mark Langbehn</name>
+			<email>mlangbehn@pacificmetrics.com</email>
+			<organization>Pacific Metrics</organization>
+			<roles>
+				<role>Creator</role>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Pacific Metrics</name>
+		<url>http://www.pacificmetrics.com/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>codehaus</id>
+			<name>Codehaus Central repo</name>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>artifact</id>
+			<name>snapshots</name>
+			<snapshots><updatePolicy>always</updatePolicy><enabled>true</enabled></snapshots>
+			<url>http://sbacartifact1.pacificmetrics.com/artifactory/libs-snapshot-local</url>
+			<releases><updatePolicy>always</updatePolicy></releases>		
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/src/main/opt-tomee-webapps/</outputDirectory>
+							<includeTypes>war</includeTypes>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.0.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<name>iaip-orcasbac-webapp</name>
+					<version>1.0</version>
+					<release>0</release>
+					<copyright></copyright>
+					<distribution>Pacific Metrics</distribution>
+					<group>Application/System</group>
+					<prefix>/</prefix>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0
+						</defineStatement>
+					</defineStatements>
+					<provides>
+						<provide>iaip-orcasbac-webapp</provide>
+					</provides>
+					<mappings>					
+<!--					
+                        <mapping>
+                            <directory>/opt/tomee/conf</directory>
+                            <configuration>false</configuration>
+                            <filemode>755</filemode>
+                            <username>tomcat</username>
+                            <groupname>tomcat</groupname>
+                            <sources>
+                                <source>
+                                    <location>src/main/opt-tomee-conf</location>
+                                </source>
+                            </sources>
+                        </mapping>
+ -->                       
+                        <mapping>
+                            <directory>/opt/tomee/webapps</directory>
+                            <configuration>false</configuration>
+                            <filemode>755</filemode>
+                            <username>tomcat</username>
+                            <groupname>tomcat</groupname>
+                            <sources>
+                                <source>
+                                    <location>src/main/opt-tomee-webapps</location>
+                                </source>
+                            </sources>
+                        </mapping>
+
+						<mapping>
+							<directory>/usr/local/orcadata/usr-java-default-jre-lib-security</directory>
+							<configuration>false</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/usr-java-default-jre-lib-security</location>
+								</source>
+							</sources>
+						</mapping>
+
+					</mappings>
+					
+					<preinstallScriptlet>
+						<scriptFile>src/main/scripts/preinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+
+<!--					
+					<preremoveScriptlet>
+						<scriptFile>src/main/scripts/preuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+-->
+
+					<postinstallScriptlet>
+						<scriptFile>src/main/scripts/postinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+
+					<postremoveScriptlet>
+						<scriptFile>src/main/scripts/postuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+
+					<requires>
+					    <require>iaip-tomee &gt;= 1.0</require>
+					</requires>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.pacificmetrics</groupId>
+			<artifactId>orca-sbac</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+</project>

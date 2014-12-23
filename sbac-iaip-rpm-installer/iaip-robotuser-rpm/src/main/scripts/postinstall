@@ -1,0 +1,12 @@
+echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}   
+
+# Run the script that creates the "robot" user
+/bin/sh /home/pacific/setup.sh || fail "Could not run the robot-user 'setup.sh' script"
+
+# Delete the setup script, it contains sensitive info
+/bin/rm -f /home/pacific/setup.sh

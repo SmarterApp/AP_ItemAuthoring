@@ -1,0 +1,112 @@
+####################################################
+# jasperserver autodeployment script for Websphere #
+####################################################
+
+global AdminConfig
+
+set cell "${wsCellName}"
+set node "${wsNodeName}"
+if { [llength $cell] == 0 } {
+    set cell [$AdminControl getCell]
+}
+if { [llength $node] == 0 } {
+    set node [$AdminControl getNode]
+}
+
+################################################
+# stop and uninstall application (if it exists)
+################################################
+set existingApplication [$AdminConfig  getid  /Deployment:${webAppName}/]
+if { [llength $existingApplication] > 0 } {
+    puts "${webAppName} already installed. Try to deinstall it"
+    set appManager [$AdminControl queryNames cell=$cell,node=$node,type=ApplicationManager,process=${wsServerName},*]
+    catch {$AdminControl invoke $appManager stopApplication ${webAppName}} r
+    # uninstall the application
+    $AdminApp uninstall ${webAppName}
+
+    # save the new server info
+    $AdminConfig save
+}
+
+################################################
+# install the application
+################################################
+$AdminApp install "${currentConf}/${webAppName}.war" {-appname ${webAppName} -server ${wsServerName} -contextroot /${webAppName} -usedefaultbindings -defaultbinding.force -defaultbinding.virtual.host ${wsDefaultHost} -createMBeansForResources}
+$AdminConfig save
+
+################################################
+#set jvp params
+################################################
+set jvm [$AdminConfig getid /Cell:$cell/Node:$node/Server:${wsServerName}/JavaProcessDef:/JavaVirtualMachine:/]
+$AdminConfig modify $jvm {{genericJvmArguments ""}}
+$AdminConfig modify $jvm {{classpath ""}}
+$AdminConfig save
+
+$AdminConfig modify $jvm {{initialHeapSize "${wsInitialHeapSize}"}}
+$AdminConfig modify $jvm {{maximumHeapSize "${wsMaximumHeapSize}"}}
+$AdminConfig modify $jvm {{genericJvmArguments "${wsJvmOpt}"}}
+$AdminConfig modify $jvm {{classpath "${appServerJdbcDir}/${wsJdbcDriverFileName}"}}
+$AdminConfig save
+
+################################################
+#set classloader params
+################################################
+set dep [$AdminConfig  getid  /Deployment:${webAppName}/]
+set depObject [$AdminConfig showAttribute $dep deployedObject]
+set modules [lindex [$AdminConfig showAttribute $depObject modules] 0]
+# This one will be effective for WS 6.x only
+set classldr6_1 [$AdminConfig showAttribute $modules classloader]
+# This one will be effective for WS 7.x only
+set classldr7 [$AdminConfig showAttribute $depObject classloader]
+$AdminConfig modify $classldr6_1 {{mode PARENT_LAST}}
+$AdminConfig modify $classldr7 {{mode PARENT_LAST}}
+$AdminConfig save
+
+################################################
+#set web container custom properties
+################################################
+proc setCustomProperties { propertyName propertyValue} {
+    global AdminConfig
+    
+	set a1 [list name $propertyName]
+	set a2 [list value $propertyValue]
+	set attrs [list $a1 $a2]
+
+	# get server config
+	set server [$AdminConfig getid /Server:server1/]
+	#get the webcontainer config from the server config
+	set webcontainer [$AdminConfig list WebContainer $server]
+	# get a list of existing webcontainer properties
+	set webcontainerProperties [$AdminConfig list Property $webcontainer]
+	# Check for existing properties with the same name and delete if found
+	if { ${webcontainerProperties} != "" } {
+	    foreach propertyID ${webcontainerProperties} {
+	        set propertyIDName [$AdminConfig showAttribute $propertyID name]
+	        set match [string match $propertyIDName $propertyName]
+	        if { ${match} == 1 } {
+	            $AdminConfig remove $propertyID
+	        }
+	    }
+	}
+	# Create the specified property
+	$AdminConfig create Property $webcontainer $attrs
+}
+
+set props ${wsWebContainerProperties}
+foreach entry ${props} {
+    set name [lindex $entry 0]
+    set value [lindex $entry 1]
+    setCustomProperties $name $value
+}
+
+$AdminConfig save
+
+set isReady 0
+while {$isReady != 1} {
+    set appStatus [$AdminApp isAppReady ${webAppName}]
+    set isReady [string match $appStatus "true"]
+}
+
+# start the application
+set appManager [$AdminControl queryNames cell=$cell,node=$node,type=ApplicationManager,process=${wsServerName},*]
+$AdminControl invoke $appManager startApplication ${webAppName}

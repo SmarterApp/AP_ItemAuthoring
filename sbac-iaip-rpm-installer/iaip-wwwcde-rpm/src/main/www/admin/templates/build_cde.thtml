@@ -1,0 +1,75 @@
+<table width="490" border="0" bordercolor="#0099CC">
+  <tr>
+    <td>
+      <span class="style3">Select A Client : </span>
+      <select name="client_list" onChange="selectClient2(this.value, this.form)">
+	<option value="">--- Current Clients ---</option>
+	<TMPL_LOOP NAME="clients">
+		<option value="<TMPL_VAR NAME="short_name">"><TMPL_VAR NAME="client_name"></option>
+	</TMPL_LOOP>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span class="style3">Select A Branch : </span>
+      <select name="branch_list" onChange="setBranch(this.value)">
+	<option value="">--- Branches ---</option>
+	<TMPL_LOOP NAME="branches">
+		<option value="<TMPL_VAR NAME="label">"><TMPL_VAR NAME="label"></option>
+	</TMPL_LOOP>
+      </select>
+    </td>
+  </tr>
+</table>
+<table width="500" border="0" cellpadding="5" cellspacing="10">
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" border="1" bordercolor="#0099CC">
+      	  <tr>
+            <td><span class="style3">Current Build Info</span>
+		<table width="450" border="0">
+          	  <tr>
+            	    <td width="50%" class="style6">Build Branch: <b><span id="build_branch_lbl">&nbsp;</span></b></td>
+          	  </tr>
+          	  <tr>
+            	    <td width="50%" class="style6">Build #: <b><span id="build_num_lbl">&nbsp;</span></b></td>
+          	  </tr>
+          	  <tr>
+            	    <td width="50%" class="style6">Build Time: <b><span id="build_time_lbl">&nbsp;</span></td>
+          	  </tr>
+        	</table>
+	    </td>
+      	  </tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<table width="475" height="150" border="0">
+  	  <tr>
+    	    <td align="left" valign="top">
+          	<table width="450" border="0">
+            	  <tr>
+            	    <td class="style3">
+    	    		New Build # <input type="text" id="build_num" name="build_num" size="5" maxlength="5" onChange="client['num'] = this.value;" />
+            	    </td>
+            	    <td class="style3" align="right">
+    	    		<input id="build_btn" type="button" name="build_btn" value="Build >>>" style="display:block; color:#0000FF" onClick="doBuild(this.name, this.form)" /> 
+            	    </td>
+            	    <td class="style3">
+			<img src="/admin/images/spinner.gif" id="spinner_gif" style="display:none;" />
+            	    </td>
+            	  </tr>
+          	</table>
+    	    </td>
+  	  </tr>
+  	  <tr>
+    	    <td>
+		<div id="msg_content" class="reqd">&nbsp;</div>
+    	    </td>
+  	  </tr>
+	</table>
+    </td>
+  </tr>
+</table>

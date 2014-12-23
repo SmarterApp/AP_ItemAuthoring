@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <dev_state ds_id="1" ds_name="Assigned"/>
+    <dev_state ds_id="9" ds_name="Rejected"/>
+    <dev_state ds_id="2" ds_name="State:Accepted"/>
+</dataset>

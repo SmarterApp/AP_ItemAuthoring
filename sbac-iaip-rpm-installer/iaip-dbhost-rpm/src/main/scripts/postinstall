@@ -1,0 +1,18 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+# Set ownership
+###/bin/chown -R tomcat:tomcat /opt/tomee
+
+
+# Start tomee service
+###/sbin/service tomee start || fail "failed to start tomee service"
+
+
+# Start httpd service
+###/sbin/service httpd start || fail "failed to start httpd service"

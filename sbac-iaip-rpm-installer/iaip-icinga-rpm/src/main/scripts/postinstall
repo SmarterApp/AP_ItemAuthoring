@@ -1,0 +1,88 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+echo "Creating username and groupname: icinga"
+
+groupadd icinga
+adduser icinga -g icinga
+
+
+## ------------------------------------
+
+
+## Get hostname to be substituted in template config files
+THISHOSTNAME="$(hostname)"
+TMPLHOSTNAME="eagledev.pacificmetrics.com"
+
+echo "Icinga post-install configuration"
+echo "Hostname:    $THISHOSTNAME"
+echo "Tmpl Host:   $TMPLHOSTNAME"
+
+## /usr/bin/replace "$TMPLHOSTNAME" "$THISHOSTNAME" -- /usr/local/orcadata/icingamysql-init/create-user-pacific.sql
+
+
+
+
+## Bootstrap the MySQL database "icinga"
+ROOTUSER="root"
+ROOTPSWD=""
+
+PACIFICUSER="pacific"
+PACIFICPSWD="itemong3r"
+ORCADBDATABASENAME="icinga"
+
+## MyHOST="$(hostname)"
+MyHOST="localhost"
+
+MyDB="mysql"
+MYSQL="$(which mysql)"
+
+mysqlresult=`($MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB -Bse "select distinct User from mysql.user where User = 'root'") 2>&1`
+
+
+if [[ "$mysqlresult" != 'root' ]]
+then
+ROOTPSWD="itemong3r"
+fi
+
+
+mysqlresult=`($MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB -Bse "select distinct User from mysql.user where User = 'icinga'") 2>&1`
+
+echo "icinga user result: $mysqlresult"
+
+
+if [[ "$mysqlresult" != 'icinga' ]]
+then
+echo 'Creating icinga user'
+$MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB < /usr/local/orcadata/icingamysql-init/create-user-icinga.sql || fail "MySQL failed to create user icinga"
+
+echo 'Populating icinga database'
+$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD --database=$ORCADBDATABASENAME < /usr/local/orcadata/icingamysql-init/mysql.sql || fail "MySQL failed to populate initial icinga tables"
+fi
+
+
+echo 'Starting ido2db service'
+
+# Enable ido2db service at boot-time
+/sbin/chkconfig ido2db --level 345 on || fail "chkconfig failed to enable ido2db service"
+
+# Start ido2db service
+/sbin/service ido2db restart || fail "failed to restart ido2db service"
+
+
+echo 'Starting icinga service'
+
+# Enable icinga service at boot-time
+/sbin/chkconfig icinga --level 345 on || fail "chkconfig failed to enable icinga service"
+
+# Start icinga service
+/sbin/service icinga restart || fail "failed to restart icinga service"
+
+# Start httpd service
+/sbin/service httpd restart
+

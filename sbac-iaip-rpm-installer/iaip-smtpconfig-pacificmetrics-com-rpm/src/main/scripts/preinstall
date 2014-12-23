@@ -1,0 +1,11 @@
+# echo "rpm preinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+## stop service if its running
+## /sbin/service tomcat7 stop || fail "failed to stop tomcat7 service"
+

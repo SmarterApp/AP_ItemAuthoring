@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+<TITLE>CDE Admin Tools</TITLE>
+
+<link rel="stylesheet" href="/admin/css/admin_style.css" type="text/css">
+<script src="/admin/js/admin.js"></script>
+</HEAD>
+<body bgcolor="#FFFFFF" topmargin="5" leftmargin="0">
+<CENTER>
+
+<form method="POST" action="index.pl" name="admin">
+<input type="hidden" name="action" value="">
+<input type="hidden" name="sid" value="<TMPL_VAR NAME="sid">">
+<table width="95%" align="center" cellspacing="1" cellpadding="0"  border="0" bgcolor=#000000>
+    <tr>
+	<td bgcolor=#000000>
+	    <table width="100%" cellspacing="0" cellpadding="4" border="0">
+    		<tr>
+		    <td bgcolor="#EEEEEE">
+			<div id ="title">CDE Admin</div>
+			<div id="sub_title">Tools</div>
+		    </td>
+        	    <td bgcolor="#EEEEEE" align=right valign=bottom>
+			<div id ="right_title">orca.pacificmetrics.com</div>
+		    </td>
+    		</tr>
+    		<tr>
+		    <td bgcolor="#DDDDDD">
+			<a href="javascript:doActionLink( document.admin, 'displayMainPage' )">Home</a> |
+			<a href="javascript:logout( document.admin )">Log out</a>
+		    </td>
+		    <td bgcolor="#DDDDDD" align="right">
+    			CDE v1.17.0
+		    </td>
+    		</tr>
+	    </table>
+	</td>
+    </tr>
+</table>
+<br><br>
+<table width=95% cellpadding=0 cellspacing=1 border=0 bgcolor=#000000 align=center>
+   <tr>
+	<td>
+    	    <table width=100% cellpadding=0 cellspacing=1 border=0>
+    		<tr>
+		    <td width=30% valign=top bgcolor=#FFFFFF>
+    			<table width=100% cellpadding=6 cellspacing=0 border=0>
+    			    <tr>
+				<td bgcolor="#333333">
+				    <font face=verdana size=3 color=#FFFFFF><b>Admin Menu</b>
+        			    </font>
+    				</td>
+			    </tr>
+			    <tr>
+    				<td bgcolor="#EEEEEE">
+				    <font face="verdana" size="2" color="#333333">
+				    <b>Manage</b></font>
+    				</td>
+			    </tr>
+    			    <tr>
+    				<td bgcolor="#FFFFFF">
+				    <font face=verdana size=2 color=#333333>
+    				    &raquo; <a href="javascript:runTool( document.admin, 'manageClient' )">Clients</a>
+				    <br>
+    				    &raquo; <a href="javascript:runTool( document.admin, 'buildCDE' )">Builds</a>
+    				</td>
+			    </tr>
+    			    <tr>
+    				<td bgcolor="#EEEEEE">
+				    <font face="verdana" size="2" color="#333333">
+				    <b>Misc.</b></font>
+    				</td>
+			    </tr>
+    			    <tr nowrap>
+    				<td bgcolor="#FFFFFF" nowrap>
+				    <font face=verdana size=2 color=#333333>
+      				    </font>
+    				</td>
+			    </tr>
+			</table>
+    		    </td>
+		    <td width=70% valign=top bgcolor=#FFFFFF>
+			<table width=100% cellpadding=6 cellspacing=0 border=0>
+                	    <tr>
+				<td bgcolor=#333333" colspan="2">
+				    <font face=verdana size=3 color=#FFFFFF>
+                		    <b>Welcome to CDE Administrator Tools</b>
+                		</td>
+			    </tr>
+                	    <tr>
+                		<td bgcolor=#EEEEEE nowrap>
+				    <font face=tahoma color=#333333 size=1>
+					<b>Admin User: <TMPL_VAR NAME="admin_user"></b></font>
+				</td>
+                		<td valign="top" align="right" bgcolor="#EEEEEE">
+				    <TMPL_IF NAME="message">
+				    	<font face="tahoma" color="#FF0000" size="1">
+				    	<TMPL_VAR NAME="message">
+				    </TMPL_IF>
+				</td>
+                	    </tr>
+                	    <tr>
+                		<td bgcolor=#FFFFFF valign=middle align=left colspan="2">
+				  <div id="tools_area" name="tools_area">&nbsp;</div>
+				</td>
+			    </tr>
+			</table>
+		    </td>
+		</tr>
+	    </table>
+      	</td>
+    </tr>
+</table>
+</CENTER>
+</form>
+<script>
+var clients = { <TMPL_LOOP NAME="clients">'<TMPL_VAR NAME="short_name">' : { 'client_name' : '<TMPL_VAR NAME="client_name">', 'short_name' : '<TMPL_VAR NAME="short_name">', 'db_name' : '<TMPL_VAR NAME="db_name">', 'db_host' : '<TMPL_VAR NAME="db_host">', 'db_user' : '<TMPL_VAR NAME="db_user">', 'db_pass' : '<TMPL_VAR NAME="db_pass">', 'web_path' : '<TMPL_VAR NAME="web_path">', 'orca_url' : '<TMPL_VAR NAME="orca_url">', 'common_url' : '<TMPL_VAR NAME="common_url">', 'build_branch' : '<TMPL_VAR NAME="build_branch">', 'build_num' : '<TMPL_VAR NAME="build_num">', 'build_time' : '<TMPL_VAR NAME="build_time">' }<TMPL_VAR NAME="comma"></TMPL_LOOP>
+              };
+</script>
+</BODY>
+</HTML>

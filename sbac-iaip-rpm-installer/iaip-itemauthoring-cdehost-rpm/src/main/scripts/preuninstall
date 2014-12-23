@@ -1,0 +1,4 @@
+#  echo "rpm preuninstall $1"
+
+# Stop tomee service
+/sbin/service tomee stop || fail "failed to stop tomee service"

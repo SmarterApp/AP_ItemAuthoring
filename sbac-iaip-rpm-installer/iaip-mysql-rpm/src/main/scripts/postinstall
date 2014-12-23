@@ -1,0 +1,72 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}   
+
+## Swap in the new MySQL my.cnf file
+mv /etc/my.cnf /etc/my.cnf-RPMSAVE 
+mv /usr/local/orcadata/mysql-init/my.cnf /etc/my.cnf
+
+
+# Enable mysqld service at boot-time
+/sbin/chkconfig mysqld --level 345 on || fail "chkconfig failed to enable mysqld service"
+
+# Start mysqld service
+/sbin/service mysqld restart || fail "failed to restart mysqld service"
+
+
+## Bootstrap the MySQL database user
+ROOTUSER="root"
+ROOTPSWD=""
+
+PACIFICUSER="pacific"
+PACIFICPSWD="itemong3r"
+
+## MyHOST="$(hostname)"
+MyHOST="localhost"
+
+MyDB="mysql"
+MYSQL="$(which mysql)"
+TAR="$(which tar)"
+
+mysqlresult=`($MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB -Bse "select distinct User from mysql.user where User = 'root'") 2>&1`
+
+
+if [[ "$mysqlresult" != 'root' ]]
+then
+ROOTPSWD="itemong3r"
+fi
+
+
+mysqlresult=`($MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB -Bse "select distinct User from mysql.user where User = 'pacific'") 2>&1`
+
+echo "pacific user result: $mysqlresult"
+
+
+if [[ "$mysqlresult" != 'pacific' ]]
+then
+echo "Creating database user"
+$MYSQL --user=$ROOTUSER --host=$MyHOST --password=$ROOTPSWD --database=$MyDB < /usr/local/orcadata/mysql-init/create-user-pacific.sql || fail "MySQL failed to create database user"
+fi
+
+echo "Cleaning up"
+rm -rf /usr/local/orcadata/mysql-init
+
+
+
+
+## Add aliases helpful for MySQL admin tasks to .bashrc
+
+PREEXISTING_TAILMYSQLLOG_ALIAS=`grep tailmysql /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILMYSQLLOG_ALIAS" == "" ]]; then
+  echo "Adding shell aliases: tailmysql, editmysqlconf"  
+  echo ""     >> /root/.bashrc
+
+  echo "alias tailmysql='tail -f -n200 /var/log/mysqld.log'"                                                 >> /root/.bashrc  
+  echo "alias editmysqlconf='vi /etc/my.cnf'"                                                               >> /root/.bashrc
+else
+  echo "Already has shell alias 'tailmysql' in: /root/.bashrc"
+fi

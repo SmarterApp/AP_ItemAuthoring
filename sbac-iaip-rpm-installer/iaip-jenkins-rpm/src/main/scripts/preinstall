@@ -1,0 +1,22 @@
+# echo "rpm preinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Jenkins/Tomcat 7 process runs under its own username
+
+PREEXISTINGTOMCATUSER=`grep "jenkins" /etc/passwd`
+
+##echo "PREEXISTINGTOMCATUSER: $PREEXISTINGTOMCATUSER"
+
+if [[ "$PREEXISTINGTOMCATUSER" == "" ]]; then
+  echo "Creating username and groupname: jenkins"
+
+  groupadd jenkins
+  adduser -d /opt/jenkins-tomcathome jenkins -g jenkins
+  
+else
+  echo "Username 'jenkins' already exists"
+fi

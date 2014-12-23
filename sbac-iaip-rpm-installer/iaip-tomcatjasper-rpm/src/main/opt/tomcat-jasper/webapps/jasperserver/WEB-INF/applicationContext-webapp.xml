@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+  
+  <!-- Tiles 2 integration. -->
+  <bean class="com.jaspersoft.jasperserver.war.tiles2.SpringTilesConfigurer" />
+
+  <!-- pull in properties -->
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>/WEB-INF/hibernate.properties</value>
+        <value>/WEB-INF/js.quartz.properties</value>
+        <value>/WEB-INF/js.spring.properties</value>
+        <value>/WEB-INF/js.scheduling.properties</value>
+        <value>/WEB-INF/mondrian.connect.string.properties</value>
+        <value>/WEB-INF/js.diagnostic.properties</value>
+      </list>
+    </property>
+    <property name="properties">
+      <props>
+        <prop key="resource.root">/WEB-INF</prop>
+        <prop key="bean.olapCacheManager">olapCacheManager</prop>
+      </props>
+    </property>
+  </bean>
+
+    
+  <!-- define datasource for repository -->
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="java:comp/env/${metadata.hibernate.dataSource.jndiName}"/>
+  </bean>
+
+
+  <!-- repositoryService bean: moved from applicationContext.xml                         -->
+  <!-- the bean definition here is unchanged. bean was moved to accommodate non-standard -->
+  <!-- definition that is found for for import-export.                                   -->
+  <bean id="repositoryService" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <!--<property name="proxyInterfaces"><value>com.jaspersoft.jasperserver.api.metadata.common.service.impl.hibernate.HibernateRepositoryService</value></property>-->
+    <property name="interceptorNames">
+      <list>
+        <idref bean="hibernateRepoServiceSecurity"/>
+        <idref bean="permissionsPrefetcher"/>
+        <idref bean="hibernateRepositoryService"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- reportJobsPersistenceService bean: moved from appContext-report-scheduling.xml    -->
+  <!-- the bean definition here is unchanged. bean was moved to accommodate non-standard -->
+  <!-- definition that is found for for import-export.                                   -->
+  <bean id="reportJobsPersistenceService" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="interceptorNames">
+      <list>
+        <idref bean="reportJobSecurity"/>
+        <idref bean="reportJobsPersistenceHibernateService"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="hibernateCompositeDeleteListenerListeners" class="java.util.ArrayList">
+     <constructor-arg>
+        <list>
+            <ref bean="hibernateReportJobsUserDeleteListener"/>
+            <ref bean="hibernateLoggingServiceUserDeleteListener"/>
+            <ref bean="hibernateAccessEventDeleteListener"/>
+            <ref bean="hibernateRoleDeleteListener"/>
+            <ref bean="themeHibernateListener" />
+        </list>
+     </constructor-arg>
+    </bean>
+
+  <bean id="hibernateCompositeSaveOrUpdateListeners" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="dataSnapshotReportUnitListener" />
+                <ref bean="themeHibernateListener" />
+            </list>
+        </constructor-arg>
+   </bean>
+
+  <bean id="hibernateCompositePostUpdateListeners" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                  <ref bean="olapConnectionRepositoryPostUpdateListener"/>
+            </list>
+        </constructor-arg>
+  </bean>
+
+</beans>

@@ -1,0 +1,27 @@
+# echo "rpm preinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+## TomEE process runs under tomcat username
+
+PREEXISTINGTOMCATUSER=`grep "tomcat" /etc/passwd`
+
+##echo "PREEXISTINGTOMCATUSER: $PREEXISTINGTOMCATUSER"
+
+if [[ "$PREEXISTINGTOMCATUSER" == "" ]]; then
+  echo "Creating username and groupname: tomcat"
+
+  groupadd tomcat
+  adduser tomcat -g tomcat
+  
+else
+  echo "Username 'tomcat' already exists"
+fi
+
+
+## stop service if its running
+## /sbin/service tomee stop || fail " failed to stop tomee service"

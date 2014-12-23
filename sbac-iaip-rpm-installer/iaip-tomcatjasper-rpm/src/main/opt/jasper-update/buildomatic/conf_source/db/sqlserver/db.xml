@@ -1,0 +1,111 @@
+<project name="db">
+
+  <import file="${buildBin}/db-common.xml"/>
+
+  <!-- database tasks -->
+
+  <macrodef name="validateDBMSConnection">
+    <attribute name="jdbcUrl" />
+    <attribute name="systemName" default="before" />
+    <attribute name="phase" default="before" />
+    <attribute name="failOnConnectionError" default="true" />
+    <attribute name="failOnDBNotExists" default="false" />
+    <attribute name="failOnUnrecoverableConnectionError" default="true" />
+    <attribute name="connectionErrorOccurredProperty" default="connectionErrorOccurredProperty@{phase}" />
+    <attribute name="errorSqlStateCodeProperty" default="errorSqlStateCodeProperty@{phase}" />
+    <attribute name="errorNativeCodeProperty" default="errorNativeCodeProperty@{phase}" />
+    <attribute name="errorMessageProperty" default="errorMessageProperty@{phase}" />
+
+    <sequential>
+      <var name="dbExists" value="" />
+
+      <runSQL jdbcUrl="@{jdbcUrl}"
+          print="false"
+          onerror="abort"
+          failOnConnectionError="@{failOnConnectionError}"
+          connectionErrorOccurredProperty="@{connectionErrorOccurredProperty}"
+          errorSqlStateCodeProperty="@{errorSqlStateCodeProperty}"
+          errorNativeCodeProperty="@{errorNativeCodeProperty}"
+          errorMessageProperty="@{errorMessageProperty}">
+        SELECT 0;
+      </runSQL>
+      <if>
+        <isset property="@{connectionErrorOccurredProperty}" />
+        <then>
+          <connectionValidationFailureInfoListener
+              errorSqlStateCodeProperty="@{errorSqlStateCodeProperty}"
+              errorNativeCodeProperty="@{errorNativeCodeProperty}"
+              errorMessageProperty="@{errorMessageProperty}" />
+          <if>
+            <and>
+              <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="08S01" />
+              <equals arg1="${@{errorNativeCodeProperty}}" arg2="0" />
+            </and>
+            <then>
+              <if>
+                <isset property="dbInstance" />
+                <then>
+                  <hostDbInstanceNameFailureListener
+                      failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}" />
+                </then>
+                <else>
+                  <hostPortValidationFailureListener
+                      failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}" />
+                </else>
+              </if>
+            </then>
+            <elseif>
+              <and>
+                <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="S0001" />
+                <equals arg1="${@{errorNativeCodeProperty}}" arg2="18456" />
+              </and>
+              <then>
+                <usernamePasswordValidationFailureListener
+                   failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}"
+                   userName="${dbUsername}"
+                   password="${dbPassword}" />
+              </then>
+            </elseif>
+            <elseif>
+              <and>
+                <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="S0001" />
+                <equals arg1="${@{errorNativeCodeProperty}}" arg2="4060" />
+              </and>
+              <then>
+                <dBExistsValidationFailureListener failOnDBNotExists="@{failOnDBNotExists}" />
+              </then>
+            </elseif>
+			<elseif>
+              <and>
+                <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="08001" />
+                <equals arg1="${@{errorNativeCodeProperty}}" arg2="4060" />
+              </and>
+              <then>
+                <dBExistsValidationFailureListener failOnDBNotExists="@{failOnDBNotExists}" />
+              </then>
+            </elseif>
+            <else>
+              <genericConnectionValidationFailureListener
+                  failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}"
+                  errorMessageProperty="@{errorMessageProperty}"  />
+            </else>
+          </if>
+        </then>
+        <else>
+          <connectionOKValidationListener />
+        </else>
+      </if>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="hostDbInstanceNameFailureListener"
+      description="Listens db instance name validation and prints out information about the failure">
+    <attribute name="failOnUnrecoverableConnectionError" />
+
+    <sequential>
+      <failIfUnrecoverable flag="@{failOnUnrecoverableConnectionError}"
+          message="Invalid host/instanceName combination: [${dbHost}]/[${dbInstance}]" />
+    </sequential>
+  </macrodef>
+
+</project>

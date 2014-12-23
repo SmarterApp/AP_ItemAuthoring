@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>rpm-sbac-iaip</artifactId>
+		<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<packaging>jar</packaging>
+	<artifactId>iaip-tomcatjasper-rpm</artifactId>
+	<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+	<version>1.0</version>
+	<name>SBAC IAIP Tomcat for JasperReports RPM</name>
+	<description />
+
+	<developers>
+		<developer>
+			<id>mark.langbehn</id>
+			<name>Mark Langbehn</name>
+			<email>mlangbehn@pacificmetrics.com</email>
+			<organization>Pacific Metrics</organization>
+			<roles>
+				<role>Creator</role>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Pacific Metrics</name>
+		<url>http://www.pacificmetrics.com/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>codehaus</id>
+			<name>Codehaus Central repo</name>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.0.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<name>iaip-tomcatjasper</name>
+					<version>1.0</version>
+					<release>0</release>
+					<copyright></copyright>
+					<distribution>Pacific Metrics</distribution>
+					<group>Application/System</group>
+					<prefix>/</prefix>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0
+						</defineStatement>
+					</defineStatements>
+					<provides>
+						<provide>iaip-tomcatjasper</provide>
+					</provides>
+					<needarch>noarch</needarch>
+					<mappings>
+						<mapping>
+							<directory>/opt</directory>
+							<configuration>false</configuration>
+							<filemode>755</filemode>
+							<username>tomcat</username>
+							<groupname>tomcat</groupname>
+							<sources>
+								<source>
+									<location>src/main/opt</location>
+								</source>
+							</sources>
+						</mapping>
+						<mapping>
+							<directory>/etc</directory>
+							<directoryIncluded>false</directoryIncluded>
+							<configuration>true</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc</location>
+								</source>
+							</sources>
+						</mapping>
+			
+					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>src/main/scripts/preinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+					<postinstallScriptlet>
+						<scriptFile>src/main/scripts/postinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>src/main/scripts/postuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+					<preremoveScriptlet>
+						<scriptFile>src/main/scripts/preuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+
+<!--	
+					<prereqs>
+					    <prereq>jdk &gt;= 1.7</prereq>
+					</prereqs>
+-->
+	
+					<requires>
+					    <require>iaip-mysql-schema-jasperserver &gt;= 1.0</require>
+					    <require>jdk &gt;= 1.7</require>	
+					    <require>redhat-lsb-core &gt;= 4.0</require>	
+					</requires>
+				
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+	</dependencies>
+</project>

@@ -1,0 +1,7 @@
+[sbac-iaip]
+name=SBAC IAIP System
+## baseurl=http://192.168.1.50/yum/sbac-iaip/1.0/
+## baseurl=http://10.4.1.116/yum/sbac-iaip/1.0/
+baseurl=http://sbacuser:smart2@sbacartifact1.pacificmetrics.com/yum/sbac-iaip/1.0/
+enabled=1
+gpgcheck=0

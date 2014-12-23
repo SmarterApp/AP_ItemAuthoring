@@ -1,0 +1,67 @@
+#!/bin/bash
+
+echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="eagledev.pacificmetrics.com"
+
+## This MUST match the SSL Certs to be installed, postinstall script exits if not match
+TMPLDOMAINNAME="pacificmetrics.com"
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+
+echo "SSL Cert post-install configuration"
+echo "Domain:      $THISDOMAINNAME"
+echo "Tmpl Domain: $TMPLDOMAINNAME"
+echo "Hostname:    $THISHOSTNAME"
+## echo "Tmpl Host:   $TMPLHOSTNAME"
+
+
+## Extract the intended domain-name, should be similar to TMPLDOMAINNAME
+## PKGDOMAINNAME = ${RPM_PACKAGE_NAME:14}
+## echo "Pkg Domain:  $PKGDOMAINNAME"
+
+if [ $TMPLDOMAINNAME != $THISDOMAINNAME ]; 
+then
+  echo "Non-matching Domain, exiting"
+##   /bin/rm -rf /usr/local/orcadata/etc-httpd-conf-certs/$TMPLDOMAINNAME/certs
+##   /bin/rm -rf /usr/local/orcadata/etc-httpd-conf-certs/$THISDOMAINNAME/certs
+  exit 0
+fi
+
+
+# Stop httpd service
+## /sbin/service httpd stop || fail "failed to stop httpd service"
+/sbin/service httpd stop
+
+
+## Copy the SSL certificates
+echo "Copy the SSL certificates:  /etc/httpd/conf/certs"
+
+if
+ [[ -e /etc/httpd/conf/certs ]]; then
+    /bin/rm -rf /etc/httpd/conf/certs-RPMSAVE
+    /bin/mv /etc/httpd/conf/certs /etc/httpd/conf/certs-RPMSAVE
+fi
+cp -r /usr/local/orcadata/etc-httpd-conf-certs/$THISDOMAINNAME/certs /etc/httpd/conf/
+
+
+#### Copy the SSL config
+##if
+## [[ -e /etc/httpd/conf.d/ssl.conf ]]; then
+##    /bin/rm -f /etc/httpd/conf.d/ssl.conf-RPMSAVE
+##    /bin/mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf-RPMSAVE
+##fi
+##cp /usr/local/orcadata/etc-httpd-conf.d/ssl.conf /etc/httpd/conf.d/
+
+
+# Start httpd service
+/sbin/service httpd start || fail "failed to restart httpd service"
+

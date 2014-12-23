@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+    <!-- REST v.2-->
+    <context:component-scan base-package="com.jaspersoft.jasperserver.jaxrs, com.jaspersoft.jasperserver.rest"/>
+
+    <bean id="rolesJaxrsService" class="com.jaspersoft.jasperserver.jaxrs.authority.RolesJaxrsService">
+        <property name="service" ref="${bean.userAndRoleService}" />
+    </bean>
+
+    <bean id="usersJaxrsService"  class="com.jaspersoft.jasperserver.jaxrs.authority.UsersJaxrsService">
+        <property name="service" ref="${bean.userAndRoleService}" />
+        <property name="attributesService" ref="${bean.userAttributesService}"/>
+
+        <property name="maxLengthAttrName">
+            <value type="int">255</value>
+        </property>
+        <property name="maxLengthAttrValue">
+            <value type="int">255</value>
+        </property>
+    </bean>
+
+    <!-- REST v.1-->
+    <alias name="${bean.restUtils}" alias="concreteRestUtils"/>
+    <alias name="${bean.restServiceRegistry}" alias="restServiceRegistry"/>
+    <alias name="${bean.userAndRoleManagementService}" alias="concreteUserAndRoleManagementService"/>
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
+
+    <bean id="restServiceRegistryCE" class="com.jaspersoft.jasperserver.rest.MapRESTServiceRegistry">
+        <property name="services">
+            <map>
+                <entry key="login" value-ref="restLoginService"/>
+                <entry key="resources" value-ref="restResourcesService"/>
+                <entry key="job" value-ref="restJobSchedService"/>
+                <entry key="resource" value-ref="restResourceService"/>
+                <entry key="report" value-ref="restReportService"/>
+                <entry key="jobsummary" value-ref="restJobSummarySchedService"/>
+                <entry key="user" value-ref="restUserService"/>
+                <entry key="role" value-ref="restRoleService"/>
+                <entry key="permission" value-ref="restPermissionService"/>
+                <entry key="attribute" value-ref="restProfileAttributeService"/>
+            </map>
+        </property>
+    </bean>
+
+    <util:map id="specialRoles">
+        <entry key="SUPERUSER" value="ROLE_SUPERUSER"/>
+        <entry key="ADMINISTRATOR" value="ROLE_ADMINISTRATOR"/>
+    </util:map>
+
+    <util:list id="rolesToDisablePermissionEditForEveryone">
+        <value>ROLE_SUPERUSER</value>
+    </util:list>
+    <util:list id="rolesToDisablePermissionEditForNonSuperuser">
+        <value>ROLE_ADMINISTRATOR</value>
+    </util:list>
+
+</beans>

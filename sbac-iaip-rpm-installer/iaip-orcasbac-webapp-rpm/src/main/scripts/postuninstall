@@ -1,0 +1,11 @@
+#  echo "rpm postuninstall $1"
+
+echo "Uninstalling iaip-orcasbac-webapp"
+
+# Clear out old exploded webapp folders
+echo "Clear obsoleted folders under:  /opt/tomcat/webapps"
+
+/bin/rm -rf "/opt/tomcat/webapps/star-custom/"
+/bin/rm -rf "/opt/tomcat/webapps/griffin/"
+/bin/rm -rf "/opt/tomcat/webapps/rlicde/"
+/bin/rm -rf "/opt/tomcat/webapps/tei/"

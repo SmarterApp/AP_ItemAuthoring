@@ -1,0 +1,60 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Get hostname to be substituted in template config files
+TMPLDBHOSTNAME="sbacuatdb.pacificmetrics.com"
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+##ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+echo "Tomcat-Jasper postinstall configuration"
+echo "Hostname:         $THISHOSTNAME"
+echo "Tmpl DB Hostname: $TMPLDBHOSTNAME"
+
+
+echo "Updating configuration file: /opt/tomcat-jasper/webapps/jasperserver/META-INF/context.xml"
+echo "                DB hostname: $THISHOSTNAME"
+sed -i "s/$TMPLDBHOSTNAME/$THISHOSTNAME/g"  /opt/tomcat-jasper/webapps/jasperserver/META-INF/context.xml
+
+
+
+## Add aliases helpful for Tomcat admin tasks to .bashrc
+
+PREEXISTING_TAILTOMCAT_ALIAS=`grep tailtomcatjasper /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILTOMCAT_ALIAS" == "" ]]; then
+  echo ""     >> /root/.bashrc  
+  echo "Adding shell alias:   tailtomcatjasper"
+  
+  echo "alias tailtomcatjasper='tail -f -n200 /opt/tomcat-jasper/logs/catalina.out'" >> /root/.bashrc    
+  echo "alias edittomcatjaspercontext='vi /opt/tomcat-jasper/webapps/jasperserver/META-INF/context.xml'"                               >> /root/.bashrc
+  echo "alias psjasper='ps -ef | grep jasper'" >> /root/.bashrc      
+else
+  echo "Already has shell alias 'tailtomcatjasper' in: /root/.bashrc"
+fi
+
+
+
+
+# Set ownership
+echo "Set ownership to 'tomcat' under: /opt/tomcat-jasper"
+
+/bin/chown -R tomcat:tomcat /opt/tomcat-jasper
+
+# Register tomcatjasper service
+echo "Register 'tomcatjasper' service"
+
+/sbin/chkconfig --add tomcatjasper || fail "chkconfig failed to register tomcatjasper"
+
+# Enable tomcatjasper service at boot-time
+/sbin/chkconfig tomcatjasper --level 345 on || fail "chkconfig failed to enable tomcatjasper service"
+
+# Start tomcatjasper service
+##/sbin/service tomcatjasper start || fail "failed to start tomcatjasper service"
+/sbin/service tomcatjasper start

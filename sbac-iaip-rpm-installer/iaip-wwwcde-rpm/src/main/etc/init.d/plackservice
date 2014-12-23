@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# plackservice     This shell script takes care of starting and stopping the Perl plackservice
+#
+# chkconfig: - 81 21
+#
+### BEGIN INIT INFO
+# Provides: plackservice
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Default-Start:
+# Default-Stop:
+# Description: Perl web service
+# Short-Description: start and stop plack service
+### END INIT INFO
+
+## Source function library.
+#. /etc/rc.d/init.d/functions
+
+plackservice_pid() {
+  echo `ps aux | grep 'start_server' | grep -v grep | awk '{ print $2 }'`
+}
+
+start() {
+  pid=$(plackservice_pid)
+  if [ -n "$pid" ] 
+  then
+    echo "Plack start_server is already running (pid: $pid)"
+  else
+    # Start Plack
+    echo "Plack start_server"
+    ulimit -n 100000
+    umask 022
+    /bin/su -p -s /bin/sh apache /www/cdesbac/cgi-bin/run.sh &
+  fi
+
+  return 0
+}
+
+stop() {
+  pid=$(plackservice_pid)
+  if [ -n "$pid" ]
+  then
+    echo "Stopping plackservice pid: $pid"
+    kill $(cat /home/pacific/cdesbac.pid) 
+    sleep 1   
+    
+    ## these two pid/status files should be already removed if the 'kill' worked
+    ## /bin/rm -f /home/pacific/cdesbac.pid
+    ## /bin/rm -f /home/pacific/cdesbac.status
+    echo "plackservice stopped"
+     
+  else
+    echo "plackservice is not running"
+  fi
+ 
+  return 0
+}
+
+case $1 in
+start)
+  start
+;; 
+stop)   
+  stop
+;; 
+restart)
+  stop
+  start
+;;
+status)
+  pid=$(plackservice_pid)
+  if [ -n "$pid" ]
+  then
+    echo "Plack is running with pid: $pid"
+  else
+    echo "Plack is not running"
+  fi
+;; 
+esac    
+exit 0

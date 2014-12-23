@@ -1,0 +1,37 @@
+##############################################################
+# jasperserver jdbc datasource creation script for Websphere #
+#############################################################
+
+global AdminConfig
+
+set cell "${wsCellName}"
+set node "${wsNodeName}"
+if { [llength $cell] == 0 } {
+    set cell [$AdminControl getCell]
+}
+if { [llength $node] == 0 } {
+    set node [$AdminControl getNode]
+}
+
+proc getProvider {AdminConfig} {
+    set providers [$AdminConfig list JDBCProvider]
+    set existingProvider ""
+    foreach provider ${providers} {
+        set providerName [$AdminConfig showAttribute $provider name]
+	    set match [string match $providerName ${wsJdbcProviderName}]
+	    if { ${match} == 1 } {
+	        set existingProvider $provider
+	    }
+    }
+
+    return $existingProvider
+}
+
+set provider [getProvider $AdminConfig]
+
+if { [llength $provider] > 0 } {
+    $AdminConfig remove $provider
+    $AdminConfig save
+} else {
+    puts "${wsJdbcProviderName} doesn't exists."
+}

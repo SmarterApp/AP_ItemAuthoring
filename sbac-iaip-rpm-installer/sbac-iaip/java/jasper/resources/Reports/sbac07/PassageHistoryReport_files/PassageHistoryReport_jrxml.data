@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PassageHistoryReport" language="groovy" pageWidth="800" pageHeight="792" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="caa292f0-e667-48f4-97f7-94cdbe44030d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Reports/qa/PassageHistoryReport"/>
+	<property name="ireport.jasperserver.url" value="http://cde.pacificmetrics.com:7080/jasperserver/services/repository"/>
+	<parameter name="PassageId" class="java.lang.Integer"/>
+    <parameter name="LoggedInUsername" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+     item_bank.`ib_external_id` AS ItemBankExternalId,
+     passage_status.`ps_last_dev_state` AS PassageStatusLastDevState,
+     passage_status.`ps_new_dev_state` AS PassageStatusNewDevState,
+     passage_status.`ps_timestamp` AS PassageStatusTimeStamp,
+     user.`u_username` AS UserName,
+     passage.`p_name` AS PassageName,
+     dev_state.`ds_name` AS DevStateName
+FROM
+     `passage_status` passage_status INNER JOIN `user` user ON passage_status.`ps_u_id` = user.`u_id`
+     INNER JOIN `passage` passage ON passage_status.`p_id` = passage.`p_id`
+     INNER JOIN `item_bank` item_bank ON passage_status.`ib_id` = item_bank.`ib_id` AND item_bank.`ib_id` IN (SELECT up_value FROM user_permission WHERE up_type=1 AND u_id=(SELECT u_id FROM user WHERE u_username=$P{LoggedInUsername}))
+     INNER JOIN `dev_state` dev_state ON passage_status.`ps_new_dev_state` = dev_state.`ds_id`
+WHERE
+     passage_status.`p_id` = $P{PassageId}]]>
+	</queryString>
+	<field name="ItemBankExternalId" class="java.lang.String"/>
+	<field name="PassageStatusLastDevState" class="java.lang.Integer"/>
+	<field name="PassageStatusNewDevState" class="java.lang.Integer"/>
+	<field name="PassageStatusTimeStamp" class="java.sql.Timestamp"/>
+	<field name="UserName" class="java.lang.String"/>
+	<field name="PassageName" class="java.lang.String"/>
+	<field name="DevStateName" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="95e782d0-a9a4-401c-b307-e70361ac3a72" x="326" y="0" width="156" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dev State]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="212a5c44-10c3-4c7a-8702-0c7f79ee0055" x="641" y="0" width="119" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date/Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c6936b2b-d15c-48f3-a378-a722f7d06401" x="482" y="0" width="159" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3134a504-ebc0-41f9-a0ba-f37d96e3b8eb" x="0" y="0" width="163" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Program]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f8ba8eec-44ab-445e-bf56-6f19c9f48479" x="163" y="0" width="163" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Passage Name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="abc9e4d7-88f5-4793-b7f8-38eb88bdf1c4" x="326" y="0" width="156" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DevStateName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b2f00f9b-dc66-4cd6-a74b-cfba765f4544" x="641" y="0" width="119" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PassageStatusTimeStamp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7276821e-69a5-4cd3-9c9e-941459d61d17" x="482" y="0" width="159" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UserName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f61ca0bc-a6fb-4f95-bec9-fd3879d3e711" x="0" y="0" width="163" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemBankExternalId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="32a97a7b-4aee-4ff5-a166-27f7010564fd" x="163" y="0" width="163" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PassageName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

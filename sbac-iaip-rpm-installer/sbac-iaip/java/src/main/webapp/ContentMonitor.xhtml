@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+<h:head>
+	<title>Content Monitor</title>
+	<h:outputStylesheet name="css/basic.css"/>
+    <script type="text/javascript" src="/common/js/jquery-1.4.2.min.js"></script>    
+    <script type="text/javascript" src="/common/js/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="resources/javascript/common.js"></script>
+    <script>
+	    function clearErrors() {
+			var errorMessagesBlock = document.getElementById("errorMessages");
+			if (errorMessagesBlock) {
+				errorMessagesBlock.style.display = 'none';
+			}
+		}	    
+	    
+		
+	</script>
+	<script type="text/javascript">
+		$.noConflict();
+		jQuery(document).ready(function($) {
+			//console.log('inside ready function');
+	   });
+	</script>
+</h:head>
+
+
+      
+<h:body onclick="clearErrors();">
+
+    <h2>Content Monitor</h2>
+    <h:messages id="errorMessages" class="error"/>
+    <h:form id="mainForm">
+    	<table style="width:100%; border-bottom: 2px solid lightgray; padding-bottom: 5px; margin-bottom: 5px" cellspacing="2" cellpadding="2">
+			<tr>
+				<td>
+					<h:outputText value="Organization: "/>
+				</td>
+				<td>
+					<h:selectOneMenu value="#{contentMonitor.selectedOrganization}" style="width:160px;">
+					   <f:selectItem itemValue="" itemLabel="Organization"/>
+					   <f:selectItems value="#{contentMonitor.organizationMap.entrySet()}" var="organization"  
+					   itemValue="#{organization.key}" itemLabel="#{organization.value}"/>
+					</h:selectOneMenu>	
+				</td>
+			 	<td>	
+					<h:outputText value="Program: "/>
+			 	</td>
+			 	<td>			
+					<h:selectOneMenu value="#{contentMonitor.selectedItemBank}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="Program"/>
+				   		<f:selectItems value="#{contentMonitor.itemBankNamesMap}" var="itembank"  
+					   itemValue="#{itembank.key}" itemLabel="#{itembank.value}"/>
+					</h:selectOneMenu>
+				</td>		
+				<td>
+					<h:outputText value="Move Type: "/>
+				</td>
+				<td>
+					<h:selectOneMenu value="#{contentMonitor.selectedMoveType}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="Move Type"/>
+			   			<f:selectItems value="#{contentMonitor.itemMoveTypeMap.entrySet()}" var="type"
+			   			itemValue="#{type.key}" itemLabel="#{type.value.name}" />
+					</h:selectOneMenu>
+				</td>			
+				<td>
+					<h:outputText value="Destination: "/>
+				</td>
+				<td>
+					<h:inputText size="21" value="#{contentMonitor.searchDestinationText}" />
+				</td>
+			</tr>	
+			<tr>
+				<td>
+					<h:outputText value="User: "/>
+				</td>
+				<td>
+					<h:selectOneMenu value="#{contentMonitor.selectedUser}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="User"/>
+			   			<f:selectItems value="#{contentMonitor.userMap.entrySet()}" var="user"
+			   			itemValue="#{user.key}"
+			   			itemLabel="#{user.value}"  />
+					</h:selectOneMenu>
+				</td>
+				<td>
+					<h:outputText value="Status: "/>
+				</td>
+				<td>
+					<h:selectOneMenu value="#{contentMonitor.selectedStatus}" style="width:160px;">
+					    <f:selectItem itemValue="" itemLabel="Status"/>
+			   			<f:selectItems value="#{contentMonitor.itemMoveStatusMap.entrySet()}" var="source"
+			   			itemValue="#{source.key}"
+			   			itemLabel="#{source.value.status}"/>
+					</h:selectOneMenu>
+				</td>
+				<td>
+					<h:outputText value="Source: "/>
+				</td>
+				<td>
+					<h:inputText size="21" value="#{contentMonitor.searchSourceText}" />
+				</td>
+				<td>
+					<h:outputText value="File: "/>
+				</td>
+				<td>
+					<h:inputText size="21" value="#{contentMonitor.searchFileText}" />
+				</td>
+			</tr>
+			<tr>
+				<td cellspan="2">
+					<h:commandButton value="Apply" action="#{contentMonitor.doFilter}"/>
+				</td>
+				<td cellspan="2">
+					<h:commandButton value="Reset" action="#{contentMonitor.clearFilter}"/>
+				</td>
+			</tr>
+		</table>	
+    </h:form>
+    
+    <h:form id="tableForm" style="height: 100%">
+		<table style="width: 100%; height: 100%">
+			
+			<tr><td align="center">
+			<t:dataTable id="data"
+			        styleClass="scrollerTable"
+			        headerClass="standardTable_Header"
+			        footerClass="standardTable_Header"
+			        rowClasses="standardTable_Row1,standardTable_Row2"
+			        columnClasses="metafilesTable_Column1,metafilesTable_Column2,metafilesTable_Column3,metafilesTable_Column4,metafilesTable_Column5,metafilesTable_Column6"
+			        var="itemMoveMonitor"
+			        value="#{contentMonitor.allItemMoveMonitors}"
+			        preserveDataModel="false"
+			        first="#{contentMonitor.firstRow}"
+			        rows="15"
+			        sortColumn="#{contentMonitor.sortField}"
+			        sortAscending="#{contentMonitor.sortAscending}"
+			   >	
+                    
+			   
+			   <h:column>
+                        <f:facet name="header">
+                            <t:commandSortHeader columnName="status" arrow="true">
+					          <h:outputText value="Source" />
+					         </t:commandSortHeader> 
+                        </f:facet>
+                        <h:outputText value="#{itemMoveMonitor.source}" />
+                    </h:column>				
+			   <h:column>
+			       <f:facet name="header">
+			       	<t:commandSortHeader columnName="destination" arrow="true">
+			          <h:outputText value="Destination" />
+			         </t:commandSortHeader>   
+			       </f:facet>
+			       <div style="width: 140px;" >
+			       		<h:outputText value="#{itemMoveMonitor.destination}" />
+			       </div>
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			       	<t:commandSortHeader columnName="moveTypeAsString" arrow="true">
+			          <h:outputText value="Move Type" />
+			        </t:commandSortHeader>  
+			       </f:facet>
+			       <div style="width: 100px;" >
+			       <h:outputText value="#{itemMoveMonitor.moveTypeAsString}" />
+			       </div>
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			       	<t:commandSortHeader columnName="timestampAsString" arrow="true">
+			          <h:outputText value="Time of Move" />
+			        </t:commandSortHeader>  
+			       </f:facet>
+			       <div style="width: 100px;" >
+			       <h:outputText value="#{itemMoveMonitor.timestampAsString}" />
+			       </div>
+			   </h:column>
+			   
+			   <h:column>
+			       <f:facet name="header">
+			         <t:commandSortHeader columnName="organizationAsString" arrow="true">
+			          <h:outputText value="Organization" />
+			         </t:commandSortHeader> 
+			       </f:facet>
+			       <h:outputText value="#{itemMoveMonitor.organizationAsString}" />
+			   </h:column>
+			   
+			   <h:column>
+			       <f:facet name="header">
+			         <t:commandSortHeader columnName="programAsString" arrow="true">
+			          <h:outputText value="Program" />
+			         </t:commandSortHeader> 
+			       </f:facet>
+			       <h:outputText value="#{itemMoveMonitor.programAsString}" />
+			   </h:column>
+			   
+			   <h:column>
+			       <f:facet name="header">
+			         <t:commandSortHeader columnName="fileName" arrow="true">
+			          <h:outputText value="File" />
+			         </t:commandSortHeader> 
+			       </f:facet>
+			        <div style="width: 240px;" >
+			       		<h:outputText value="#{itemMoveMonitor.fileName}" />
+			       	</div>
+			   </h:column>
+			   
+			    <h:column>
+			       <f:facet name="header">
+			       	<t:commandSortHeader columnName="userNameAsString" arrow="true">
+			          <h:outputText value="User" />
+			        </t:commandSortHeader>  
+			       </f:facet>
+			       <h:outputText value="#{itemMoveMonitor.userNameAsString}" />
+			   </h:column>
+			
+			   <h:column>
+			       <f:facet name="header">
+			       	 <t:commandSortHeader columnName="statusAsString" arrow="true">
+			          <h:outputText value="Status" />
+			         </t:commandSortHeader> 
+			       </f:facet>
+			       <div style="width:70px;">
+			       <h:outputText value="#{itemMoveMonitor.statusAsString}" />
+			       </div>
+			   </h:column>
+			   
+			   
+			   
+			   <h:column>
+			       <f:facet name="header">
+			          <h:outputText value="Action" />
+			       </f:facet>
+			       <h:selectOneMenu value="#{contentMonitor.itemAction}" rendered="#{itemMoveMonitor.moveTypeAsString eq 'Import'}" onchange="submit()" valueChangeListener="#{contentMonitor.onChange}">
+			       		<f:attribute name="itemMonitorId" value="#{itemMoveMonitor.id}" />
+			       		<f:attribute name="itemBankId" value="#{itemMoveMonitor.itemBank.id}" />
+						<f:attribute name="packageName" value="#{itemMoveMonitor.fileName}" />
+						
+			    		<f:selectItem itemValue="" itemLabel="-- Options --"/>
+	   					<f:selectItem itemValue="Detail" itemLabel="Detail" />
+	   					<f:selectItem itemValue="Rollback" itemLabel="Rollback" />
+				   </h:selectOneMenu>
+				   <h:selectOneMenu value="#{contentMonitor.itemAction}" rendered="#{itemMoveMonitor.moveTypeAsString eq 'Export' and itemMoveMonitor.destination eq 'Test Item Bank'}" onchange="submit()" valueChangeListener="#{contentMonitor.onChange}">
+			       		<f:attribute name="itemMonitorId" value="#{itemMoveMonitor.id}" />
+			       		<f:attribute name="itemBankId" value="#{itemMoveMonitor.itemBank.id}" />
+						<f:attribute name="packageName" value="#{itemMoveMonitor.fileName}" />
+						
+			    		<f:selectItem itemValue="" itemLabel="-- Options --"/>
+	   					<f:selectItem itemValue="Detail" itemLabel="Detail" />
+				   </h:selectOneMenu>
+			   </h:column>
+			   
+			</t:dataTable>
+		</td></tr>
+		<tr><td valign="bottom" align="center" style="padding-top: 7px">
+
+                <t:dataScroller id="scroll_2"
+                        for="data"
+                        rowsCountVar="rowsCount"
+                        displayedRowsCountVar="displayedRowsCountVar"
+                        firstRowIndexVar="firstRowIndex"
+                        lastRowIndexVar="lastRowIndex"
+                        pageCountVar="pageCount"
+                        immediate="true"
+                        pageIndexVar="pageIndex"
+                        >
+                    <h:outputFormat value="{0} Content Monitor found, displaying {1} from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                        <f:param value="#{rowsCount}" />
+                        <f:param value="#{displayedRowsCountVar}" />
+                        <f:param value="#{firstRowIndex}" />
+                        <f:param value="#{lastRowIndex}" />
+                        <f:param value="#{pageIndex}" />
+                        <f:param value="#{pageCount}" />
+                    </h:outputFormat>
+                </t:dataScroller>	
+		
+		        <t:dataScroller id="scroll_1"
+		                for="data"
+		                fastStep="5"
+		                pageCountVar="pageCount"
+		                pageIndexVar="pageIndex"
+		                styleClass="scroller"
+		                paginator="true"
+		                paginatorMaxPages="5"
+		                paginatorTableClass="paginator"
+		                paginatorActiveColumnStyle="font-weight:bold;"
+		                immediate="true"
+		                
+		                disableFacetLinksIfFirstPage="true"
+		                disableFacetLinksIfLastPage="true"
+		                actionListener="#{contentMonitor.scrollerAction}"
+		                >
+		            <f:facet name="first" >
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/first.png"/>
+		            </f:facet>
+		            <f:facet name="last">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/last.png"/>
+		            </f:facet>
+		            <f:facet name="previous">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/back.png"/>
+		            </f:facet>
+		            <f:facet name="next">
+		                <t:graphicImage style="height: 16px; width: 16px;" url="images/forward.png"/>
+		            </f:facet>
+		        </t:dataScroller>
+                
+		    </td></tr>
+		
+		</table>
+		
+	</h:form>
+    
+
+</h:body>
+</html>

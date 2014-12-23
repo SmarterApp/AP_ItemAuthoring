@@ -1,0 +1,51 @@
+#!/bin/bash
+
+echo "rpm preinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+
+# Stop plackservice service
+### /sbin/service plackservice stop || fail "failed to stop plackservice service"
+/sbin/service plackservice stop
+
+# Remove potential stale pid/status file
+/bin/rm -f /home/pacific/cdesbac.pid
+/bin/rm -f /home/pacific/cdesbac.status
+
+
+## HACK -- fix this -- we should do /cde home folder for this 
+chmod -R a+rwx /home/pacific
+
+
+# Stop httpd service
+### /sbin/service httpd stop || fail "failed to stop httpd service"
+/sbin/service httpd stop
+
+
+
+## May need to remove the previously unzipped folder
+if [[ -e /www/common/mathjax ]]; then
+  echo "Preinstall: removing previously unzipped folder: /www/common/mathjax"
+  /bin/rm -rf "/www/common/mathjax"
+fi
+
+
+## May need to remove the previously created symbolic links
+if [[ -h /www/cdesbac/images ]]; then
+  echo "Preinstall: removing previously created symbolic links under: /www/cdesbac"
+  /bin/unlink /www/cdesbac/images
+  /bin/unlink /www/cdesbac/itembank-metafiles
+  /bin/unlink /www/cdesbac/item-import
+  /bin/unlink /www/cdesbac/item-metafiles
+  /bin/unlink /www/cdesbac/item-pdf
+  /bin/unlink /www/cdesbac/passage-pdf
+  /bin/unlink /www/cdesbac/passages
+  /bin/unlink /www/cdesbac/passages-metafiles
+  /bin/unlink /www/cdesbac/project
+  /bin/unlink /www/cdesbac/rubrics
+  /bin/unlink /www/cdesbac/workflow
+fi

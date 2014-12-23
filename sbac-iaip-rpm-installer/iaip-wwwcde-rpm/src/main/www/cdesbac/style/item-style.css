@@ -1,0 +1,13 @@
+body {
+  font-family: Arial;
+	font-size: 12pt;
+}
+
+table.Fraction {
+  display: inline;
+  vertical-align:middle;
+}
+
+span.nowrap {
+  background-color: #00CCCC;
+}

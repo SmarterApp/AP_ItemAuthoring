@@ -1,0 +1,585 @@
+
+/* Overall Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+body {
+	background: #EDEDDD url(/images/bg_pattern.gif) repeat-y top left;
+	font-family: 'Lucida Grande','Lucida Sans Unicode',arial,verdana,sans-serif;
+	margin: 0;
+	padding: 0;
+	color: #666;
+	}
+
+/* Layout Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#container {
+	background: transparent url(/images/bg_rel-one.gif) no-repeat bottom right;
+	margin: 0;
+	padding: 0;
+	}
+	
+#menu {
+	position: absolute;
+	margin-left: 0px;
+	top: 0px;
+
+	}
+
+#flash {
+	position: absolute;
+	margin-left: 231px;
+	top: 182px;
+	}
+	
+#far_right {
+	background: transparent url(/images/bg_pattern.gif) repeat top left;
+	margin: 0;
+	padding: 0;
+	border-bottom: 2px solid #fff
+	}
+
+#supportingText {
+	background: transparent url(/images/bg_left.gif) repeat-y top left;
+	margin: 0;
+	padding: 0;
+	}
+
+#header {
+	background: #EDEDDD url(/images/bg_header.jpg) repeat-y top left;
+	color: #666;
+	height: 180px;
+	margin: 0;
+	border-bottom: 2px solid #fff;
+	}
+
+#header h1 {
+	display: none;
+	}
+
+#header h2 {
+	display: none;
+	}
+
+#sub_head {
+	height: 166px;
+	width: 735px;
+	background: #EDEDDD url(/images/bg_sub_header.jpg) no-repeat top right;
+	color: #fff;
+	border-bottom: 2px solid #fff;
+	margin: 0;
+	}
+
+#sub_head p.p1 {
+	padding: 14px;
+	margin: 0;
+	width: 188px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 160px;	 /* Actual value for conformant browsers */	
+	}
+
+html>#sub_head p.p1 {
+	width: 160px; /* Be nice to Opera */
+	}
+
+#sub_head p.p2 {
+	padding: 0px 14px 14px 14px;
+	margin: 0;
+	width: 158px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 130px;	 /* Actual value for conformant browsers */	
+	}
+
+html>#sub_head p.p2 {
+	width: 130px; /* Be nice to Opera */
+	}
+	
+#banners {
+    position: absolute;
+	margin-left: 735px;
+	background: #DBDBBB url(/images/bg_tile.gif) top left;
+	color: #fff;
+	border-right: 2px solid #fff;
+	border-left: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	border-top: 2px solid #fff;
+	padding-bottom: 16px;
+	width: 210px;  /* False value for IE4-5.x/Win */	
+	height:800px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 210px;	 /* Actual value for conformant browsers */	
+	height: 800px;	 /* Actual value for conformant browsers */	
+	}
+	
+	html>#banners {
+	width: 200px; /* Be nice to Opera */
+	}
+
+#section_one {
+	margin-left: 233px;
+	background: #9AAFC5 url(/images/bg_preamble.gif) no-repeat top right;
+	color: #fff;
+	border-right: 2px solid #fff;
+	padding-bottom: 16px;
+	width: 505px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 502px;	 /* Actual value for conformant browsers */	
+	}
+	
+	html>#preamble {
+	width: 500px; /* Be nice to Opera */
+	}
+
+#section_two, #section_three, #section_four {
+	margin-left: 233px;
+	border: 1px solid #fff;
+	background: #EDEDDD;
+	color: #666;
+	margin-bottom: 2px;
+	width: 505px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 500px;	 /* Actual value for conformant browsers */	
+	}
+
+html>#section_two, #section_three {
+	width: 498px; /* Be nice to Opera */
+	}
+	
+	#section_four {
+	margin-left: 233px;
+	border: 1px solid #fff;
+	background: #EDEDDD;
+	color: #666;
+	margin-bottom: 0;
+	padding-bottom: 16px;
+	width: 500px;  /* False value for IE4-5.x/Win */	
+	font-size: 10px;
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 500px;	 /* Actual value for conformant browsers */	
+	}
+
+#section_five {
+	margin-left: 233px;
+	border: 1px solid #fff;
+	background: #EDEDDD;
+	color: #666;
+	margin-bottom: 0;
+	padding-bottom: 16px;
+	width: 500px;  /* False value for IE4-5.x/Win */	
+	font-size: 10px;
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 500px;	 /* Actual value for conformant browsers */	
+	}
+	
+	html>#section_five {
+	width: 498px; /* Be nice to Opera */
+	}
+	
+	#section_six {
+	margin-left: 233px;
+	border: 1px solid #fff;
+	background: #EDEDDD;
+	color: #666;
+	margin-bottom: 0;
+	padding-bottom: 16px;
+	width: 500px;  /* False value for IE4-5.x/Win */	
+	font-size: 10px;
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 500px;	 /* Actual value for conformant browsers */	
+	}
+	
+	html>#section_six {
+	width: 498px; /* Be nice to Opera */
+	}
+	
+	#section_seven {
+	margin-left: 233px;
+	border: 1px solid #fff;
+	background: #EDEDDD;
+	color: #666;
+	margin-bottom: 0;
+	padding-bottom: 16px;
+	width: 500px;  /* False value for IE4-5.x/Win */	
+	font-size: 10px;
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width: 500px;	 /* Actual value for conformant browsers */	
+	}
+	
+	html>#section_even {
+	width: 498px; /* Be nice to Opera */
+	}
+
+#footer {
+	border-top: 2px solid #fff;
+	background: #EDEDDD url(/images/bg_footer.gif) no-repeat top left;
+	color: #fff;
+	padding: 14px 0 8px 252px;
+	height: 36px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	height: 12px; /* Actual value for conformant browsers (IE6 needs a height value to display the background correctly. Don't even start...) */
+	}
+
+html>#footer {
+	height: 12px; /* Be nice to Opera */
+	}
+
+#left_section {
+	position: absolute;
+	background: #DBDBBB url(/images/bg_tile.gif) top left;
+	color: #666;
+	top: 350px;
+	padding: 12px;
+	border-right: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	width: 231px;  /* False value for IE4-5.x/Win */
+	height: 600px;
+	voice-family: "\"}\""; 
+	width: 207px;	 /* Actual value for conformant browsers */	
+	height: %100px;	 /* Actual value for conformant browsers */	
+	}
+
+html>#left_section {
+	width: 207px; /* Be nice to Opera */
+	}
+
+#larchives, #lfavorites, #lresources {
+	background: #C5D6E8;
+	color: #666;
+	border: 2px solid #fff;
+	padding: 12px;
+	margin: 0 0 12px 0;
+	}
+
+#left_selection {
+	background: #C5D6E8 url(/images/bg_left_selection.gif) no-repeat top right;
+	color: #666;
+	border: 2px solid #fff;
+	padding: 12px;
+	margin: 0 0 12px 0;
+	}
+
+/* Text Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+p {
+	font-size: 11px;
+	text-align: justify;
+	}
+
+#section_one p, #sub_head p.p2 {
+	line-height: 1.5;
+	color: #fff;
+	background: transparent;
+	}
+
+#section_one p {
+	font-size: 10px;
+	width: 250px;
+	text-align: justify;
+	}
+
+#section_one p.p1 {
+	margin: 16px 18px 10px 18px;
+	}
+
+#section_one p.p2 {
+	margin: 0 18px 10px 18px;
+}
+
+#section_one p.p3 {
+	padding: 0;
+	margin: 0 18px 0 18px;
+	}
+
+/* First Paragraphs */
+
+#section_two p.p1, #section_three p.p1, #section_five p.p1, #section_six p.p1, #section_seven p.p {
+	padding: 0;
+	margin: 16px 18px 12px 18px;
+	}
+
+/* Intermediate Paragraphs */
+
+#section_three p.p2, #section_three p.p3, #section_five p.p2, #section_five p.p3, #section_five p.p4 {
+	padding: 0;
+	margin: 12px 18px 12px 18px;
+	}
+
+/* Last Paragraphs */
+
+#section_two p.p2, #section_three p.p4 {
+	padding: 0;
+	margin: 0px 18px 16px 18px;
+	}
+
+#section_five p.p5 {
+	margin: 0px 18px 0px 18px;
+	padding: 0;
+	}
+
+/* One Paragraph */
+
+#section_four p.p1 {
+	margin: 16px 18px 16px 18px;
+	}
+
+#supportingText p {
+	line-height: 1.5;
+	}
+
+#sub_head p.p1 {
+	font-size: 9px;
+	background: transparent;
+	color: #999;
+	text-align: left;
+	}
+
+#sub_head p.p2 {
+	font-size: 9px;
+	color: #999;
+	text-align: left;
+	}
+
+#footer {
+	font-size: 9px;
+	font-family: 'Arial', Helvetica, sans-serif; /* Looks slightly better  */
+	}
+
+/* Lists Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#left_section ul {
+	font-size: 10px;
+	list-style:none;
+	margin: 0;
+	padding: 0;
+	}
+
+#left_section ul li {
+	background:   url(/images/bullet_gen.gif) no-repeat 2px 3px;
+	margin: 0;
+	padding: 0 0 5px 15px;
+	line-height: 12px;
+	color: #999;
+	}
+
+#left_section #left_selection li {
+	background:   url(/images/bullet_design.gif) no-repeat 2px 3px;
+	font-size: 9px;
+	}
+
+#left_section #lfavorites li {
+	background:   url(/images/bullet_fav.gif) no-repeat;
+	font-size: 9px;
+	}
+
+#left_section #left_selection a:link, #left_section #left_selection a:visited, #left_section #lfavorites a:link, #left_section #lfavorites a:visited {
+	display: block;
+	}
+
+#left_section #left_selection a.c:link, #left_section #left_selection a.c:visited, #left_section #lfavorites a.c:link, #left_section #lfavorites a.c:visited {
+	display:inline;
+	}
+
+#larchives li, #lresources li {
+	text-transform: lowercase;
+	}
+
+
+/* Links Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+a, a:link, a:visited {
+	background: transparent;
+	color: #333;
+	text-decoration: underline;
+	}
+
+a:hover {
+	background: transparent;
+	color: #333;
+	text-decoration: none;
+	}
+
+#sub_head a, #sub_head a:link, #sub_head a:visited {
+	background: transparent url(/images/download.gif) no-repeat 0 4px;
+	color: #fff;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding-left: 8px;
+	}
+
+#sub_head a:hover {
+	text-decoration: underline;
+	}
+
+#left_section a, #left_section a:link, #left_section a:visited {
+	background: transparent;
+	color: #444;
+	text-decoration: none;
+	}
+
+#left_section a:hover {
+	background: transparent;
+	color: #333;
+	text-decoration: underline;
+	}
+
+#left_section a.c, #left_section a.c:link, #left_section a.c:visited {
+	background: transparent;
+	color: #666;
+	text-decoration: none;
+	}
+
+#left_section a.c:hover {
+	background: transparent;
+	color: #333;
+	text-decoration: underline;
+	}
+
+#left_section #left_selection a {
+	font-size: 10px;
+	}
+
+#left_section #left_selection a.c {
+	font-size: 9px;
+	text-transform: lowercase;
+	}
+
+#footer a, #footer a:link, #footer a:visited {
+	background: transparent url(/images/arrow_footer.gif) no-repeat 0 2px;
+	color: #fff;
+	text-decoration: none;
+	text-transform: uppercase;
+	padding-left: 8px;
+	}
+
+#footer a:hover {
+	text-decoration: underline;
+	}
+
+
+/* Headings Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+h3 {
+	margin-bottom: 0px;
+	}
+
+h3 span {
+	display: none;
+	}
+
+#left_section h3 {
+	width: 150px;
+	height: 20px;
+	margin-top: 20px;
+	}
+
+#section_one h3 {
+	background: transparent url(/images/title_road.gif) no-repeat top left;
+	width: 500px;
+	height: 34px;
+	border-bottom: 2px solid #fff;
+	margin: 0;
+	height: 36px;  /* False value for IE4-5.x/Win */	
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	height: 34px; /* Actual value for conformant browsers */	
+	}
+
+html>#section_one h3 {
+	height: 34px; /* Be nice to Opera */
+	}
+
+#section_two h3, #section_three h3, #section_four h3, #section_five h3, #section_six h3, #section_seven h3 {
+	width: 498px;
+	height: 30px;
+	margin: 0;
+	}
+
+#section_two h3 {
+	background: transparent url(/images/title_about.gif) no-repeat top left;
+	}
+
+#section_three h3 {
+	background: transparent url(/images/title_partici.gif) no-repeat top left;
+	}
+
+#section_four h3 {
+	background: transparent url(/images/title_benef.gif) no-repeat top left;
+	}
+
+#section_five h3 {
+	background: transparent url(/images/title_req.gif) no-repeat top left;
+	}
+#section_six h3 {
+	background: transparent url(/images/title_req.gif) no-repeat top left;
+	}
+	
+	#section_seven h3 {
+	background: transparent url(/images/title_req.gif) no-repeat top left;
+	}
+	
+#left_selection h3, #lfavorites h3, #larchives h3, #lresources h3 {
+	height: 28px;
+	width: 100%;
+	margin: 0;
+	}
+
+#left_selection h3 {
+	background: transparent url(/images/bg_select_des.gif) no-repeat top left;
+	}
+
+#lfavorites h3 {
+	background: transparent url(/images/bg_select_fav.gif) no-repeat top left;
+	}
+
+#larchives h3 {
+	background: transparent url(/images/bg_select_arc.gif) no-repeat top left;
+	}
+
+#lresources h3 {
+	background: transparent url(/images/bg_select_res.gif) no-repeat top left;
+	}
+
+
+/* Other Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+acronym {
+	cursor: help;
+	}
+
+#section_one acronym {
+	border-bottom: 1px dotted #ffe0b3;
+}
+
+#lresources acronym {
+	border-bottom: 1px dotted #999;
+}
+
+#supportingText acronym {
+	background: transparent url(/images/acro.gif) no-repeat center right;
+	padding-right: 11px;
+	margin-right: 1px;
+	cursor: help;
+	border: 0;
+	}
+
+#section_three a acronym {
+	background: transparent;
+	padding: 0;
+	margin: 0;
+}
+
+#extraDiv1, #extraDiv2, #extraDiv3, #extraDiv4, #extraDiv5, #extraDiv6 {
+	display: none; /* I was tempted at times though... */
+	}
+
+/*img {
+	display: none;
+	}*/

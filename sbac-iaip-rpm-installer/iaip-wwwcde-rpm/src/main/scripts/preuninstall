@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "rpm preuninstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+# Stop plackservice service
+##/sbin/service plackservice stop || fail "failed to stop plackservice service"
+/sbin/service plackservice stop
+
+
+# Stop httpd service
+##/sbin/service httpd stop || fail "failed to stop httpd service"
+/sbin/service httpd stop
+
+
+## May need to remove the previously unzipped folder
+if [[ -d /www/common/mathjax ]]; then
+  echo "Preuninstall: removing previously unzipped folder: /www/common/mathjax"
+  /bin/rm -rf "/www/common/mathjax"
+fi

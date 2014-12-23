@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <accessibility_element ae_id="1" i_id="123" ae_name="ae001" ae_content_name="cde_11" ae_content_type="1"/>
+    <accessibility_element ae_id="2" i_id="321" ae_name="ae001" ae_content_name="cde_11" ae_content_type="1"/>
+    <accessibility_element ae_id="3" i_id="321" ae_name="ae002" ae_content_name="cde_12" ae_content_type="1"/>
+    <accessibility_feature af_id="1" ae_id="1"/> 
+    <accessibility_feature af_id="2" ae_id="1"/>
+    <inclusion_order io_id="1" i_id="321" io_type="2"/> 
+    <inclusion_order io_id="2" i_id="321" io_type="3"/> 
+    <inclusion_order_element ioe_id="1" io_id="1" ae_id="2" ioe_sequence="1"/>
+    <inclusion_order_element ioe_id="2" io_id="1" ae_id="3" ioe_sequence="2"/>
+</dataset>

@@ -1,0 +1,8 @@
+<TMPL_LOOP NAME="cde_instances">
+ScriptAlias /<TMPL_VAR NAME="instance_name">/cgi-bin/ "/www/<TMPL_VAR NAME="instance_name">/cgi-bin/"
+<Directory "/www/<TMPL_VAR NAME="instance_name">/cgi-bin">
+    AllowOverride All
+    Options -Indexes
+</Directory>
+
+</TMPL_LOOP>

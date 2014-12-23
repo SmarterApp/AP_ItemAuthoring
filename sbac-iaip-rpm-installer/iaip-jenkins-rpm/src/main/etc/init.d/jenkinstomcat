@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Startup script for the Jenkins Continuous Integration server
+# https://wiki.jenkins-ci.org/display/JENKINS/JenkinsLinuxStartupScript
+#
+# chkconfig: - 85 15
+# description: Jakarta Tomcat Java Servlets and JSP server
+# processname: tomcat
+# pidfile: /var/run/jenkins-tomcat.pid
+
+# Set Tomcat environment.
+JENKINS_USER=jenkins
+LOCKFILE=/var/lock/jenkins
+export PATH=/usr/local/bin:$PATH
+export JENKINSUSER_HOME=/opt/jenkins-tomcathome
+export JAVA_HOME=/usr/java/latest/jre
+
+export CATALINA_HOME="/opt/jenkins-tomcat"
+export JENKINS_BASEDIR=/opt/jenkins-tomcat
+export TOMCAT_HOME=$JENKINS_BASEDIR
+
+export CATALINA_PID=$JENKINSUSER_HOME/jenkins-tomcat.pid
+export CATALINA_OPTS="-DJENKINS_HOME=$JENKINSUSER_HOME -Xmx768m -Djava.awt.headless=true"
+
+[ -f $TOMCAT_HOME/bin/catalina.sh ] || exit 0
+
+export PATH=$PATH:/usr/bin:/usr/local/bin
+
+# See how we were called.
+case "$1" in
+  start)
+        # Start daemon.
+        echo -n "Starting Jenkins-Tomcat: "
+        su -p -s /bin/sh $JENKINS_USER -c "$TOMCAT_HOME/bin/catalina.sh start"
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && touch $LOCKFILE
+        ;;
+  stop)
+        # Stop daemons.
+        echo -n "Shutting down Jenkins-Tomcat: "
+        su -p -s /bin/sh $JENKINS_USER -c "$TOMCAT_HOME/bin/catalina.sh stop"
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && rm -f $LOCKFILE
+        ;;
+  restart)
+        $0 stop
+        $0 start
+        ;;
+  condrestart)
+       [ -e $LOCKFILE ] && $0 restart
+       ;;
+  status)
+        status tomcat
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+WL_HOME=$1
+export WL_HOME
+shift
+CLASSPATH=$1
+export CLASSPATH
+shift
+ANT_RUN=$1
+shift
+BUILD_PATH=$1
+shift
+
+CMD_LINE_ARGS=$*
+
+$ANT_RUN -f $BUILD_PATH/wl-build.xml $CMD_LINE_ARGS

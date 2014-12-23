@@ -1,0 +1,84 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}
+
+## Get hostname to be substituted in template config files
+TMPLHOSTNAME="localhost"
+TMPLDOMAINNAME="pacificmetrics.com"
+TMPLSELFHOSTNAME="sbacqa.pacificmetrics.com"
+TMPLDBHOSTNAME="sbacqa.pacificmetrics.com"
+
+
+THISHOSTNAME="$(hostname)"
+THISDOMAINNAME="$(hostname -d)"
+
+ONLYHOSTNAME=`echo $THISHOSTNAME  |  cut -d. -f 1`
+
+## To derive the database hostname naming convention is flip the "CDE" substring to "DB"
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAME/cde/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/CDE/DB}
+
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/app/db}
+ONLYHOSTNAMEALTEREDFORDB=${ONLYHOSTNAMEALTEREDFORDB/APP/DB}
+
+THISHOSTNAMEALTEREDFORDB="${ONLYHOSTNAMEALTEREDFORDB}.${THISDOMAINNAME}"
+
+echo "TomEE postinstall configuration"
+##echo "Domain:          $THISDOMAINNAME"
+echo "Hostname:         $THISHOSTNAME"
+echo "Tmpl Hostname:    $TMPLHOSTNAME"
+echo "Tmpl DB Hostname: $TMPLDBHOSTNAME"
+##echo "Derived DB Host:  $THISHOSTNAMEALTEREDFORDB"
+##echo "Tmpl Domain: $TMPLDOMAINNAME"
+
+
+
+echo "Updating configuration file: system.properties"
+echo "               APP hostname: $THISHOSTNAME"
+sed -i "s/$TMPLSELFHOSTNAME/$THISHOSTNAME/g"  /opt/tomee/conf/system.properties
+
+
+echo "Updating configuration file: tomee.xml"
+echo "               APP hostname: $THISHOSTNAME"
+sed -i "s/$TMPLSELFHOSTNAME/$THISHOSTNAME/g"  /opt/tomee/conf/tomee.xml
+
+
+
+
+## Add aliases helpful for TomEE admin tasks to .bashrc
+
+PREEXISTING_TAILTOMCAT_ALIAS=`grep tailtomee /root/.bashrc`
+
+if [[ "$PREEXISTING_TAILTOMCAT_ALIAS" == "" ]]; then
+  echo ""     >> /root/.bashrc  
+  echo "Adding shell alias:   tailtomee"
+  
+  echo "alias tailtomee='tail -f -n200 /opt/tomee/logs/catalina.out'" >> /root/.bashrc    
+  echo "alias edittomeesystemprops='vi /opt/tomee/conf/system.properties'"                               >> /root/.bashrc
+  echo "alias psjava='ps -ef | grep java'"     >> /root/.bashrc    
+  echo "alias pstomee='ps -ef | grep tomee'"   >> /root/.bashrc      
+else
+  echo "Already has shell alias 'tailtomee' in: /root/.bashrc"
+fi
+
+
+
+
+# Set ownership
+echo "Set ownership to 'tomcat' under: /opt/tomee"
+
+/bin/chown -R tomcat:tomcat /opt/tomee
+
+# Register tomee service
+echo "Register 'tomee' service"
+
+/sbin/chkconfig --add tomee || fail "chkconfig failed to register tomee"
+
+# Enable tomee service at boot-time
+/sbin/chkconfig tomee --level 345 on || fail "chkconfig failed to enable tomee service"
+
+## # Start tomee service
+## /sbin/service tomee start || fail "failed to start tomee service"

@@ -1,0 +1,246 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>rpm-sbac-iaip</artifactId>
+		<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<packaging>jar</packaging>
+	<artifactId>iaip-apache-rpm</artifactId>
+	<groupId>com.pacificmetrics.rpm.sbaciaip</groupId>
+	<version>1.0</version>
+	<name>SBAC IAIP Apache 2.4 RPM</name>
+	<description />
+
+	<developers>
+		<developer>
+			<id>mark.langbehn</id>
+			<name>Mark Langbehn</name>
+			<email>mlangbehn@pacificmetrics.com</email>
+			<organization>Pacific Metrics</organization>
+			<roles>
+				<role>Creator</role>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Pacific Metrics</name>
+		<url>http://www.pacificmetrics.com/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>codehaus</id>
+			<name>Codehaus Central repo</name>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.0.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<name>iaip-apache</name>
+					<version>1.0</version>
+					<release>0</release>
+					<copyright></copyright>
+					<distribution>Pacific Metrics</distribution>
+					<group>Application/System</group>
+					<prefix>/</prefix>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0
+					</defineStatement>
+					</defineStatements>
+					
+					<provides>
+						<provide>iaip-apache</provide>
+					</provides>
+					
+					<conflicts>
+					    <conflict>httpd &lt;= 2.4.0</conflict>
+					    <conflict>httpd-tools &lt;= 2.4.0</conflict>
+					</conflicts>
+					
+					<needarch>noarch</needarch>
+
+					<mappings>					
+					
+						<mapping>
+							<directory>/usr/local/orcadata/etc-httpd-conf</directory>
+							<configuration>true</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc-httpd-conf</location>
+								</source>
+							</sources>
+						</mapping>
+
+<!--					
+						<mapping>
+							<directory>/usr/local/orcadata/etc-httpd-conf-certs</directory>
+							<configuration>false</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc-httpd-conf-certs</location>
+								</source>
+							</sources>
+						</mapping>					
+-->
+					
+						<mapping>
+							<directory>/usr/local/orcadata/etc-httpd-conf.d</directory>
+							<configuration>false</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc-httpd-conf.d</location>
+								</source>
+							</sources>
+						</mapping>
+<!-- 						
+						<mapping>
+							<directory>/usr/local/orcadata/etc-httpd-conf.d-virtualhost</directory>
+							<configuration>true</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc-httpd-conf.d-virtualhost</location>
+								</source>
+							</sources>
+						</mapping>
+-->
+						<mapping>
+							<directory>/usr/local/orcadata/www-favicon</directory>
+							<configuration>true</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/www-favicon</location>
+								</source>
+							</sources>
+						</mapping>
+					
+<!--					
+						<mapping>
+							<directory>/usr/local/orcadata/etc-sysconfig</directory>
+							<configuration>true</configuration>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/etc-sysconfig</location>
+								</source>
+							</sources>
+						</mapping>
+-->
+					</mappings>
+					
+					
+<!--					
+					<preinstallScriptlet>
+						<scriptFile>src/main/scripts/preinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+					<postinstallScriptlet>
+						<scriptFile>src/main/scripts/postinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>src/main/scripts/postuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+					<preremoveScriptlet>
+						<scriptFile>src/main/scripts/preuninstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+-->
+					<postinstallScriptlet>
+						<scriptFile>src/main/scripts/postinstall</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+	
+					<requires>
+					    <require>httpd &gt;= 2.4.0</require>
+					    <require>apr &gt;= 1.4.6</require>
+					    <require>apr-util &gt;= 1.5</require>
+					    <require>apr-util-mysql &gt;= 1.5</require>
+					    <require>apr-util-openssl &gt;= 1.5</require>
+					    <require>openssl &gt;= 1.0</require>
+					    <require>mod_lua &gt;= 2.4</require>
+					    <require>mod_proxy_html &gt;= 2.4</require>
+					    <require>mod_socache_dc &gt;= 2.4</require>
+					    <require>mod_ssl &gt;= 2.4</require>
+<!-- 					<require>mod_jk-ap20 &gt; 1.2.0</require>   -->
+					    
+					    <require>mysql &gt;= 5.1.0</require>
+					    <require>mysql-server &gt;= 5.1.0</require>
+<!--
+##TODO reduce dependence on mysql-server package, it is only needed because of cmd: /usr/bin/replace
+-->
+
+					    <require>perl &gt; 5.0</require>
+					</requires>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+
+	</dependencies>
+</project>

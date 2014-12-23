@@ -1,0 +1,78 @@
+##############################################################
+# foodmart jdbc datasource creation script for Websphere #
+#############################################################
+
+global AdminConfig
+
+set cell "${wsCellName}"
+set node "${wsNodeName}"
+if { [llength $cell] == 0 } {
+    set cell [$AdminControl getCell]
+}
+if { [llength $node] == 0 } {
+    set node [$AdminControl getNode]
+}
+
+proc getProvider {} {
+    global AdminConfig
+    set providers [$AdminConfig list JDBCProvider]
+    set existingProvider ""
+    foreach provider ${providers} {
+        set providerName [$AdminConfig showAttribute $provider name]
+	    set match [string match $providerName ${wsJdbcProviderName}]
+	    if { ${match} == 1 } {
+	        set existingProvider $provider
+	    }
+    }
+
+    return $existingProvider
+}
+
+proc getDataSource {dataSourceName} {
+    global AdminConfig
+    set dataSources [$AdminConfig list DataSource]
+    set existingDataSource ""
+    foreach dataSource ${dataSources} {
+        set dsName [$AdminConfig showAttribute $dataSource name]
+	    set match [string match $dsName $dataSourceName]
+	    if { ${match} == 1 } {
+	        set existingDataSource $dataSource
+	    }
+    }
+
+    return $existingDataSource
+}
+
+proc setDSProperties {propertyName propertyType propertyValue propsSet} {
+    global AdminConfig
+    set attrs [subst {{name $propertyName} {type $propertyType} {value $propertyValue}}]
+    $AdminConfig create J2EEResourceProperty $propsSet $attrs
+}
+
+set existingDataSource [getDataSource ${foodmart.dbName}]
+
+if {[llength $existingDataSource] == 0} {
+    set provider [getProvider]
+    set dsName [list name ${foodmart.dbName}]
+    set dsAttrs [list $dsName]
+    $AdminConfig create DataSource $provider $dsAttrs
+    $AdminConfig save
+
+    set providerName [$AdminConfig showAttribute $provider name]
+    set foodmartDs [getDataSource ${foodmart.dbName}]
+    #Set the properties on the data source
+    set propsSet [$AdminConfig create J2EEResourcePropertySet $foodmartDs {}]
+
+    set dsProps ${ws.jdbc.foodmart.properties}
+    foreach entry ${dsProps} {
+        set name [lindex $entry 0]
+        set type [lindex $entry 1]
+        set value [lindex $entry 2]
+        setDSProperties $name $type $value $propsSet
+    }
+    set attrs [subst {{jndiName ${foodmart.jndi}} {datasourceHelperClassname ${ws.dataStore.helper.class}}}]
+    $AdminConfig modify $foodmartDs $attrs
+    $AdminConfig save
+} else {
+    puts "${foodmart.dbName} datasource already exists. It will not be recreated"
+}

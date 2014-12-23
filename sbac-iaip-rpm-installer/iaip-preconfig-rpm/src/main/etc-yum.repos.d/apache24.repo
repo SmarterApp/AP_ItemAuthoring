@@ -1,0 +1,7 @@
+[apache24]
+name=Apache 2.4 Components
+## baseurl=http://192.168.1.50/yum/apache24/
+## baseurl=http://10.4.1.116/yum/apache24/
+baseurl=http://sbacuser:smart2@sbacartifact1.pacificmetrics.com/yum/apache24/
+enabled=1
+gpgcheck=0

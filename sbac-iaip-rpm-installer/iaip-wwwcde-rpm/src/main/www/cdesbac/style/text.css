@@ -1,0 +1,131 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+
+span.title {
+  font-size: 13pt; 
+  color: #000066;
+}
+
+div.title {
+  font-size: 13pt; 
+  color: #000066;
+  margin-bottom: 1em;
+}
+
+.required {
+  color: #FF0000;
+}
+
+.red-text {
+	color: #FF0000;
+
+}
+.required-value {
+	font-weight: bold;
+	color: #FF0000;
+
+}
+.light-blue-text {
+	font-weight: bold;
+	color: #0000FF;
+
+}
+.input-field-background {
+                  color: #FFFFCC;
+}
+
+.nav_button {
+	background-color: #0000FF;
+	color: #FFFFFF;
+}
+
+.action_button {
+	font-family: Verdana;
+	font-size: 9pt;
+	height:24px;
+	width:110px;
+}
+
+.action_button_long {
+	font-family: Verdana;
+	height:24px;
+	font-size: 8pt;
+	width:130px;
+}
+
+.action2_button {
+	font-weight: bold;
+	background-color: #33CC00;
+	color: #FFFFFF;
+}
+
+.value{
+    width:50px;
+}
+
+.value-long{
+        width:170px;
+}
+
+select {
+     padding: 4px 5px;
+    border-radius: 3px 3px 3px 3px;
+     border: 1px solid #AAAAAA;
+    vertical-align: middle;
+    background-color: transparent;
+}
+
+table{
+    border:1px solid #ccc;
+border-bottom:0;
+border-right:0;
+
+}
+
+table th {
+    background:#ccc;
+}
+
+table td{
+    border-bottom:1px solid #ccc;
+        border-right:1px solid #ccc
+}
+
+table th, table td{
+    text-align:left;
+padding:5px
+}
+
+table tr.even td{
+        background:#eee;
+}
+
+table th.sort span {
+    display: block;
+    background:transparent url(chosen-sprite.png) no-repeat -2px -8px ;
+    height: 10px;
+    width: 10px;
+    float:right;
+    margin:5px;
+}
+
+table.no-style, table.no-style td{
+        border:0;       
+}
+
+#results{
+        margin:20px 0 0 0;
+        padding:20px 0 0 0;
+}
+
+#results.items {
+    margin:0 0 20px 0;
+padding:0 20px;
+}
+
+#results.items table.table-results {
+    margin:20px 0;
+}

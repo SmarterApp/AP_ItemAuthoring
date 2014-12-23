@@ -1,0 +1,246 @@
+<project name="db">
+
+  <import file="${buildBin}/db-common.xml"/>
+
+    <target name="create-test-user"
+            description="create test user">
+        <!-- does nothing by default -->
+    </target>
+    
+    <target name="drop-js-db" 
+            description="drop jasperserver repository db">
+        <echo>========================================================</echo>
+        <echo> Automatically dropping the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to drop the repository database:</echo>
+        <echo> ${js.drop}</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="create-js-db" 
+            description="create jasperserver repository db">
+        <echo>========================================================</echo>
+        <echo> Automatically creating the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to create the repository database:</echo>
+        <echo> ${js.create}</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="drop-foodmart-db" 
+            description="drop foodmart db">
+        <echo>========================================================</echo>
+        <echo> Automatically dropping the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to drop the repository database:</echo>
+        <echo> ${foodmart.drop}</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="create-foodmart-db" 
+            description="create foodmart db">
+        <echo>========================================================</echo>
+        <echo> Automatically creating the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to create the repository database:</echo>
+        <echo> ${foodmart.create}</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="drop-sugarcrm-db" 
+            description="drop sugarcrm db">
+        <echo>========================================================</echo>
+        <echo> Automatically dropping the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to drop the repository database:</echo>
+        <echo> ${sugarcrm.drop}</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="create-sugarcrm-db"
+            description="create sugarcrm db">
+        <echo>========================================================</echo>
+        <echo> Automatically creating the DB2 database is not supported by buildomatic, see Install Guide Section [5.7.2] for more info</echo>
+        <echo> Use the following command to create the repository database:</echo>
+        <echo> ${sugarcrm.create}</echo>
+        <echo>========================================================</echo>
+    </target>
+ 
+    <target name="init-js-db-pro"
+            description="run ddl on pro jasperserver db">
+        <runSQL jdbcUrl="${js.jdbcUrl}" print="true">
+            <fileset dir="${currentSqlDir}">
+                <include name="js-pro-create.ddl"/>
+                <include name="quartz.ddl"/>
+            </fileset>
+        </runSQL>
+    </target>
+    
+    <target name="init-quartz" 
+            description="run ddl for js db">
+        <runSQL jdbcUrl="${js.jdbcUrl}" print="true">
+            <fileset dir="${currentSqlDir}">
+                <include name="quartz.ddl"/>
+            </fileset>
+        </runSQL>
+    </target>
+   
+
+    <target name="upgrade-3.5-3.7-pro"
+            description="upgrade from 3.5 to 3.7">
+
+        <echo> </echo>
+        <echo> currentSqlDir = ${currentSqlDir} </echo>
+        <echo> dbType = ${dbType} </echo>
+        <echo> </echo>
+
+        <if>
+            <not>
+                <available file="${currentSqlDir}/upgrade-${dbType}-3.5.0-3.7.0-pro.sql"/>
+            </not>
+            <then>
+                <echo> </echo>
+                <echo>======================================================================</echo>
+                <echo> Error: The upgrade script: upgrade-${dbType}-3.5.0-3.7.0-pro.sql     </echo>
+                <echo> Error: is not currently available.                                   </echo>
+                <echo> Error: Check release notes for avaliability on your database type    </echo>
+                <echo>======================================================================</echo>
+                <echo> </echo>
+                <fail>Error: The upgrade script: upgrade-${dbType}-3.5.0-3.7.0-pro.sql was not found</fail>
+            </then>
+        </if>
+
+        <runSQL jdbcUrl="${js.jdbcUrl}" print="true">
+            <fileset dir="${currentSqlDir}">
+                <include name="upgrade-${dbType}-3.5.0-3.7.0-pro.sql"/>
+            </fileset>
+        </runSQL>
+    </target>
+
+    
+    <!-- Mondrian loader temporary can not be used because of some errors. Using simple dump -->
+    <target name="load-foodmart-db"
+            description="load the foodmart database using the Mondrian loader">
+
+        <echo message="food mart data: ${currentSqlDir}/foodmart-db2.zip"/>
+        <runSQL jdbcUrl="${foodmart.jdbcUrl}" print="true">
+            <zipentry zipfile="${currentSqlDir}/foodmart-db2.zip" name="foodmart-db2.sql"/>
+        </runSQL>
+     </target>
+      
+    <target name="update-foodmart-db"
+            description="update foodmart for supermart additions">
+        <echo>========================================================</echo>
+        <echo> This task is not needed for Foodmart database under DB2.</echo>
+        <echo> The load-foodmart-db target loads all necessary updates.</echo>
+        <echo>========================================================</echo>
+    </target>
+
+    <target name="load-sugarcrm-db"
+            description="load sugarcrm database">
+
+        <runSQL jdbcUrl="${sugarcrm.jdbcUrl}">
+            <zipentry zipfile="${currentSqlDir}/sugarcrm.zip" name="sugarcrm.sql"/>
+        </runSQL>
+    </target>
+
+    <target name="build-js-ddl-ce" 
+            depends="init-source-paths"
+            description="generate hibernate ddl for os">
+        <property name="build-db" value="${js-path}/jasperserver-repository-hibernate/build-db"/>
+        <runmaven dir="${build-db}">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </runmaven>
+        
+        <!-- copy to resources -->
+        <copy file="${build-db}/target/sql/js-drop.ddl" toFile="${currentSqlDir}/js-drop.ddl"/>
+        <copy file="${build-db}/target/sql/js-create.ddl" toFile="${currentSqlDir}/js-create.ddl"/>
+    </target>
+    
+    <target name="build-js-ddl-pro" 
+            depends="init-source-paths"
+            description="generate hibernate ddl">
+        <property name="build-db" value="${js-pro-path}/repository-hibernate/build-db"/>
+        <runmaven dir="${build-db}">
+            <arg value="clean"/>
+            <arg value="install"/>
+        </runmaven>
+        
+        <!-- copy to resources -->
+        <copy file="${build-db}/target/sql/js-pro-drop.ddl" toFile="${currentSqlDir}/js-pro-drop.ddl"/>
+        <copy file="${build-db}/target/sql/js-pro-create.ddl" toFile="${currentSqlDir}/js-pro-create.ddl"/>
+    </target>
+
+  <macrodef name="validateDBMSConnection">
+    <attribute name="jdbcUrl" />
+    <attribute name="systemName" default="before" />
+    <attribute name="phase" default="before" />
+    <attribute name="failOnConnectionError" default="true" />
+    <attribute name="failOnDBNotExists" default="false" />
+    <attribute name="failOnUnrecoverableConnectionError" default="true" />
+    <attribute name="connectionErrorOccurredProperty" default="connectionErrorOccurredProperty@{phase}" />
+    <attribute name="errorSqlStateCodeProperty" default="errorSqlStateCodeProperty@{phase}" />
+    <attribute name="errorNativeCodeProperty" default="errorNativeCodeProperty@{phase}" />
+    <attribute name="errorMessageProperty" default="errorMessageProperty@{phase}" />
+
+    <sequential>
+      <runSQL jdbcUrl="@{jdbcUrl}"
+          print="false"
+          onerror="abort"
+          failOnConnectionError="@{failOnConnectionError}"
+          connectionErrorOccurredProperty="@{connectionErrorOccurredProperty}"
+          errorSqlStateCodeProperty="@{errorSqlStateCodeProperty}"
+          errorNativeCodeProperty="@{errorNativeCodeProperty}"
+          errorMessageProperty="@{errorMessageProperty}">
+        SELECT COUNT(*) FROM SYSIBM.SYSTABLES
+      </runSQL>
+
+      <if>
+        <isset property="@{connectionErrorOccurredProperty}" />
+        <then>
+          <connectionValidationFailureInfoListener
+              errorSqlStateCodeProperty="@{errorSqlStateCodeProperty}"
+              errorNativeCodeProperty="@{errorNativeCodeProperty}"
+              errorMessageProperty="@{errorMessageProperty}" />
+          <if>
+            <and>
+              <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="08001" />
+              <equals arg1="${@{errorNativeCodeProperty}}" arg2="-4499" />
+            </and>
+            <then>
+              <hostPortValidationFailureListener
+                  failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}" />
+            </then>
+            <elseif>
+              <and>
+                <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="08004" />
+                <equals arg1="${@{errorNativeCodeProperty}}" arg2="-4499" />
+              </and>
+              <then>
+                <dBExistsValidationFailureListener failOnDBNotExists="@failOnDBNotExists" />
+              </then>
+            </elseif>
+            <elseif>
+              <and>
+                <equals arg1="${@{errorSqlStateCodeProperty}}" arg2="28000" />
+                <equals arg1="${@{errorNativeCodeProperty}}" arg2="-4214" />
+              </and>
+              <then>
+                <usernamePasswordValidationFailureListener
+                   failOnUnrecoverableConnectionError="@{failOnUnrecoverableConnectionError}"
+                   userName="${dbUsername}"
+                   password="${dbPassword}" />
+              </then>
+            </elseif>
+            <else>
+              <genericConnectionValidationFailureListener
+                  failOnUnrecoverableConnectionError="@failOnUnrecoverableConnectionError"
+                  errorMessageProperty="@errorMessageProperty"  />
+            </else>
+          </if>
+        </then>
+        <else>
+          <connectionOKValidationListener />
+        </else>
+      </if>
+
+    </sequential>
+  </macrodef>
+    
+</project>

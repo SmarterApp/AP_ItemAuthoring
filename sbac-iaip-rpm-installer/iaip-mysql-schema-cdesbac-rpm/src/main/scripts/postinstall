@@ -1,0 +1,57 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}   
+
+## Bootstrap the MySQL database "cdesbac"
+ROOTUSER="root"
+ROOTPSWD=""
+
+PACIFICUSER="pacific"
+PACIFICPSWD="itemong3r"
+ORCADBDATABASENAME="cdesbac"
+
+## MyHOST="$(hostname)"
+MyHOST="localhost"
+
+MYSQL="$(which mysql)"
+
+## Run the DB creation scripts
+
+DB_INIT_STORED_PROC="create-stored-procs.sql"
+DB_INIT_SCRIPT_DATA="db-backup-cdesbac.sql"
+
+##echo "Drop cdesbac Database"
+##$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD < /usr/local/orcadata/mysql-init/drop-database.sql
+
+echo "Creating cdesbac Database"
+$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD < /usr/local/orcadata/mysql-init/create-database.sql || fail "MySQL failed to create cdesbac database"
+
+echo "Loading SBAC IAIP Item Authoring CDE data"
+
+##echo "Running: $DB_INIT_STORED_PROC"
+##$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD --database=$ORCADBDATABASENAME < /usr/local/orcadata/mysql-init/$DB_INIT_STORED_PROC || fail "MySQL failed to populate cdesbac tables with data"
+
+##echo "Running: $DB_INIT_SCRIPT_DATA"
+##$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD --database=$ORCADBDATABASENAME < /usr/local/orcadata/mysql-init/$DB_INIT_SCRIPT_DATA || fail "MySQL failed to populate cdesbac tables with data"
+
+
+echo "Cleaning up"
+rm -rf /usr/local/orcadata/mysql-init
+
+
+
+## Add alias helpful for MySQL cdesbac admin tasks to .bashrc
+
+PREEXISTING_DBBACKUP_ALIAS=`grep dbbackupcdesbac /root/.bashrc`
+
+if [[ "$PREEXISTING_DBBACKUP_ALIAS" == "" ]]; then
+  echo "Adding shell alias: dbbackupcdesbac"  
+  echo ""     >> /root/.bashrc
+
+  echo "alias dbbackupcdesbac='mysqldump -u pacific -p --routines cdesbac > db-backup-cdesbac-$(date +%Y-%m-%d).sql'"   >> /root/.bashrc 
+else
+  echo "Already has shell alias 'dbbackupcdesbac' in: /root/.bashrc"
+fi

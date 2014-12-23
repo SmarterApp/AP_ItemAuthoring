@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    <context:component-scan base-package="com.jaspersoft.jasperserver.remote"/>
+    <alias name="${bean.auditContext}" alias="concreteAuditContext"/>
+    <alias name="${bean.userAuthorityService}" alias="concreteUserAuthorityService"/>
+    <alias name="${bean.objectPermissionService}" alias="concreteObjectPermissionsService"/>
+    <alias name="${bean.permissionsService}" alias="concretePermissionsService"/>
+    <alias name="${bean.remoteResourceHandlerRegistry}" alias="remoteResourceHandlerRegistry"/>
+    <alias name="${bean.tenantService}" alias="concreteTenantService"/>
+    <alias name="${bean.reportSchedulingService}" alias="concreteReportSchedulingService"/>
+    <alias name="${bean.securityContextProvider}" alias="concreteSecurityContextProvider"/>
+    <alias name="${bean.serverInfoService}" alias="concreteServerInfoService"/>
+    <alias name="${bean.runReportService}" alias="runReportService"/>
+    <alias name="${bean.reportJobsPersistenceService}" alias="concreteJobsPersistenceService"/>
+
+    <util:list id="defaultRoles">
+      <bean class="com.jaspersoft.jasperserver.api.metadata.user.domain.client.RoleImpl">
+         <property name="roleName" value="ROLE_USER"/>
+      </bean>
+     </util:list>
+
+    <bean id="remoteResourceHandlerRegistryCE" class="com.jaspersoft.jasperserver.remote.MapResourceHandlerRegistry">
+        <property name="handlers">
+            <map>
+                <entry key="folder" value-ref="folderHandler"/>
+                <entry key="img" value-ref="fileHandler"/>
+                <entry key="xml" value-ref="fileHandler"/>
+                <entry key="font" value-ref="fileHandler"/>
+                <entry key="jrxml" value-ref="fileHandler"/>
+                <entry key="jar" value-ref="fileHandler"/>
+                <entry key="prop" value-ref="fileHandler"/>
+                <entry key="jrtx" value-ref="fileHandler"/>
+                <entry key="reference" value-ref="fileHandler"/>
+                <entry key="olapMondrianSchema" value-ref="fileHandler"/>
+                <entry key="reportUnit" value-ref="reportUnitHandler"/>
+                <entry key="olapUnit" value-ref="olapUnitHandler"/>
+                <entry key="datasource" value-ref="dataSourceHandler"/>
+                <entry key="jdbc" value-ref="jdbcDataSourceHandler"/>
+                <entry key="jndi" value-ref="jndiJdbcDataSourceHandler"/>
+                <entry key="bean" value-ref="beanDataSourceHandler"/>
+                <entry key="virtual" value-ref="remoteVirtualDataSourceHandler"/>
+                <entry key="custom" value-ref="customDataSourceHandler"/>
+                <entry key="inputControl" value-ref="inputControlHandler"/>
+                <entry key="dataType" value-ref="dataTypeHandler"/>
+                <entry key="olapXmlaCon" value-ref="xmlaConnectionHandler"/>
+                <entry key="xmlaConnection" value-ref="xmlaConnectionHandler"/>
+                <entry key="unknow" value-ref="unknownResourceHandler"/>
+                <entry key="lov" value-ref="listOfValuesHandler"/>
+                <entry key="query" value-ref="queryHandler"/>
+                <entry key="contentResource" value-ref="contentResourceHandler"/>
+            </map>
+        </property>
+    </bean>
+    <util:list id="htmlReportHeaderIncludes">
+        <!--{contextPath} placeholder (multiple usage is supported) is replaced by real contextPath in runtime.-->
+        <!--See com.jaspersoft.jasperserver.remote.exporters.HtmlExporter-->
+        <value><![CDATA[<script type='text/javascript' src='{contextPath}/scripts/jquery/js/jquery-1.7.1.min.js'></script>]]></value>
+    </util:list>
+
+    <bean id="jasperReportsRemoteContext" class="net.sf.jasperreports.engine.SimpleJasperReportsContext">
+        <property name="parent" ref="${bean.jasperReportsContext}"/>
+        <property name="propertiesMap">
+            <props>
+                <prop key="com.jaspersoft.jasperreports.highcharts.generate.image">false</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="tempFolder" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="/temp"/>
+    </bean>
+
+    <bean id="roleToAccessTempFolder" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="ROLE_ADMINISTRATOR"/>
+    </bean>
+    
+    <bean id="localizedErrorDescriptorBuilder" class="com.jaspersoft.jasperserver.remote.exception.builders.LocalizedErrorDescriptorBuilder">
+        <constructor-arg ref="messageSource" />
+    </bean>
+
+    <util:map id="remoteExportersMap">
+        <entry key="pdf" value-ref="remotePdfExporter"/>
+        <entry key="html" value-ref="remoteHtmlExporter"/>
+        <entry key="xlsx" value-ref="remoteXlsxExporter"/>
+        <entry key="xls" value-ref="remoteXlsExporter"/>
+        <entry key="rtf" value-ref="remoteRtfExporter"/>
+        <entry key="csv" value-ref="remoteCsvExporter"/>
+        <entry key="xml" value-ref="remoteXmlExporter"/>
+        <entry key="odt" value-ref="remoteOdtExporter"/>
+        <entry key="ods" value-ref="remoteOdsExporter"/>
+        <entry key="docx" value-ref="remoteDocxExporter"/>
+    </util:map>
+
+    <util:set id="technicalParameterNames">
+        <value>REPORT_PARAMETERS_MAP</value>
+        <value>JASPER_REPORT</value>
+        <value>REPORT_CONNECTION</value>
+        <value>REPORT_MAX_COUNT</value>
+        <value>REPORT_DATA_SOURCE</value>
+        <value>REPORT_SCRIPTLET</value>
+        <value>REPORT_LOCALE</value>
+        <value>REPORT_RESOURCE_BUNDLE</value>
+        <value>REPORT_TIME_ZONE</value>
+        <value>REPORT_VIRTUALIZER</value>
+        <value>REPORT_CLASS_LOADER</value>
+        <value>REPORT_URL_HANDLER_FACTORY</value>
+        <value>REPORT_FILE_RESOLVER</value>
+        <value>REPORT_FORMAT_FACTORY</value>
+        <value>IS_IGNORE_PAGINATION</value>
+        <value>REPORT_TEMPLATES</value>
+        <value>SORT_FIELDS</value>
+        <value>REPORT_CONTEXT</value>
+        <value>FILTER</value>
+        <value>DATABASE_TIMEZONE</value>
+    </util:set>
+
+</beans>

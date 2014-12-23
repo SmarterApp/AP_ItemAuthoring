@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>TEI</title>
+        <!--link rel="stylesheet" href="demo.css" media="screen"-->
+        <script src="/common/js/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/common/js/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-common.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-scoring.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-json.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-test.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-lines.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-dnd.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tei-text.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+        
+            var currentTemplate = "00";
+            var holder;
+            
+            var SCORING_FIELDS = [['XY1', 'XY2', 'interceptX', 'interceptY', 'slope'],
+                                  ['sequence'],
+                                  ['XY1', 'XY2', 'XY3', 'XY4', 'sides', 'perimeter', 'area', 'shape'],
+                                  ['XY1', 'XY2', 'XY3', 'sides', 'perimeter', 'area', 'triangle'],
+                                  ['sequence'],
+                                  ['start', 'end', 'correct', 'incorrect', 'rule'],
+                                  ['start', 'end', 'text']];
+            
+            
+            window.onload = function () {
+    
+                holder = document.getElementById("holder");
+                holder.paper = Raphael("holder", holder.clientWidth, holder.clientHeight);
+    
+                var topTable = document.getElementById("topTable");
+                document.getElementById("rightPanelDiv").style.height = topTable.clientHeight + 'px';
+                
+                setDeleteButtonDisabled(1, true);
+                
+            };
+
+            function getItemDefinition() {
+                return getItemAsObject(currentTemplate, holder.paper);
+            }
+
+            function getItemAsJSON() {
+                return getAsJSON(currentTemplate, holder.paper)
+            }
+
+            function loadItemFromJSON(json) {
+                return loadFromJSON(json, holder.paper);
+            }
+            
+            function init() {
+                cleanPaper(holder.paper);
+                if (hasAxes()) {
+                    initAxisRow();
+                } else {
+                    hideAxisRow();
+                }
+                if (hasImages()) {
+                    initImagesRow();
+                } else {
+                    hideImagesRow();
+                }
+                if (currentTemplate == "02") {
+                    document.getElementById("boxSizeRow").style.display = "table-row";
+                    document.getElementById("elementsRow").style.display = "table-row";
+                    document.getElementById("elements").innerHTML = "";
+                    document.getElementById("targetsRow").style.display = "table-row";
+                    document.getElementById("targets").innerHTML = "";
+                } else {
+                    document.getElementById("boxSizeRow").style.display = "none";
+                    document.getElementById("elementsRow").style.display = "none";
+                    document.getElementById("targetsRow").style.display = "none";
+                }
+                if (hasText()) {
+                    initTextRow();
+                    holder.paper.mouseMove = textMouseMove;
+                    holder.paper.mouseOut = textMouseOut;
+                } else {
+                    hideTextRow();
+                    holder.paper.mouseMove = undefined;
+                    holder.paper.mouseOut = undefined;
+                }
+                initScoring();
+            }
+            
+            function hideImagesRow() {
+                document.getElementById("imagesRow").style.display = "none";
+            }
+            
+            function hideAxisRow() {
+                document.getElementById("axisRow").style.display = "none";
+            }
+            
+            function hideTextRow() {
+                document.getElementById("textRow").style.display = "none";
+            }
+            
+            function initImagesRow() {
+                document.getElementById("imagesRow").style.display = "table-row";
+                document.getElementById("images").innerHTML = "";
+            }
+            
+            function initTextRow() {
+                document.getElementById("textRow").style.display = "table-row";
+                document.getElementById("workingText").value = "";
+                document.getElementById("separatorParagraphs").checked = true;
+                document.getElementById("separatorChar").value = "";
+                document.getElementById("separatorChar").disabled = true;
+                document.getElementById("fontName").value = 'Arial';
+                document.getElementById("fontSize").value = '14';
+            }
+            
+            function initAxisRow() {
+                document.getElementById("axisRow").style.display = "table-row";
+                document.getElementById("displayAxesCheck").checked = false;
+                document.getElementById("gridVisibleCheck").checked = false;
+                document.getElementById("snapToCheck").checked = false;
+                document.getElementById("endPointsCheck").checked = false;
+                document.getElementById("minX").value = document.getElementById("minY").value = -10;
+                document.getElementById("maxX").value = document.getElementById("maxY").value = 10;
+                document.getElementById("stepX").value = document.getElementById("stepY").value = 1;
+                document.getElementById("extendLineRow").style.display = currentTemplate == "01" ? "table-row" : "none";
+                enableDisableElements(false);
+            }
+            
+            function hasAxes() {
+                return currentTemplate == "01" || currentTemplate == "03" || currentTemplate == "04";
+            }
+            
+            function hasText() {
+                return currentTemplate == "05" || currentTemplate == "06" || currentTemplate == "07";
+            }
+            
+            function hasImages() {
+                return currentTemplate == "01" || currentTemplate == "02" || currentTemplate == "03" || currentTemplate == "04";
+            }
+            
+            function onSelection(select) {
+                var option = select.options[select.selectedIndex].value
+                if (currentTemplate != "00" && currentTemplate != option) {
+                    if (!confirm('All changes made to this item will be lost. Continue?')) {
+                        option = "00";
+                        select.selectedIndex = parseInt(currentTemplate);
+                    }                   
+                } 
+                if (option != "00" && currentTemplate != option) {
+                    currentTemplate = option;
+                    select.options[0].disabled = true;
+                    init();
+                }
+                //alert(currentTemplate);
+            }
+            
+            function initScoring() {
+                document.getElementById("scoringRow").style.display = "table";
+                for (var i = 1; i <= SCORING_FIELDS.length; i++) {
+                    document.getElementById("scoring0" + i).style.display = "none";
+                }
+                initScoringTable();                                     
+                clearAnswers();
+                addAnswer();
+                selectAnswer(1);
+            }
+            
+            function initScoringTable() {
+                var table = document.getElementById("scoring" + currentTemplate);
+                table.style.display = "table";
+                initScoringFields(table, SCORING_FIELDS[parseInt(currentTemplate) - 1]);
+            }
+            
+            function initScoringFields(table, fields) {
+                scoringNames = fields;
+                for (var i = 0; i < fields.length; i++) {
+                    table.rows[i + 1].cells[1].innerHTML = scoringCell(fields[i]);
+                    if (table.rows[i + 1].cells[2]) {
+                        table.rows[i + 1].cells[2].innerHTML = scoringCell(fields[i] + '_Aux');
+                    }
+                }
+            }
+            
+            function scoringCell(name) {
+                if (name == 'shape') {
+                    return "<select name='shape' id='" + name + "' onchange='updateValues();'>" +
+                           "<option/>" +
+                           "<option>Quadrilateral</option>" +
+                           "<option>Parallelogram</option>" +
+                           "<option>Rectangle</option>" +
+                           "<option>Square</option>" +
+                           "<option>Rhombus</option>" +
+                           "</select>";
+                } else if (name == 'triangle') {
+                    return "<select name='shape' id='" + name + "' onchange='updateValues();'>" +
+                       "<option/>" +
+                       "<option>Any</option>" +
+                       "<option>Equilateral</option>" +
+                       "<option>Isosceles</option>" +
+                       "<option>Scalene</option>" +
+                       "<option>Right</option>" +
+                       "<option>Acute</option>" +
+                       "<option>Obtuse</option>" +
+                       "</select>";
+                } else if (name == 'rule') {
+                    return "<select name='rule' id='" + name + "' onchange='updateValues();'>" +
+                       "<option/>" +
+                       "<option>SumOnly</option>" +
+                       "<option>SumSubtract</option>" +
+                       "</select>";
+                } else if (name == 'text') {
+                    return "<textarea id='" + name + "' style='font-family: \"Arial\"' rows='3' cols='18' onchange='updateValues();'>"
+                } else {
+                    return "<input id='" + name + "' type='text' value='' size='2' onchange='updateValues();'>";
+                }
+            }
+            
+        </script>
+        <style type="text/css" media="screen">
+            #holder {
+                -moz-border-radius: 5px;
+                -webkit-border-radius: 5px;
+                border: solid 1px #333;
+            }
+            p {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <table cellpadding=0 cellspacing=0 id="topTable" width="100%">
+            <tr><td valign="top">
+            <table style="padding-right: 5px; border-right-style: solid; border-width: 2px; border-color: lightgray">
+                <tr><td style="padding-bottom: 5px">Choose template: 
+                <select id="templateSelect" onchange="onSelection(this);">
+                    <option value="00"></option>
+                    <option value="01">Single Line</option>
+                    <option value="02">Select and Order</option>
+                    <option value="03">Vertex Based Quadrilateral</option>
+                    <option value="04">Vertex Based Triangle</option>
+                    <option value="05">Reorder Text</option>
+                    <option value="06">Select Text</option>
+                    <option value="07">Select and Change Text</option>
+                </select>
+                <tr><td valign="top">
+                <div id="holder" style="border:1px solid #ccc;width:640px;height:480px;" onmousemove="mouseMove(event);" onmouseout="mouseOut(event);"> </div>
+            </table>
+            <td width="100%" valign="top">
+            <div id="rightPanelDiv" style="height: 500px; width: 100%; overflow: auto">            
+            <table>
+                <tr id="imagesRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td><b>Images</b>
+                    <tr><td>
+                    <table cellpadding=0 cellspacing=0><tr>
+                        <td valign="middle">URL: 
+                        <td valign="middle"><input id="url1" type="text" value="img\glove.png">
+                        <td valign="middle"><input id="addButton" type="button" value="Add" onclick="createImage(document.getElementById('holder').paper, document.getElementById('url1').value, 0, 0, 0, 0);">
+                    </table>
+                    <tr><td><div id="images"></div>
+                </table>
+                <tr id="axisRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td valign="middle"><input id="displayAxesCheck" type="checkbox" onclick="displayAxesChecked(document.getElementById('holder').paper, this.checked)">&nbsp;Display Coordinate Axes
+                    <tr><td >X Axis: From <input id="minX" type="text" value="-10" size=2 onchange="changeAxis()"> To <input id="maxX" type="text" value="10" size=2 onchange="changeAxis()"> Step <input id="stepX" type="text" value="1" size=2 onchange="changeAxis()">
+                    <tr><td >Y Axis: From <input id="minY" type="text" value="-10" size=2 onchange="changeAxis()"> To <input id="maxY" type="text" value="10" size=2 onchange="changeAxis()"> Step <input id="stepY" type="text" value="1" size=2 onchange="changeAxis()">
+                    <tr><td valign="middle"><input id="gridVisibleCheck" type="checkbox" onclick="displayGrid(document.getElementById('holder').paper, getBounds(), this.checked)">&nbsp;Make Grid Visible
+                    <tr><td valign="middle"><input id="snapToCheck" type="checkbox" onclick='enableSnapTo(this.checked)'>&nbsp;"Snap-To" Enabled
+                    <tr id="extendLineRow"><td valign="middle"><input id="endPointsCheck" type="checkbox" onclick='extendLineBeyondEndPoints(this.checked)'>&nbsp;Extend Line Beyond End Points
+                </table>
+                <tr id="boxSizeRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td><b>Target &amp; Element Box Size</b> 
+                    <tr><td>Width <input id="boxWidth" type="text" value="200" size=2> Height <input id="boxHeight" type="text" value="100" size=2>
+                    <input id="boxSizeUpdate" type="button" value="Update" disabled="disabled" onclick="updateBoxSize(document.getElementById('holder').paper, document.getElementById('boxWidth').value, document.getElementById('boxHeight').value);">
+                </table>
+                <tr id="elementsRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td valign="middle" style="font-weight: bold">Drag Elements
+                    <tr><td>
+                    <table cellpadding=0 cellspacing=0>
+                        <tr><td valign="middle">URL:&nbsp;
+                            <td valign="middle"><input id="elementUrl" type="text" value="img\Basketball.png">
+                            <td valign="middle"><input id="addDragElementButton" type="button" value="Add" onclick="createDragElement(document.getElementById('holder').paper, document.getElementById('elementUrl').value, 0, 0, document.getElementById('boxWidth').value, document.getElementById('boxHeight').value); enableBoxSizeUpdate();">
+                        <tr><td colspan="3"><div id="elements"></div>
+                    
+                    </table>
+                </table>
+                <tr id="targetsRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td valign="middle" style="font-weight: bold">Drop Targets &nbsp;
+                        <input id="addDropTargetButton" type="button" value="Add" onclick="createDropTarget(document.getElementById('holder').paper, 0, 0, document.getElementById('boxWidth').value, document.getElementById('boxHeight').value); enableBoxSizeUpdate();">
+                    <tr><td><div id="targets"></div>
+                </table>
+                <tr id="textRow" style="display: none"><td style="padding-bottom: 5px; border-bottom-style: solid; border-width: 2px; border-color: lightgray">
+                <table>
+                    <tr><td>Enter Text
+                    <tr><td><textarea id="workingText" style="font-family: 'Arial'"rows=5 cols="40" onchange="textChanged();"></textarea>
+                    <tr><td>Separation by:
+                    <tr><td>
+                        <input type="radio" name="separator" id="separatorParagraphs" onclick="separatorChanged();" checked="checked">Paragraphs<br>
+                        <input type="radio" name="separator" id="separatorSentences" onclick="separatorChanged();">Sentences<br>
+                        <input type="radio" name="separator" id="separatorWords" onclick="separatorChanged();">Words<br>
+                        <input type="radio" name="separator" id="separatorCharacter" onclick="separatorChanged();">By character&nbsp;<input id="separatorChar" type="text" size=2 value="" onchange="separatorChanged()">
+                    <tr><td>Font Name:&nbsp;<input id="fontName" type="text" size=10 value="Arial" onchange="textChanged();">
+                    <tr><td>Font Size:&nbsp;<input id="fontSize" type="text" size=2 value="14" onchange="textChanged();">
+                </table>
+                
+                <tr id="scoringRow" style="display: none"><td>
+                <table>
+                    <tr><td valign="top">
+                    <table>
+                        <tr><td valign="middle" style="font-weight: bold">Scoring
+                        <td rowspan=2 valign="top">
+                        <table id="scoring01" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td><b>Value</b><td><b>Tolerance</b>
+                            <tr><td>Point #1 (x,y)<td><td> 
+                            <tr><td>Point #2 (x,y)<td><td>
+                            <tr><td>X-Intercept <td><td>
+                            <tr><td>Y-Intercept <td><td> 
+                            <tr><td>Slope <td><td>
+                        </table> 
+                        <table id="scoring02" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td style="padding-right: 12px"><b>Sequence</b><td><b>Score</b>
+                            <tr><td><td><td> 
+                        </table> 
+                        <table id="scoring03" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td><b>Value</b><td><b>Tolerance</b>
+                            <tr><td>Point #1 (x,y)<td><td> 
+                            <tr><td>Point #2 (x,y)<td><td>
+                            <tr><td>Point #3 (x,y)<td><td> 
+                            <tr><td>Point #4 (x,y)<td><td>
+                            <tr><td>Side Lengths <td><td> 
+                            <tr><td>Perimeter<td><td>
+                            <tr><td>Area<td><td>
+                            <tr><td>Shape <td colspan="2">
+                        </table> 
+                        <table id="scoring04" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td><b>Value</b><td><b>Tolerance</b>
+                            <tr><td>Point #1 (x,y)<td><td> 
+                            <tr><td>Point #2 (x,y)<td><td>
+                            <tr><td>Point #3 (x,y)<td><td> 
+                            <tr><td>Side Lengths <td><td> 
+                            <tr><td>Perimeter<td><td>
+                            <tr><td>Area<td><td>
+                            <tr><td>Shape <td colspan="2">
+                        </table> 
+                        <table id="scoring05" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td style="padding-right: 12px"><b>Sequence</b><td><b>Score</b>
+                            <tr><td><td><td> 
+                        </table> 
+                        <table id="scoring06" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td><b>Value</b>
+                            <tr><td>Start Char<td> 
+                            <tr><td>End Char<td>
+                            <tr><td>Correct Points<td> 
+                            <tr><td>Incorrect Points<td> 
+                            <tr><td>Scoring Rule <td>
+                        </table> 
+                        <table id="scoring07" style="display: none; padding-left: 5px; border-left-style: solid; border-width: 2px; border-color: lightgray" cellspacing="1px" cellpadding="1px">
+                            <tr><td><td><b>Value</b>
+                            <tr><td>Start Char<td> 
+                            <tr><td>End Char<td>
+                            <tr><td valign="Top">Text<td>
+                        </table> 
+                        <tr><td valign="top">
+                        <table id="answersTable">
+                            <tr><td><input type="button" value="Add" onclick='addAnswer();'>
+                        </table>
+                    </table>
+                </table>
+            </table>
+            </div>
+        </table>
+        <br>
+        <input style="display:none" type="button" value="Save" onclick="document.getElementById('jsonTextArea').value = getAsJSON(currentTemplate, document.getElementById('holder').paper);">
+        <input style="display:none" type="button" value="Load" onclick="loadFromJSON(document.getElementById('jsonTextArea').value, document.getElementById('holder').paper);">
+        <input type="button" value="Try It!" onclick="window.open('tei-test.html', '', 'height=700,width=800');">
+
+        <br>
+        <textarea id="jsonTextArea" style="display: none; font-family: 'Arial'" rows=8 cols="80"></textarea> 
+        
+        <div id="out"></div>
+    </body>
+</html>

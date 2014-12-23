@@ -1,0 +1,72 @@
+
+* Customizing PXN8
+  ================
+
+This document is intended to give a quick overview of customizing PXN8
+appearance. A more comprehensive PXN8 customization guide is in
+development.
+
+Walter Higgins
+Sxoop Technologies Ltd.
+January 24th 2006
+
+==============================================================
+
+PXN8 is based on standard web technologies, Perl, HTML, CSS and
+Javascript.
+As such, customizing the appearance of PXN8 can be done by modifying
+HTML (or JSP/ASP/PHP) and CSS stylesheets. The client-side behaviour can
+be modified by changing the javascript. 
+The server-side behaviour can be extended by adding new CGI scripts
+and or writing and registering new image-manipulation routines in
+perl.
+
+
+The following document describes how to customize PXN8 to suit your
+own company or organization's needs.
+
+** Changing the appearance of PXN8
+
+In order to change the appearance of PXN8 you will need to have some
+knowledge of HTML and CSS. HTML is short for Hypertext Markup
+Language. It is a declarative language for specifying the structure of
+web pages. CSS is short for Cascading Style Sheets, it too is a
+declarative language for specifying the layout and appearance of
+individual elements within a web page. 
+
+PXN8 ships with 2 ready-made themes
+
+1. default 
+2. slick
+
+JSP and PHP versions of each are available (default.jsp, default.php,
+slick.jsp, slick.php). Pick one of these supplied themes and copy it
+to a new file mycompany.php or mycompany.jsp.
+
+You are now ready to begin customizing PXN8. Probably the first thing
+you will want to do with PXN8 is change the logo which appears in the
+top right corner of the web page, to match your organization's
+logo. 
+First copy the company logo image into the images directory. Then open
+the mycompany.jsp/php  in your
+favourite editor and change the logo.
+
+This only scratches the surface of customizing. Each of the 2 themes
+uses their own stylesheet. As with the php/jsp, it is recommended that
+you copy one of the stylesheets to a new file name mycompany.css.
+
+Each of the stylesheets has entries for elements with names beginning
+'pxn8_'. Changing the style of such elements is not recommended unless
+you have working knowledge of CSS. All other element styles can be
+changed.
+
+Similarly each of the pages (php,jsp) contain elements with ids
+beginning 'pxn8_'. It is recommended that you include each of these
+elements in any new customized editor page you created.
+
+In particular, while you can change the placement of the 'pxn8_canvas'
+element, it is not recommended that you remove any of the elements
+contained within it.
+
+This is just the simplest, most trivial example of how PXN8's User
+interface appearance can be customized to suit your needs.

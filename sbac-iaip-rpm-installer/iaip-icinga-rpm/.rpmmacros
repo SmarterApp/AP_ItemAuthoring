@@ -1,0 +1,18 @@
+# This file should be renamed to ~/.rpmmacros
+
+%packager               Mark Langbehn <mlangbehn@pacificmetrics.com>
+%distribution           JBoss
+%vendor                 Pacific Metrics
+
+%_signature             gpg
+%_gpg_name              Mark Langbehn <mlangbehn@pacificmetrics.com>
+%_topdir                /opt/rpm-development/jboss-rpm/build
+%_tmppath               /opt/rpm-development/jboss-rpm/rpmtmp
+
+%_builddir              %{_tmppath}/BUILD
+%_rpmtopdir             %{_topdir}/rpm/%{name}
+%_rpmdir                %{_topdir}/RPMS
+%_sourcedir             %{_rpmtopdir}
+%_specdir               %{_rpmtopdir}
+%_srcrpmdir             %{_rpmtopdir}
+

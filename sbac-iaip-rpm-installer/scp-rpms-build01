@@ -1,0 +1,17 @@
+#!/bin/bash
+RPM_HOST="build01.pacificmetrics.com"
+YUM_HOME="/usr/local/yum/sbac-iaip/1.0"
+RPM_HOME="$YUM_HOME/RPMS"
+TMP_HOME="/tmp/rli/"
+USER=$1
+
+if [ $USER ]; then
+	ssh -q $USER@$RPM_HOST "mkdir -p $TMP_HOME"
+	find . -name "*.rpm" -exec scp {} $USER@$RPM_HOST:$TMP_HOME \;
+	ssh -q -t $USER@$RPM_HOST "sudo chown -R root:root $TMP_HOME"
+	ssh -q -t $USER@$RPM_HOST "sudo mv $TMP_HOME/*.rpm $RPM_HOME/"
+	ssh -q -t $USER@$RPM_HOST "cd $YUM_HOME; sudo rm -rf repodata; sudo createrepo ."
+	ssh -q -t $USER@$RPM_HOST "sudo rm -rf $TMP_HOME"
+else
+	echo $0" <remote_user>; Must provide remote username with 'ssh' and 'sudo' rights on the RPM Host."
+fi

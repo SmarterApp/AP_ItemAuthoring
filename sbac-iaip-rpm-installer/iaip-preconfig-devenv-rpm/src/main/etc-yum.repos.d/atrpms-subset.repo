@@ -1,0 +1,8 @@
+[atrpms-subset]
+name=Fedora Core $releasever - $basearch - ATrpms SBAC IAIP Subset
+## baseurl=http://192.168.1.50/yum/atrpms-subset/
+## baseurl=http://10.4.1.116/yum/atrpms-subset/
+baseurl=http://sbacuser:smart2@sbacartifact1.pacificmetrics.com/yum/atrpms-subset/
+gpgkey=http://ATrpms.net/RPM-GPG-KEY.atrpms
+enabled=1
+gpgcheck=0

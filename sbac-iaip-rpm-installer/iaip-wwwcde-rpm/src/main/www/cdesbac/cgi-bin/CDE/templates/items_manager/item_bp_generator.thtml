@@ -1,0 +1,454 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Item Generator</title>
+<link rel="stylesheet" href="../style/text.css" />
+<link rel="stylesheet" href="/common/style/tabber.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/common/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/common/js/tabber.js"></script>
+
+<link href="../style/text.css" rel="stylesheet" type="text/css">
+
+<script src="/common/js/calendar/cal2.js" type="text/javascript"></script>
+<script type="text/javascript" src="/common/js/moment.min.js"></script>
+<TMPL_INCLUDE NAME="common.tjs">
+<TMPL_INCLUDE NAME="results_table_functions.tjs">
+<script>
+var programs  = <TMPL_VAR NAME="programs_json" DEFAULT="{}">;
+var hierarchy = <TMPL_VAR NAME="hierarchy_json" DEFAULT="{}">;
+var passages = [];
+var writers  = [];
+tbl['blueprint'] = true;
+
+addCalendar("calendar1", "Select Date", "due_date", "cde");
+setWidth(90, 1, 15, 1);
+setFormat("yyyy-mm-dd");
+
+
+function openEditWindow1(subject,grade){
+
+if(!subject){
+alert("Please select a Content Area to Assign Standard!");
+return false;
+}
+if(!grade){
+alert("Please select a Grade Level to Assign Standard!");
+return false;
+}
+   myOpen('Edit',  "/orca-sbac/ItemStandardEdit.jsf?subject="+document.getElementById('subject_area').options[document.getElementById('subject_area').selectedIndex].innerHTML+"&grade="+document.getElementById('grade_level').options[document.getElementById('grade_level').selectedIndex].innerHTML+"&standardInd=P&callerFlag=itemGenerator", 700, 500);
+}
+
+function clearStandard(){
+document.getElementById('item_standard').value='';
+document.getElementById("standard_bp").style.display="none";
+}
+
+function loadLists(f, ib_id) {
+        statuses['current_ib_id'] = ib_id;
+	if( ib_id == 0 ) return;
+
+	var post_params = 'action=getIGLists' +
+                          '&sess_id='       + f.sess_id.value +
+                          '&instance_name=' + f.instance_name.value +
+                          '&ib_id='         + ib_id;
+        ajaxpack.postAjaxRequest( URL, post_params, displayLists, "txt" );
+}
+
+
+function displayLists() {
+        ajax = ajaxpack.ajaxobj;
+        if ( ajax.readyState == 4 ) {
+            if( ajax.status==200 ) {
+        	var results = ajax.responseText.split('<json_data>');
+                lists = eval('(' + results[1] + ')');
+
+		passages = lists.passages;
+		document.cde.passage.length = 1;
+		for( var i=0; i < passages.length; i++ ) {
+                    document.cde.passage.options.add( new Option(passages[i].p_name, passages[i].p_id ) );
+		}
+
+		writers = lists.writers;
+		document.cde.writers.length = 1;
+		for( var i=0; i < writers.length; i++ ) {
+		    if( writers[i].u_id > 0 )
+                    	document.cde.writers.options.add( new Option(writers[i].fullname, writers[i].u_id ) );
+		}
+	    }
+	}
+	else {
+	}
+}
+function getNextLevel(f, next_level, sh_id) {
+	if( sh_id == 0 ) return false;
+
+	tbl.sh_id = sh_id;
+	tbl.hd_id = hierarchy[sh_id].hd_id;
+	loadNext(f, next_level, hierarchy[sh_id].hd_id);
+                var hierarchy_bp = document.getElementById('hierarchy_bp');
+		while(hierarchy_bp.rows.length > 0) {
+                    hierarchy_bp.deleteRow(0);
+                }
+}
+
+
+
+function createItems(f) {
+	if( f.ib_id.selectedIndex == 0 ) {
+	    alert( 'Please Select Required Field : Program!' );
+	    f.ib_id.focus();
+	    return false;
+	}
+	 
+	if( f.primarystandard.value == '' ) {
+	    alert( 'Please Assign a Standard!' );
+	    f.primarystandard.focus();
+	    return false;
+	}
+	if( f.writers.selectedIndex == 0 ) {
+            alert( 'Please Assign a Writer!' );
+            f.writers.focus();
+            return false;
+        }
+
+	if( ! f.due_date.value.match(/^\d{4}-\d{2}-\d{2}$/) ) {
+	  alert( 'Due Date must be in the form YYYY-MM-DD');
+	  f.due_date.focus();
+	  return false;
+	} else if(! moment(f.due_date.value, 'YYYY-MM-DD').isValid()) {
+	    alert( 'Due Date is not valid');
+	    f.due_date.focus();
+	    return false;
+	}
+    var obj = '';
+	var item_cnt = 0;
+	for(var i=0; i < f.length; i++) {
+	    if( f.elements[i].name && f.elements[i].name.match(/^itemformat_/) ) {
+		var format_cnt = f.elements[i];	
+		if( format_cnt.value.match(/^\d+$/) ) {
+		    item_cnt += format_cnt.value * 1;
+		}
+		else if( format_cnt.value == '' ) {
+		    if( i == 0 ) obj = format_cnt;
+		    continue;
+		}
+		else {
+		    alert('Value must be numeric!');
+		    format_cnt.focus();
+		    return false;
+		}
+	    }
+        }
+              
+	if( item_cnt > 200 ) {
+	    alert( 'Max # allowed is 200! : ' + item_cnt );
+	    return false;
+	}
+	if( item_cnt == 0 || item_cnt=='') {
+	    alert('No Item Type count(s) entered. Please enter at least 1 to continue.');
+	     return false;
+	}
+	    
+        document.getElementById('progress_spinner').innerHTML = progress_bar;
+	f.hd_id.value = tbl.hd_id;
+	f.submit();
+}
+function displayLowerLevels() {
+        ajax = ajaxpack.ajaxobj;
+        if ( ajax.readyState == 4 ) {
+           if( ajax.status==200 ) {
+                var hierarchy_bp = document.getElementById('hierarchy_bp');
+		while(hierarchy_bp.rows.length > 0) {
+                    hierarchy_bp.deleteRow(0);
+                }
+           	var results = ajax.responseText.split('<json_data>');
+                var hd = eval('(' + results[1] + ')');
+                if( results[0] != 0 ) {
+                    var new_tr = hierarchy_bp.insertRow(-1);
+		    for( ll in hd.level_labels ) {
+			var level = hd.level_labels[ll];
+                    	var new_th = document.createElement("TH");
+                    	new_th.innerHTML = level.label;
+		    	new_tr.appendChild(new_th);
+		    }
+
+		    var sub_spec_found = false;
+		    for( ll in hd.lower_levels ) {
+			var level = hd.lower_levels[ll];
+		    	if(! level[hd.fields[2]] ) continue; 
+			sub_spec_found = true;
+
+                    	var new_tr = hierarchy_bp.insertRow(-1);
+			for( f in hd.fields ) {
+			    var field = hd.fields[f];
+                    	    var new_td = new_tr.insertCell(-1);
+                    	    new_td.innerHTML = level[field] ? level[field] : '&nbsp;';
+			}
+                    	new_td = new_tr.insertCell(-1);
+			new_td.innerHTML = '<input type="text" name="itemformat_' + level.hd_id + '_1_cnt" size="2" maxlength="2" />';
+                    	new_td = new_tr.insertCell(-1);
+			new_td.innerHTML = '<input type="text" name="itemformat_' + level.hd_id + '_2_cnt" size="2" maxlength="2" />';
+                    	new_td = new_tr.insertCell(-1);
+			new_td.innerHTML = '<input type="text" name="itemformat_' + level.hd_id + '_3_cnt" size="2" maxlength="2" />';
+                    	new_td = new_tr.insertCell(-1);
+			new_td.innerHTML = '<input type="text" name="itemformat_' + level.hd_id + '_4_cnt" size="2" maxlength="2" />';
+		    }
+		    if( ! sub_spec_found ) {
+                    	var new_tr = hierarchy_bp.insertRow(-1);
+                    	var new_td = new_tr.insertCell(-1);
+			new_td.colSpan = 7;
+			new_td.innerHTML = "No 'Sub-Specific Content' found through this Hierarchy path.";
+		    }
+
+                }
+		else {
+                    var new_tr = hierarchy_bp.insertRow(-1);
+                    var new_td = new_tr.insertCell(-1);
+		    new_td.colSpan = 7;
+		    new_td.innerHTML = "No 'Sub-Specific Content' found through this Hierarchy path.";
+                }
+                document.getElementById(statuses.progress_bar_area).innerHTML = '';
+            }
+            else {
+            	document.getElementById(statuses.progress_bar_area).innerHTML = 'Error : ' + ajax.status + '!';
+            }
+       	}
+}
+
+function getStandardTable(value){
+        document.getElementById("standard_bp").style.display="table";
+        document.getElementById("item_id").innerHTML=value;
+}
+</script>
+
+</head>
+
+<body>
+<form action="items_manager.pl" method="post" enctype="multipart/form-data" name="cde" id="cde">
+<input type="hidden" name="sess_id" value="<TMPL_VAR NAME="sess_id">" />
+<input type="hidden" name="instance_name" value="<TMPL_VAR NAME="instance_name">" />
+<input type="hidden" name="action" value="generateItemsBP" />
+<input type="hidden" name="hd_id" value="" />
+<input type="hidden" name="stem_cnt" value="1" />
+
+<div class="title">Item BP Generator</div>
+
+
+<table  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td valign="top">
+<table  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="175" align="left" valign="top">
+	<span class="required">Program: </span>
+    </td>
+    <td width="350" align="left" valign="top">
+	<select name="ib_id" id="ib_id" style="width:180px;" onChange="loadLists(this.form, this.value)">
+            <option value="0">---</option>
+            <TMPL_LOOP NAME="programs">
+            	<option value="<TMPL_VAR NAME="ib_id">"><TMPL_VAR NAME="ib_external_id"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  
+  <tr>
+    <td align="left" valign="top">
+	Choices:
+    </td>
+    <td align="left" valign="top">
+	<select name="choice_cnt" style="width:180px;">
+	    <option value="1">1</option>
+	    <option value="2">2</option>
+	    <option value="3">3</option>
+	    <option value="4">4</option>
+	    <option value="5">5</option>
+	    <option value="6">6</option>
+	    <option value="7">7</option>
+	    <option value="8">8</option>
+	    <option value="9">9</option>
+	    <option value="10">10</option>
+    	</select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        <span class="required">Content Area: </span>
+    </td>
+    <td align="left" valign="top">
+        <select id="subject_area" name="subject_area" style="width:180px;" id="sub" onChange="clearStandard()">
+                <option value=""></option>
+            <TMPL_LOOP NAME="subject_areas">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        <span class="required">Grade Level: </span>
+    </td>
+    <td align="left" valign="top">
+        <select id="grade_level" name="grade_level" style="width:180px;" onChange="clearStandard()">
+                <option value=""></option>
+            <TMPL_LOOP NAME="grade_levels">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Grade Span:
+    </td>
+    <td align="left" valign="top">
+        <select name="grade_span_start" onChange="compareGradeSpan(this.form, this)">
+            <option value=""></option>
+            <TMPL_LOOP NAME="grade_span">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+        -
+        <select name="grade_span_end" onChange="compareGradeSpan(this.form, this)">
+            <option value=""></option>
+            <TMPL_LOOP NAME="grade_span">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Item Points:
+    </td>
+    <td align="left" valign="top">
+        <select name="points" style="width:180px;">
+            <TMPL_LOOP NAME="points">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Difficulty:
+    </td>
+    <td align="left" valign="top">
+        <select name="difficulty" style="width:180px;">
+            <option value=""></option>
+            <TMPL_LOOP NAME="difficulty_levels">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Depth of Knowledge:
+    </td>
+    <td align="left" valign="top">
+        <select name="dok" style="width:180px;">
+            <option value=""></option>
+            <TMPL_LOOP NAME="dok">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Publication Status:
+    </td>
+    <td align="left" valign="top">
+        <select name="publication_status" style="width:180px;">
+            <option value=""></option>
+            <TMPL_LOOP NAME="publication_status">
+                <option value="<TMPL_VAR NAME="_value">"><TMPL_VAR NAME="_label"></option>
+            </TMPL_LOOP>
+        </select>
+    </td>
+  </tr>
+
+<tr>
+    <td align="left" valign="top">
+        <span class="required">Standard:</span>
+    </td>
+    <td align="left" valign="top">
+       <input type="text" name="primarystandard" id="item_standard" onChange="getStandardTable(this.value)" readonly/> <a href="#" onclick="openEditWindow1(document.getElementById('subject_area').value,document.getElementById('grade_level').value);">Assign Standard</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="left" valign="top">
+        <span class="required">Assigned Writer:</span>
+    </td>
+    <td align="left" valign="top">
+        <select name="writers" style="width:180px;">
+            <option value=""></option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	Passage:
+    </td>
+    <td align="left" valign="top">
+	<select name="passage" style="width:180px;">
+    	</select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+        Readability Index:
+    </td>
+    <td align="left" valign="top">
+        <input type="text" id="readability_index" name="readability_index" size="25" value="" />
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+	<span class="required">Due Date:</span>
+    </td>
+    <td align="left" valign="top">
+	<input type="text" id="due_date" name="due_date" size="11" value="" />
+        &nbsp;<a href="javascript:showCal('calendar1')">Select Date</a>
+        <div id="calendar1"></div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+	<span class="required">Red label</span> = required field
+	<p>
+            <input type="button" class="action_button" name="create_items" value="Create Items" onClick="createItems(this.form)" />
+            <span id="progress_spinner">&nbsp;</span>
+        </p>
+    </td>
+  </tr>
+</table>
+    </td>
+  <td valign="top" bgcolor="#F0F0F0">
+	
+	<table  cellspacing="0" cellpadding="0" id="standard_bp" name="standard_bp" style="display:none">
+	<tr>
+	  <th>Standard: </th>
+	  <th>SR</th>
+	  <th>CR</th>
+	  <th>Activity Based</th>
+	  <th>Performance</th>
+	</tr>
+	<tr>
+	  <td id="item_id" size="5" ></td>
+	  <td><input type="text" name="itemformat_11_1_cnt" id="itemformat_11_1_cnt" size="2" maxlength="2"/></td>
+	  <td><input type="text" name="itemformat_22_2_cnt" id="itemformat_22_2_cnt" size="2" maxlength="2"/></td>
+	  <td><input type="text" name="itemformat_33_3_cnt" id="itemformat_33_3_cnt" size="2" maxlength="2"/></td>
+	  <td><input type="text" name="itemformat_33_4_cnt" id="itemformat_33_4_cnt" size="2" maxlength="2"/></td>
+	</tr>
+   </table>
+  </td>
+  </tr>
+</table>
+
+
+</form>
+</body>
+</html>

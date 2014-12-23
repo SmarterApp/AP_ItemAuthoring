@@ -1,0 +1,53 @@
+# echo "rpm postinstall $1"
+
+fail() {
+    echo "ERROR: $1"
+    exit 1
+}   
+
+## Bootstrap the MySQL database "jasperserver"
+ROOTUSER="root"
+ROOTPSWD=""
+
+PACIFICUSER="pacific"
+PACIFICPSWD="itemong3r"
+ORCADBDATABASENAME="jasperserver"
+
+## MyHOST="$(hostname)"
+MyHOST="localhost"
+
+MYSQL="$(which mysql)"
+
+## Run the DB creation scripts
+
+DB_INIT_SCRIPT_DATA="db-backup-jasperserver.sql"
+
+##echo "Drop jasperserver Database"
+##$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD < /usr/local/orcadata/mysql-jasperserver-init/drop-database.sql
+
+echo "Creating jasperserver Database"
+$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD < /usr/local/orcadata/mysql-jasperserver-init/create-database.sql || fail "MySQL failed to create jasperserver database"
+
+echo "Loading SBAC IAIP JasperReports data"
+
+echo "Running: $DB_INIT_SCRIPT_DATA"
+$MYSQL --user=$PACIFICUSER --host=$MyHOST --password=$PACIFICPSWD --database=$ORCADBDATABASENAME < /usr/local/orcadata/mysql-jasperserver-init/$DB_INIT_SCRIPT_DATA || fail "MySQL failed to populate jasperserver tables with data"
+
+
+##echo "Cleaning up"
+##rm -rf /usr/local/orcadata/mysql-jasperserver-init
+
+
+
+## Add alias helpful for MySQL jasperserver admin tasks to .bashrc
+
+PREEXISTING_DBBACKUP_ALIAS=`grep dbbackupjasperserver /root/.bashrc`
+
+if [[ "$PREEXISTING_DBBACKUP_ALIAS" == "" ]]; then
+  echo "Adding shell alias: dbbackupjasperserver"  
+  echo ""     >> /root/.bashrc
+
+  echo "alias dbbackupjasperserver='mysqldump -u pacific -p --routines jasperserver > db-backup-jasperserver-$(date +%Y-%m-%d).sql'"   >> /root/.bashrc 
+else
+  echo "Already has shell alias 'dbbackupjasperserver' in: /root/.bashrc"
+fi

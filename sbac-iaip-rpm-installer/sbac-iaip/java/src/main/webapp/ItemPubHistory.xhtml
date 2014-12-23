@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+<h:head>
+	<title>Standard Edit</title>
+	<h:outputStylesheet name="css/pubHistory.css"/></h:head>
+<h:body>
+
+<h:outputText value="No Statistics To Report At This Time." rendered="#{pubHistory.temp.size()==0}"  style="color:red;font-size:20px;"/>
+<h:form rendered="#{pubHistory.temp.size()>0}">
+<div class="main_wrapper" >
+            <div class="header">
+                <label>Publication History</label>    
+            </div>
+            <div class="sub_wrapper">
+                <div class="left_container">
+                    <div class="left_inner_top"> 
+                        <table cellspacing="0" cellpadding="4">
+                            <tr>
+                                <th>Administration</th><th class="common"><h:outputText value="#{pubHistory.temp['administration']}" /></th>
+                            </tr>
+                            <tr>
+                                <td>Item Response Type</td><td class="common"><h:outputText value="#{pubHistory.temp['item_response_type']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Item Total correlation</td><td class="common"><h:outputText value="#{pubHistory.temp['item_total_correlation']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Item Statistical Flags</td><td class="common"><h:outputText value="#{pubHistory.temp['item_flag']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Sample size</td><td class="common"><h:outputText value="#{pubHistory.temp['sample_size']}"  /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="left_inner_bottom"> 
+                        <table cellspacing="0" cellpadding="4" >
+                            <tr>
+                                <th>Percent Obtaining 0</th><th class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_0']}" /></th>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 1</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_1']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 2</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_2']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 3</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_3']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 4</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_4']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 5</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_5']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 6</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_6']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 7</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_7']}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Percent Obtaining 8</td><td class="common"><h:outputText value="#{pubHistory.temp['percent_obtaining_8']}" /></td>
+                            </tr>                            
+                        </table>
+                    </div>
+                </div>
+                <div class="right_container">
+                    <table cellspacing="0" cellpadding="4" >
+                        <tr>
+                            <th>N_Male</th>
+                            <th>N_Female</th>
+                            <th>N_White</th>
+                            <th>N_Hispanic</th>
+                            <th>N_Asian</th>
+                            <th>N_NativeAmerican</th>
+                            <th>N_IEP</th>
+                            <th>N_LEP</th>
+                            <th>N_Title1</th>
+                        </tr>
+                        <tr>
+                            <td><h:outputText value="#{pubHistory.temp['n_male']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_female']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_white']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_hispanic']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_asian']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_nativeamerican']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_iep']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_lep']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_title1']}" /></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>                                                     
+                    </table>
+                    <table cellspacing="0" cellpadding="4">
+                        <tr>
+                            <th>DIF:Female v Male</th>
+                            <th>DIF:Asian v White</th>
+                            <th>DIF:Black v White</th>
+                            <th>DIF:Hispanic v White</th>
+                            <th>NativeA_v_White</th>
+                            <th>IEP_v_NonIEP</th>
+                            <th>LEP_v_NonLEP</th>
+                            <th>Title1_v_NonTitle1</th>
+                        </tr>
+                        <tr>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_female_v_male']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_asian_v_white']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_black_v_white']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_hispanic_v_white']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_nativea_v_white']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_iep_v_noniep']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_lep_v_nonlep']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['difcat_title1_v_nontitle1']}" /></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>                                                     
+                    </table>
+                    <table cellspacing="0" cellpadding="4">
+                        <tr>
+                            <th></th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Option E</th><th>Option F</th><th>Option G</th>
+                        </tr>
+                        <tr>
+                            <td>Percent Choosing </td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosinga']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosingb']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosingc']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosingd']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosinge']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosingf']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['percent_choosingg']}" /></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Number Choosing </td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosinga']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosingb']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosingc']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosingd']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosinge']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosingf']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['n_choosingg']}" /></td>
+                        </tr>
+                        <tr>
+                            <td> Biserial </td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optiona']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optionb']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optionc']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optiond']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optione']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optionf']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['biserial_optiong']}" /></td>
+                        </tr>
+                        <tr>
+                            <td>Pt. Biserial </td>
+                         	<td><h:outputText value="#{pubHistory.temp['pt_biserial_optiona']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optionb']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optionc']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optiond']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optione']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optionf']}" /></td>
+                            <td><h:outputText value="#{pubHistory.temp['pt_biserial_optiong']}" /></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>                                                     
+                    </table>
+                </div>
+             </div>
+            <div class="clear"></div>
+             <div class="navigation_container">
+                <h:commandLink  styleClass ="prev" value="&lt; Previous Administration" actionListener="#{pubHistory.prevNavigation}" rendered="#{pubHistory.prevSelect}"/>
+                <h:commandLink styleClass="next" value=" Next Administration &gt;" actionListener="#{pubHistory.nextNavigation}" rendered="#{pubHistory.nextSelect}"/>
+                </div>
+           
+        </div>
+	</h:form>
+</h:body>
+</html>
