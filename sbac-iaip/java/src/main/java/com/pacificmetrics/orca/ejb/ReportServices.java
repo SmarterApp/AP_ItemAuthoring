@@ -131,9 +131,11 @@ public class ReportServices {
         String uuid = node.getText();
         node = document.selectSingleNode("/report/totalPages");
         Integer totalPages = Integer.parseInt(node.getText());
+
         if (totalPages == 0) {
             throw new ReportException("EMPTY_REPORT");
         }
+
         urlReport = this.restEndpointUrl + "/report/" + uuid + "?file=report";
         return urlReport;
     }

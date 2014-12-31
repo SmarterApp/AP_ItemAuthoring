@@ -58,6 +58,16 @@ public class SAAIFPackageConstants {
         Map<Integer, String> languageMap = new HashMap<Integer, String>();
         languageMap.put(1, "eng");
         languageMap.put(2, "spa");
+        languageMap.put(3, "ar");
+        languageMap.put(4, "zh-yu");
+        languageMap.put(5, "ilo");
+        languageMap.put(6, "ko");
+        languageMap.put(7, "zh-cm");
+        languageMap.put(8, "pa");
+        languageMap.put(9, "ru");
+        languageMap.put(10, "tl");
+        languageMap.put(11, "uk");
+        languageMap.put(12, "vi");
         return languageMap;
     }
 }

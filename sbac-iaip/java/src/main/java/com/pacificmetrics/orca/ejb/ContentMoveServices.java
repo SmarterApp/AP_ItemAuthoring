@@ -47,6 +47,7 @@ import com.pacificmetrics.orca.entities.ExternalContentMetadata;
 import com.pacificmetrics.orca.entities.Genre;
 import com.pacificmetrics.orca.entities.Grade;
 import com.pacificmetrics.orca.entities.Item;
+import com.pacificmetrics.orca.entities.ItemAlternate;
 import com.pacificmetrics.orca.entities.ItemAssetAttribute;
 import com.pacificmetrics.orca.entities.ItemBank;
 import com.pacificmetrics.orca.entities.ItemCharacterization;
@@ -151,6 +152,16 @@ public class ContentMoveServices implements Serializable {
             return entityManager.find(Genre.class, genreId);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error finding genre with id " + genreId
+                    + " " + e.getMessage(), e);
+        }
+        return null;
+    }
+    
+    public Item findItemById(long itemId) {
+        try {
+            return entityManager.find(Item.class, itemId);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error finding genre with id " + itemId
                     + " " + e.getMessage(), e);
         }
         return null;
@@ -323,6 +334,23 @@ public class ContentMoveServices implements Serializable {
         return rubric;
     }
 
+    public ItemAlternate findItemAlternateByItem(long id) {
+    	ItemAlternate itemAlternate = new ItemAlternate();
+        try {
+	        if (entityManager != null) {
+	        	itemAlternate = entityManager
+	                    .createNamedQuery("alternatesByItemId",
+	                    		ItemAlternate.class)
+	                    .setParameter("i_id", id).getSingleResult();
+	        }
+        } catch(NoResultException e) {
+        	LOGGER.log(Level.SEVERE,"No Detail Status found by item: ", e);
+        } catch(Exception e) {
+        	LOGGER.log(Level.SEVERE,"Error finding Detail Status by item: ", e);
+        }
+        return itemAlternate;
+    }
+    
     public DetailStatusType findDetailStatusTypeByVal(String value) {
         DetailStatusType detailStatusType = new DetailStatusType();
         try {

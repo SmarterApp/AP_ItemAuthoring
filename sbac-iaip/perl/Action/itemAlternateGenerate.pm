@@ -30,9 +30,18 @@ sub run {
   			       5 => 'Transcript' );
   
   our %ia_language = ( '' => 'None',
-                      'es' => 'Spanish',
-  		    'de' => 'German',
-  		    'fr' => 'French' );
+                      'ar' => 'Arabic',
+  		      'zh-yu' => 'Cantonese',
+  		      'en' => 'English',		      
+		      'ilo' => 'Ilokano',
+  		      'ko' => 'Korean',
+  		      'zh-cm' => 'Mandarin',
+  		      'pa' => 'Punjabi',
+  		      'ru' => 'Russian',
+              'es' => 'Spanish',
+  		      'tl' => 'Tagalog',
+  		      'uk' => 'Ukrainian',
+  		      'vi' => 'Vietnamese' );
   
   our $banks = defined($user->{banks}) ? $user->{banks} : &getItemBanks( $dbh, $user->{id} );
   

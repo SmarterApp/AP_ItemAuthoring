@@ -864,7 +864,17 @@ our %genres = (
 
 our %languages = (
     '1' => 'English',
-    '2' => 'Spanish'
+    '2' => 'Spanish',
+    '3' => 'Arabic',
+    '4' => 'Cantonese',
+    '5' => 'Ilokano',
+    '6' => 'Korean',
+    '7' => 'Mandarin',
+    '8' => 'Punjabi',
+    '9' => 'Russian',
+    '10' => 'Tagalog',
+    '11' => 'Ukrainian',
+    '12' => 'Vietnamese'
 );
 
 our %error_types = (

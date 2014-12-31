@@ -36,6 +36,7 @@ import com.pacificmetrics.orca.entities.AccessibilityElement;
 import com.pacificmetrics.orca.entities.AccessibilityFeature;
 import com.pacificmetrics.orca.entities.DevState;
 import com.pacificmetrics.orca.entities.Item;
+import com.pacificmetrics.orca.entities.ItemAlternate;
 import com.pacificmetrics.orca.entities.ItemAssetAttribute;
 import com.pacificmetrics.orca.entities.ItemCharacterization;
 import com.pacificmetrics.orca.entities.ItemFragment;
@@ -165,8 +166,17 @@ public class ORCA2SAAIFItemWriter {
             itemElement.setAttriblist(buildItemAttributes(item));
             itemElement.getContent().addAll(buildItemContents(item));
 
+            // Alternate content
+            ItemAlternate itemAlternate = contentMoveService
+                    .findItemAlternateByItem(item.getId());
+            if (null != itemAlternate) {
+                Item altItem = contentMoveService.findItemById(itemAlternate
+                        .getAlternateItemId());
+                if (null != altItem) {
+                    itemElement.getContent().addAll(buildItemContents(altItem));
+                }
+            }
             itemrelease.setItem(itemElement);
-
             xmlContent = JAXBUtil.mershallSBAIF(itemrelease,
                     AssessmentitemreleaseType.class);
         } catch (Exception e) {
@@ -295,7 +305,8 @@ public class ORCA2SAAIFItemWriter {
 
         ItemcontentType ict = new ItemcontentType();
 
-        ict.setLanguage("ENU");
+        ict.setLanguage(SAAIFPackageConstants.LANGUAGE.get(item.getLang())
+                .toUpperCase());
         // TODO: Needs for clarification
         ict.setVersion("0");
         // Version of Item

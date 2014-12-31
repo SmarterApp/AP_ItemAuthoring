@@ -164,7 +164,7 @@ sub run {
         'editor'          => {},
         'difficultyLevel' => {},
         'language'        => {},
-	'hasCopyright'    => {},
+    'hasCopyright'    => {},
     );
 
     foreach my $filterKey ( keys %filterFields ) {
@@ -281,13 +281,13 @@ sub run {
 
         unless(exists $filterFields{hasCopyright}{1} && exists $filterFields{hasCopyright}{2}) {
 
-	  next if scalar(keys %{$copyrightFiles}) && exists $filterFields{hasCopyright}{2};
-	  next if scalar(keys %{$copyrightFiles}) == 0 && exists $filterFields{hasCopyright}{1};
+      next if scalar(keys %{$copyrightFiles}) && exists $filterFields{hasCopyright}{2};
+      next if scalar(keys %{$copyrightFiles}) == 0 && exists $filterFields{hasCopyright}{1};
         }
 
         my %newItem = ();
         $newItem{id}              = $row->{i_id};
-	$newItem{version} = $row->{i_version};
+    $newItem{version} = $row->{i_version};
         $newItem{external_id}     = $row->{i_external_id};
         $newItem{ims_id}          = $row->{i_ims_id};
         $newItem{format}            = $item_formats{ $row->{i_format} };
@@ -302,7 +302,7 @@ sub run {
         $newItem{correct}    = $row->{i_correct_response};
         $newItem{read_only}  = $row->{i_read_only};
         $newItem{difficulty} = $difficulty_levels{ $row->{i_difficulty} };
-	$newItem{source_document} = $row->{i_source_document} || '';
+    $newItem{source_document} = $row->{i_source_document} || '';
         $newItem{grade_level} =
           $const[$OC_GRADE_LEVEL]->{ $row->{grade_level} };
         $newItem{content_area} =
@@ -324,9 +324,10 @@ sub run {
         $newItem{standards}      = [];
         $newItem{mf_count}       = $row->{mf_count};
         $newItem{mf_outdated}    = $row->{mf_outdated};
-	$newItem{enemies} = [];
-	$newItem{copyrightFiles} = {};
+    $newItem{enemies} = [];
+    $newItem{copyrightFiles} = {};
         $newItem{alternatives} = '';
+    $newItem{primaryStandard} = $row->{i_primary_standard};
 
         for ( 0 .. 2 ) {
             my $standard = {
@@ -339,7 +340,11 @@ sub run {
             push @{ $newItem{standards} }, $standard;
         }
 
-	# get extra attributes
+    $newItem{secondaryStandard} = ' ';
+    $newItem{tertiaryStandard} = ' ';
+
+
+    # get extra attributes
 
         $sql = "SELECT * FROM item_characterization WHERE i_id=$row->{i_id}";
         my $sth2 = $dbh->prepare($sql);
@@ -387,19 +392,19 @@ sub run {
             elsif ( $row2->{ic_type} == $OC_TERTIARY_CONTENT_STANDARD ) {
                 $newItem{standards}[2]{contentStandard} = $row2->{ic_value};
             }
-	    elsif ( $row2->{ic_type} == $OC_ITEM_ENEMY ) {
-	    
-	      $sql = "SELECT i_external_id FROM item WHERE i_id=" . $row2->{ic_value};
-	      my $sth3 = $dbh->prepare($sql);
-	      $sth3->execute();
-	      if(my $row3 = $sth3->fetchrow_hashref) {
-	        push @{$newItem{enemies}}, $row3->{i_external_id};
-	      }
-	      $sth3->finish;
-	    }
+        elsif ( $row2->{ic_type} == $OC_ITEM_ENEMY ) {
+        
+          $sql = "SELECT i_external_id FROM item WHERE i_id=" . $row2->{ic_value};
+          my $sth3 = $dbh->prepare($sql);
+          $sth3->execute();
+          if(my $row3 = $sth3->fetchrow_hashref) {
+            push @{$newItem{enemies}}, $row3->{i_external_id};
+          }
+          $sth3->finish;
+        }
         }
 
-	$newItem{copyrightFiles} = getBankMetafilesForItem($dbh, $row->{i_id}, $IB_METAFILE_COPYRIGHT); 
+    $newItem{copyrightFiles} = getBankMetafilesForItem($dbh, $row->{i_id}, $IB_METAFILE_COPYRIGHT); 
 
         $sql = <<ITEM_ALTERNATES;
         SELECT GROUP_CONCAT(i_external_id) 
@@ -546,7 +551,7 @@ ITEM_ALTERNATES
       if($user->{adminType}) {
         if($in{workGroupId}) {
           my $wgf = {};
-	  $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
+      $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
           $sql = &makeQueryWithWorkgroupFilter($sql,$wgf, $OT_ITEM, 't1');
         }
       } else {
@@ -584,7 +589,7 @@ ITEM_ALTERNATES
         $newItem{language}        = $languages{ $row->{i_lang} };
         $newItem{correct}         = $row->{i_correct_response};
         $newItem{difficulty}      = $difficulty_levels{ $row->{i_difficulty} };
-	$newItem{source_document} = $row->{i_source_document} || '';
+    $newItem{source_document} = $row->{i_source_document} || '';
         $newItem{grade_level} =
           $const[$OC_GRADE_LEVEL]->{ $row->{grade_level} };
         $newItem{content_area} =
@@ -593,6 +598,7 @@ ITEM_ALTERNATES
         $newItem{gle_sort_order} = '99_99';
         $newItem{gle_name}       = '';
         $newItem{strand_name}    = '';
+    $newItem{primaryStandard} = $row->{i_primary_standard};
 
         if ( $newItem{gle_id} != 0 ) {
             my $std = &getStandard( $dbh, $newItem{gle_id} );
@@ -970,7 +976,7 @@ ITEM_ALTERNATES
       if($user->{adminType}) {
         if($in{workGroupId}) {
           my $wgf = {};
-	  $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
+      $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
           $sql = &makeQueryWithWorkgroupFilter($sql,$wgf, $OT_ITEM, 't1');
         }
       } else {
@@ -998,14 +1004,14 @@ ITEM_ALTERNATES
         $foundIDs{ $row->{i_external_id} } = 1;
 
         my $writerId = $row->{i_author};
-	my $metric = ($row->{i_dev_state} == $DS_REJECTED || $row->{i_dev_state} == $DS_DNU_ITEM_POOL) ? 'dnu' : 'total';
-	my $category = $row->{content_area} . '_' . $row->{grade_level};
+    my $metric = ($row->{i_dev_state} == $DS_REJECTED || $row->{i_dev_state} == $DS_DNU_ITEM_POOL) ? 'dnu' : 'total';
+    my $category = $row->{content_area} . '_' . $row->{grade_level};
 
-	if(exists $count_map->{$writerId}{$metric}{$category}) {
+    if(exists $count_map->{$writerId}{$metric}{$category}) {
           $count_map->{$writerId}{$metric}{$category}++;
-	} else {
+    } else {
           $count_map->{$writerId}{$metric}{$category} = 1;
-	}
+    }
 
         #  $const[$OC_GRADE_LEVEL]->{ $row->{grade_level} };
         #  $const[$OC_CONTENT_AREA]->{ $row->{content_area} };
@@ -1080,7 +1086,7 @@ ITEM_ALTERNATES
       if($user->{adminType}) {
         if($in{workGroupId}) {
           my $wgf = {};
-	  $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
+      $wgf->{filters} = &getWorkgroupFilters($dbh, $in{workGroupId});
           $sql = &makeQueryWithWorkgroupFilter($sql,$wgf, $OT_ITEM, 't1');
         }
       } else {
@@ -1109,10 +1115,10 @@ ITEM_ALTERNATES
         my %newItem = ();
         $newItem{id}              = $row->{i_id};
         $newItem{name}     = $row->{i_external_id};
-	$newItem{program} = $banks->{$row->{ib_id}}{name};
+    $newItem{program} = $banks->{$row->{ib_id}}{name};
         $newItem{editor}          = $row->{i_author} ? $editors->{$row->{i_author}} : 'Unassigned, Unassigned';
         $newItem{dev_state}  = $dev_states{ $row->{i_dev_state} };
-	$newItem{due_date} = $row->{i_due_date};
+    $newItem{due_date} = $row->{i_due_date};
 
         push @{ $in{items} }, \%newItem;
     }
@@ -1137,7 +1143,7 @@ ITEM_ALTERNATES
     if ( $in{reportType} eq '1' ) {
 
         return [ $q->psgi_header( -type => 'text/csv',
-	                          -attachment => 'item_report.csv' ),
+                              -attachment => 'item_report.csv' ),
                  [ &print_standard_csv_report( \%in ) ] ];
     }
     elsif ( $in{reportType} eq '2' ) {
@@ -1265,30 +1271,30 @@ sub print_welcome {
             }
 
       function doHtmlSubmit(f) {
-	if( f.reportType.selectedIndex == 0 ) {
-	    alert('Please SELECT a Report Type to continue.');
-	    return false;
-   	}
+    if( f.reportType.selectedIndex == 0 ) {
+        alert('Please SELECT a Report Type to continue.');
+        return false;
+    }
         document.form1.myaction.value = '1';
     document.form1.submit();
     return true;
       }
       
       function doCsvSubmit(f) {
-	if( f.reportType.selectedIndex == 0 ) {
-	    alert('Please SELECT a Report Type to continue.');
-	    return false;
-   	}
+    if( f.reportType.selectedIndex == 0 ) {
+        alert('Please SELECT a Report Type to continue.');
+        return false;
+    }
         document.form1.myaction.value = '2';
     document.form1.submit();
     return true;
       }
 
       function doXmlSubmit(f) {
-	if( f.reportType.selectedIndex == 0 ) {
-	    alert('Please SELECT a Report Type to continue.');
-	    return false;
-   	}
+    if( f.reportType.selectedIndex == 0 ) {
+        alert('Please SELECT a Report Type to continue.');
+        return false;
+    }
         document.form1.myaction.value = '3';
     document.form1.submit();
     return true;
@@ -1435,10 +1441,10 @@ sub print_pivot_welcome {
 
       /*
       function doHtmlSubmit(f) {
-	if( f.reportType.selectedIndex == 0 ) {
-	    alert('Please SELECT a Report Type to continue.');
-	    return false;
-   	}
+    if( f.reportType.selectedIndex == 0 ) {
+        alert('Please SELECT a Report Type to continue.');
+        return false;
+    }
         document.form1.myaction.value = '1';
     document.form1.submit();
     return true;
@@ -1446,10 +1452,10 @@ sub print_pivot_welcome {
       */
       
       function doCsvSubmit(f) {
-	if( f.reportType.selectedIndex == 0 ) {
-	    alert('Please SELECT a Report Type to continue.');
-	    return false;
-   	}
+    if( f.reportType.selectedIndex == 0 ) {
+        alert('Please SELECT a Report Type to continue.');
+        return false;
+    }
         document.form1.myaction.value = '2';
     document.form1.submit();
     return true;
@@ -1560,7 +1566,7 @@ END_HERE
       </tr>
       <tr>
         <td><input type="checkbox" name="report_standard_gle" value="yes" /></td>
-    <td align="left">Standard: GLE</td>
+    <td align="left">Standard: Primary</td>
       </tr>
     </table>
           </td></tr></table>
@@ -1734,13 +1740,9 @@ END_HERE
     push @titles, 'Difficulty';
     push( @titles, 'Language' ) unless $in{language} eq '';
     push( @titles, 'Description' );
-    push( @titles, 'Strand' );
-    push( @titles, 'Primary GLE' );
-    push( @titles, 'Primary Content Code' );
-    push( @titles, 'Secondary GLE' );
-    push( @titles, 'Secondary Content Code' );
-    push( @titles, 'Tertiary GLE' );
-    push( @titles, 'Tertiary Content Code' );
+    push( @titles, 'Primary Standard' );
+    push( @titles, 'First Secondary Standard' );
+    push( @titles, 'Second Secondary Standard' );
     push( @titles, 'Dev State' );
     push @titles, 'Publication Status';
     push( @titles, 'Calculator' );
@@ -1776,32 +1778,30 @@ END_HERE
         push @fields, $item->{difficulty};
         push( @fields, $item->{language} ) unless $in{language} eq '';
         push( @fields, $item->{description} );
-        push( @fields, $item->{strand_name} );
 
-        foreach my $i ( 0 .. 2 ) {
-            push @fields,
-              ( $item->{"gle${i}_name"} eq ''
-                ? '&nbsp;'
-                : $item->{"gle${i}_name"} . ': ' . $item->{"gle${i}_text"} );
-            push @fields,
-              (
-                $item->{standards}[$i]{gle}
-                ? join(
-                    '.',
-                    $item->{standards}[$i]{contentStandard},
-                    0,
-                    ( $item->{standards}[$i]{category} || 0 ),
-                    $item->{standards}[$i]{benchmark},
-                    (
-                        $item->{standards}[$i]{gleNumber}
-                        ? sprintf( '%02d', $item->{standards}[$i]{gleNumber} )
-                        : 0
-                    )
-                  )
-                : '&nbsp;'
-              );
+        push( @fields, $item->{primaryStandard} );
+
+    $sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
+    $sth0 = $dbh->prepare($sql);
+    $sth0->execute();
+        
+    my $si = 0;
+        
+    while ( my $row0 = $sth0->fetchrow_hashref ) {
+          if($si eq 2 ) {
+                break;
+      } 
+      push( @fields, $row0->{isd_standard} );
+          $si = $si + 1;     
         }
-        push( @fields, $item->{dev_state} );
+    
+    while ($si lt 2 ) {
+      push( @fields, ' ' );
+          $si = $si + 1;
+    }
+    
+
+    push( @fields, $item->{dev_state} );
         push( @fields, $item->{pub_status} );
         push( @fields, $item->{calculator} );
         push( @fields, $item->{knowledge_depth} );
@@ -1839,16 +1839,16 @@ END_HERE
         push( @fields, $item->{mf_count} == '0' ? 'No' : 'Yes' );
         push( @fields, $item->{mf_count} == '0' ? '' : ( $item->{mf_outdated} eq 'Y' ? 'Yes' : 'No' ) );
 
-	push (@fields, scalar(@{$item->{enemies}}) ? join(',', @{$item->{enemies}}) : '');
+    push (@fields, scalar(@{$item->{enemies}}) ? join(',', @{$item->{enemies}}) : '');
 
         push (@fields, scalar(keys %{$item->{copyrightFiles}}) ? 'Yes' : 'No');
-	push (@fields, $item->{source_document});
-	#push (@fields, scalar(keys %{$item->{copyrightFiles}}) 
-	#               ? join(',', map { '<a href="' 
-	#	                        . $item->{copyrightFiles}{$_}{view} 
-	#				. '" target="_blank">' . $item->{copyrightFiles}{$_}{name} . '</a>' }
+    push (@fields, $item->{source_document});
+    #push (@fields, scalar(keys %{$item->{copyrightFiles}}) 
+    #               ? join(',', map { '<a href="' 
+    #                           . $item->{copyrightFiles}{$_}{view} 
+    #               . '" target="_blank">' . $item->{copyrightFiles}{$_}{name} . '</a>' }
         #                          keys %{$item->{copyrightFiles}})
-	#	       : '');
+    #          : '');
         push (@fields, $item->{alternatives});
 
         $body .= '<tr><td>' . join( '</td><td>', @fields ) . '</td></tr>';
@@ -1908,8 +1908,8 @@ END_HERE
     my @titles = ( 'Item ID', 'Subject', 'Grade', 'Type' );
 
     #push(@titles,'Description');
-    push( @titles, 'Strand' );
-    push( @titles, 'GLE' );
+
+    push( @titles, 'Primary Standard' );
     push( @titles, 'Dev State' );
     push( @titles, 'Item Writer' );
     push( @titles, 'Date/Time' );
@@ -1950,15 +1950,8 @@ END_HERE
         );
 
         #push(@fields,$item->{description});
-        push( @fields, $item->{strand_name} );
-        push(
-            @fields,
-            (
-                $item->{gle_name} eq ''
-                ? ''
-                : $item->{gle_name} . ': ' . $item->{gle_text}
-            )
-        );
+
+        push( @fields, $item->{primaryStandard});
         push( @fields, $item->{dev_state} );
 
         foreach (
@@ -2027,9 +2020,9 @@ sub print_standard_csv_report {
     push @titles, 'Format';
     push @titles, 'Difficulty';
     push( @titles, 'Language' ) unless $in{language} eq '';
-    push @titles, 'Strand', 'Primary GLE', 'Primary Content Code',
-      'Secondary GLE', 'Secondary Content Code', 'Tertiary GLE',
-      'Tertiary Content Code', 'Dev State', 'Publication Status', 'Calculator',
+    push @titles, 'Primary Standard', 
+      'First Secondary Standard',  'Second Secondary Standard',
+      'Dev State', 'Publication Status', 'Calculator',
       'Depth of Knowledge', 'Points', 'Read Only',
       'Passage', 'Passage Genre', 'Program Metafiles', 'Outdated Program Metafiles', 'Item Enemies', 
       'Copyright/DRM Files', 'Source Document', 'Alternates';
@@ -2049,36 +2042,28 @@ sub print_standard_csv_report {
         push @fields, $item->{format};
         push @fields, $item->{difficulty};
         push( @fields, $item->{language} ) unless $in{language} eq '';
-        push( @fields, $item->{strand_name} );
 
-        foreach my $i ( 0 .. 2 ) {
-            $item->{"gle${i}_text"} =~ s/\s/ /g;
+        push ( @fields, $item->{primaryStandard} );
 
-            push @fields,
-              ( $item->{"gle${i}_name"} eq ''
-                ? ''
-                : '"'
-                  . $item->{"gle${i}_name"} . ': '
-                  . $item->{"gle${i}_text"}
-                  . '"' );
-            push @fields,
-              (
-                $item->{standards}[$i]{gle}
-                ? join(
-                    '.',
-                    $item->{standards}[$i]{contentStandard},
-                    0,
-                    ( $item->{standards}[$i]{category} || 0 ),
-                    $item->{standards}[$i]{benchmark},
-                    (
-                        $item->{standards}[$i]{gleNumber}
-                        ? sprintf( '%02d', $item->{standards}[$i]{gleNumber} )
-                        : 0
-                    )
-                  )
-                : ''
-              );
+    $sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
+    $sth0 = $dbh->prepare($sql);
+    $sth0->execute();
+        
+    my $si = 0;
+        
+    while ( my $row0 = $sth0->fetchrow_hashref ) {
+          if($si eq 2 ) {
+                break;
+      } 
+      push( @fields, $row0->{isd_standard} );
+          $si = $si + 1;     
         }
+    
+    while ($si lt 2 ) {
+      push( @fields, ' ' );
+          $si = $si + 1;
+    }
+
         push( @fields, $item->{dev_state} );
         push( @fields, $item->{pub_status} );
         push( @fields, $item->{calculator} );
@@ -2097,15 +2082,15 @@ sub print_standard_csv_report {
             ( $item->{passage_name} eq '' ? '' : $item->{passage_genre} ) );
         push( @fields, $item->{mf_count} == '0' ? 'No' : 'Yes' );
         push( @fields, $item->{mf_count} == '0' ? '' : ( $item->{mf_outdated} eq 'Y' ? 'Yes' : 'No' ) );
-	push (@fields, scalar(@{$item->{enemies}}) ? join('  ', @{$item->{enemies}}) : '');
+    push (@fields, scalar(@{$item->{enemies}}) ? join('  ', @{$item->{enemies}}) : '');
 
         push (@fields, scalar(keys %{$item->{copyrightFiles}}) ? 'Yes' : 'No');
-	push (@fields, $item->{source_document});
+    push (@fields, $item->{source_document});
         push (@fields, $item->{alternatives});
-	#push (@fields, scalar(keys %{$item->{copyrightFiles}}) 
-	#               ? join(' ', map { $item->{copyrightFiles}{$_}{name}  }
+    #push (@fields, scalar(keys %{$item->{copyrightFiles}}) 
+    #               ? join(' ', map { $item->{copyrightFiles}{$_}{name}  }
         #                          keys %{$item->{copyrightFiles}})
-	#	       : '');
+    #          : '');
 
         $psgi_out .= join( ',', @fields ) . "\n";
     }
@@ -2123,8 +2108,7 @@ sub print_progress_csv_report {
     my @titles = ( 'Item ID', 'Subject', 'Grade', 'Type' );
 
     #push(@titles,'Description');
-    push( @titles, 'Strand' );
-    push( @titles, 'GLE' );
+    push( @titles, 'Primary Standard' );
     push( @titles, 'Dev State' );
     push( @titles, 'Item Writer' );
     push( @titles, 'Date/Time' );
@@ -2174,15 +2158,8 @@ sub print_progress_csv_report {
 
         #push(@fields,$item->{language}) unless $in{language} eq '';
         #push(@fields,$item->{description});
-        push( @fields, $item->{strand_name} );
-        push(
-            @fields,
-            (
-                $item->{gle_name} eq ''
-                ? ''
-                : $item->{gle_name} . ': ' . $item->{gle_text}
-            )
-        );
+
+        push( @fields,$item->{primaryStandard} );
         push( @fields, $item->{dev_state} );
         foreach (
             $DS_DEVELOPMENT,     $DS_CONTENT_REVIEW,   $DS_CONTENT_REVIEW_2,
@@ -2481,7 +2458,7 @@ sub print_quality_csv_report {
         my $s_key = $filters->{$f_key}{parts}{$OC_CONTENT_AREA};
         my $g_key = $filters->{$f_key}{parts}{$OC_GRADE_LEVEL};
 
-	push @category_list, $s_key . '_' . $g_key;
+    push @category_list, $s_key . '_' . $g_key;
       }
 
       @category_list = sort @category_list;
@@ -2503,12 +2480,12 @@ sub print_quality_csv_report {
       foreach my $metric ('total', 'dnu') {
 
         my @fields = ( $banks->{$in{itemBankId}}{name}, 
-	               ($writer ? $editors->{$writer} : 'Unassigned, Unassigned'), 
-	               ($metric eq 'total' ? 'Total Items' : 'Rejected/DNU') );
+                   ($writer ? $editors->{$writer} : 'Unassigned, Unassigned'), 
+                   ($metric eq 'total' ? 'Total Items' : 'Rejected/DNU') );
 
-	foreach my $c_key (@category_list) {
-	  push @fields, ( exists($count_map->{$writer}{$metric}{$c_key}) ?  $count_map->{$writer}{$metric}{$c_key} : 0 );
-	}
+    foreach my $c_key (@category_list) {
+      push @fields, ( exists($count_map->{$writer}{$metric}{$c_key}) ?  $count_map->{$writer}{$metric}{$c_key} : 0 );
+    }
         $psgi_out .= join( ',', @fields ) . "\n";
       }
     }
