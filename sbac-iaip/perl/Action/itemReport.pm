@@ -143,7 +143,8 @@ sub run {
     'difficulty'      => 'Difficulty',
     'item_writer'     => 'Item Writer',
     'standard_strand' => 'Strand',
-    'standard_gle'    => 'Expectation'
+    #'standard_gle'    => 'Expectation'
+    'standard_gle'    => 'Primary Standard'
   );
 
   $in{items} = [];
@@ -750,8 +751,10 @@ ITEM_ALTERNATES
         #  if exists( $in{itemContentHasImages} )
         #      && not( containsImages( $row->{i_xml_data} ) );
 
-        $row->{standard_gle} = 'GLE ' . $row->{standard_gle};
+        #$row->{standard_gle} = 'GLE ' . $row->{standard_gle};
+	$row->{standard_gle} = $row->{i_primary_standard};
 
+=for
         # load the $fieldMap{'standard_strand'} array
         if ( scalar( keys %{ $fieldMap{'standard_strand'} } ) == 0
             and $row->{gle_path} )
@@ -761,8 +764,7 @@ ITEM_ALTERNATES
             my $sth2 = $dbh->prepare($sql);
             $sth2->execute();
             while ( my $row2 = $sth2->fetchrow_hashref ) {
-                $fieldMap{'standard_strand'}{ $row2->{hd_value} } =
-                  $row2->{hd_value};
+                $fieldMap{'standard_strand'}{ $row2->{hd_value} } = $row2->{hd_value};
                 $strandId{ $row2->{hd_id} } = 1;
             }
         }
@@ -776,20 +778,25 @@ ITEM_ALTERNATES
                 $row->{standard_strand} = $row2->{hd_value};
             }
         }
-
+=cut
+=for
         # load the $fieldMap{'standard_gle'} array
         unless ( scalar( keys %{ $fieldMap{'standard_gle'} } ) > 0 ) {
             foreach ( keys %strandId ) {
-                $sql =
-"SELECT hd_id,hd_value FROM hierarchy_definition WHERE hd_type=${HD_LEAF} AND (hd_parent_path LIKE '\%,$_,\%' OR hd_parent_id=$_)";
+                $sql ="SELECT hd_id,hd_value FROM hierarchy_definition WHERE hd_type=${HD_LEAF} AND (hd_parent_path LIKE '\%,$_,\%' OR hd_parent_id=$_)";
+		$sql = "SELECT i_id, i_primary_standard FROM item WHERE i_primary_standard = '$row->{i_primary_standard}'";
                 my $sth2 = $dbh->prepare($sql);
                 $sth2->execute();
+
                 while ( my $row2 = $sth2->fetchrow_hashref ) {
-                    $fieldMap{'standard_gle'}{ 'GLE ' . $row2->{hd_value} } =
-                      'GLE ' . $row2->{hd_value};
-                }
-            }
-        }
+                    #$fieldMap{'standard_gle'}{ 'GLE ' . $row2->{hd_value} } = 'GLE ' . $row2->{hd_value};
+=cut
+		     if ($row->{i_primary_standard} ne '' && $row->{i_primary_standard} ne 'NULL') {
+		     	$fieldMap{'standard_gle'}{ $row->{i_primary_standard} } = $row->{i_primary_standard};
+			 }			
+                #}
+            #}
+        #}
 
         # It passes the filters, so add it to the count
         foreach my $key ( keys %{ $fieldMap{ $in{pivotField} } } ) {
@@ -1559,14 +1566,14 @@ END_HERE
       <tr>
         <td><input type="checkbox" name="report_item_writer" value="yes" /></td>
     <td align="left">Item Writer</td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" name="report_standard_strand" value="yes" /></td>
-    <td align="left">Standard: Strand</td>
-      </tr>
+      </tr>      
       <tr>
         <td><input type="checkbox" name="report_standard_gle" value="yes" /></td>
     <td align="left">Standard: Primary</td>
+      </tr>
+	<tr>
+        <td><!--<input type="checkbox" name="report_standard_strand" value="yes" /></td>
+    <td align="left">Standard: Strand--></td>
       </tr>
     </table>
           </td></tr></table>
@@ -1741,8 +1748,8 @@ END_HERE
     push( @titles, 'Language' ) unless $in{language} eq '';
     push( @titles, 'Description' );
     push( @titles, 'Primary Standard' );
-    push( @titles, 'First Secondary Standard' );
-    push( @titles, 'Second Secondary Standard' );
+    #push( @titles, 'First Secondary Standard' );
+    #push( @titles, 'Second Secondary Standard' );
     push( @titles, 'Dev State' );
     push @titles, 'Publication Status';
     push( @titles, 'Calculator' );
@@ -1781,25 +1788,27 @@ END_HERE
 
         push( @fields, $item->{primaryStandard} );
 
-    $sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
-    $sth0 = $dbh->prepare($sql);
-    $sth0->execute();
+    #$sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
+    #$sth0 = $dbh->prepare($sql);
+    #$sth0->execute();
         
-    my $si = 0;
-        
+    my $si = 2;
+      
+=for  
     while ( my $row0 = $sth0->fetchrow_hashref ) {
           if($si eq 2 ) {
                 break;
-      } 
+      	  } 
+
       push( @fields, $row0->{isd_standard} );
           $si = $si + 1;     
-        }
-    
+    }
+ 
     while ($si lt 2 ) {
       push( @fields, ' ' );
           $si = $si + 1;
     }
-    
+=cut
 
     push( @fields, $item->{dev_state} );
         push( @fields, $item->{pub_status} );
@@ -2021,7 +2030,7 @@ sub print_standard_csv_report {
     push @titles, 'Difficulty';
     push( @titles, 'Language' ) unless $in{language} eq '';
     push @titles, 'Primary Standard', 
-      'First Secondary Standard',  'Second Secondary Standard',
+      #'First Secondary Standard',  'Second Secondary Standard',
       'Dev State', 'Publication Status', 'Calculator',
       'Depth of Knowledge', 'Points', 'Read Only',
       'Passage', 'Passage Genre', 'Program Metafiles', 'Outdated Program Metafiles', 'Item Enemies', 
@@ -2045,12 +2054,13 @@ sub print_standard_csv_report {
 
         push ( @fields, $item->{primaryStandard} );
 
-    $sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
-    $sth0 = $dbh->prepare($sql);
-    $sth0->execute();
+    #$sql = "SELECT DISTINCT isd_standard FROM item_standard WHERE i_id=$item->{id}";
+    #$sth0 = $dbh->prepare($sql);
+    #$sth0->execute();
         
     my $si = 0;
-        
+      
+=for  
     while ( my $row0 = $sth0->fetchrow_hashref ) {
           if($si eq 2 ) {
                 break;
@@ -2063,7 +2073,7 @@ sub print_standard_csv_report {
       push( @fields, ' ' );
           $si = $si + 1;
     }
-
+=cut
         push( @fields, $item->{dev_state} );
         push( @fields, $item->{pub_status} );
         push( @fields, $item->{calculator} );
